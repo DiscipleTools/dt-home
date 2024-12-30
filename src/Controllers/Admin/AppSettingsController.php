@@ -4,6 +4,7 @@ namespace DT\Home\Controllers\Admin;
 
 use DT\Home\GuzzleHttp\Psr7\ServerRequest as Request;
 use DT\Home\Psr\Http\Message\ResponseInterface;
+use DT\Home\Services\Analytics;
 use DT\Home\Services\Apps;
 use DT\Home\Services\RolesPermissions;
 use DT\Home\Services\SVGIconService;
@@ -19,12 +20,14 @@ class AppSettingsController
     private Apps $apps;
     private SettingsApps $settings_apps;
     private RolesPermissions $roles_permissions;
+    private Analytics $analytics;
 
-    public function __construct( Apps $apps, SettingsApps $source, RolesPermissions $roles_permissions )
+    public function __construct( Apps $apps, SettingsApps $source, RolesPermissions $roles_permissions, Analytics $analytics )
     {
         $this->apps = $apps;
         $this->settings_apps = $source;
         $this->roles_permissions = $roles_permissions;
+        $this->analytics = $analytics;
     }
 
     /**
@@ -86,6 +89,8 @@ class AppSettingsController
      */
     public function store( Request $request )
     {
+        // Start the analytics event.
+        $this->analytics->event( 'admin-app-creation', [ 'action' => 'start', 'lib_name' => __CLASS__ ] );
         // Retrieve form data
         $input = extract_request_input( $request );
 
@@ -151,6 +156,9 @@ class AppSettingsController
 
         // Update global roles and permissions.
         $this->roles_permissions->update( $slug, [ $this->roles_permissions->generate_permission_key( $slug ) ], $roles, $deleted_roles );
+
+        // Stop the analytics event.
+        $this->analytics->event( 'admin-app-creation', [ 'action' => 'stop', 'lib_name' => __CLASS__ ] );
 
         // Capture core analytics metric counts.
         $this->settings_apps->capture_analytics_metric_counts( __CLASS__ );
