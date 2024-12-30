@@ -8,8 +8,10 @@ use DT\Home\League\Container\ServiceProvider\AbstractServiceProvider;
 use DT\Home\League\Container\Exception\NotFoundException;
 use DT\Home\Plugin;
 use DT\Home\Psr\Container\ContainerExceptionInterface;
+use DT\Home\Services\Analytics;
 
-class PluginServiceProvider extends AbstractServiceProvider {
+class PluginServiceProvider extends AbstractServiceProvider
+{
     /**
      * Provide the services that this provider is responsible for.
      *
@@ -18,7 +20,7 @@ class PluginServiceProvider extends AbstractServiceProvider {
      */
     public function provides( string $id ): bool
     {
-        return in_array( $id, [
+        return in_array($id, [
             Plugin::class
         ]);
     }
@@ -30,13 +32,15 @@ class PluginServiceProvider extends AbstractServiceProvider {
      * @return void
      * @throws NotFoundException|ContainerExceptionInterface
      */
-    public function register(): void {
-        $this->getContainer()->addShared( Plugin::class, function () {
+    public function register(): void
+    {
+        $this->getContainer()->addShared(Plugin::class, function () {
             return new Plugin(
                 $this->getContainer(),
                 $this->getContainer()->get( RewritesInterface::class ),
-                $this->getContainer()->get( ConfigInterface::class )
+                $this->getContainer()->get( ConfigInterface::class ),
+                $this->getContainer()->get( Analytics::class )
             );
-        } );
+        });
     }
 }

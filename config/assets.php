@@ -40,6 +40,9 @@ $config->merge([
                 'remove_menu_label' => __( 'Remove', 'dt-home' ),
                 'edit_menu_label' => __( 'Edit', 'dt-home' ),
                 'select_type_label' => __( 'Select Type', 'dt-home' ),
+                'install_notice_label' => __( 'We would like to gather analytics to improve our plugin', 'dt-home' ),
+                'allow_label' => __( 'Allow', 'dt-home' ),
+                'dismiss_label' => __( 'Dismiss', 'dt-home' ),
 
             ]
         ],
