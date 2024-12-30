@@ -67,7 +67,7 @@ Cypress.Commands.add('loginHomeScreen', (username, password) => {
         // Returning false here prevents Cypress from failing the test
         return false
     })
-  
+
     // Navigate to Home Screen login page.
     cy.visit('/apps/login')
 
@@ -244,4 +244,121 @@ Cypress.Commands.add('resetFrontendApps', () => {
 
     // Click ok for displayed confirmation.
     cy.on('window:confirm', () => true)
+})
+
+// -- Admin Roles Settings Initialization -- //
+Cypress.Commands.add('adminRolesSettingsInit', () => {
+    const app_tab_url_path = '/wp-admin/admin.php?page=dt_options&tab=roles'
+
+    /**
+     * Ensure uncaught exceptions do not fail test run; however, any thrown
+     * exceptions must not be ignored and a ticket must be raised, in order
+     * to resolve identified exception.
+     *
+     * TODO:
+     *  - Resolve any identified exceptions.
+     */
+
+    cy.on('uncaught:exception', (err, runnable) => {
+        // Returning false here prevents Cypress from failing the test
+        return false
+    })
+
+    // Capture admin credentials.
+    const dt_config = cy.config('dt')
+    const username = dt_config.credentials.admin.username
+    const password = dt_config.credentials.admin.password
+
+    // Login to WP Admin area.
+    cy.loginAdmin(username, password)
+
+    // Access Home Screen plugin area on the apps tab.
+    cy.visit(app_tab_url_path)
+})
+
+// -- admin Users Settings Init -- //
+Cypress.Commands.add('adminUsersSettingsInit', () => {
+    const app_tab_url_path = '/wp-admin/users.php'
+
+    /**
+     * Ensure uncaught exceptions do not fail test run; however, any thrown
+     * exceptions must not be ignored and a ticket must be raised, in order
+     * to resolve identified exception.
+     *
+     * TODO:
+     * - Resolve any identified exceptions.
+     */
+    cy.on('uncaught:exception', (err, runnable) => {
+        // Returning false here prevents Cypress from failing the test
+        return false
+    })
+
+    // Capture admin credentials.
+    const dt_config = cy.config('dt')
+    const username = dt_config.credentials.admin.username
+    const password = dt_config.credentials.admin.password
+
+    // Login to WP Admin area.
+    cy.loginAdmin(username, password)
+
+    // Access Home Screen plugin area on the apps tab.
+    cy.visit(app_tab_url_path)
+})
+
+Cypress.Commands.add('createTestUser', (user_data) => {
+    cy.session('create_test_user', () => {
+        // login as an administrator and go to the Users section.
+        cy.adminUsersSettingsInit()
+
+        cy.get('#the-list').then(($list) => {
+            if ($list.find(`a:contains(${user_data.email})`).length > 0) {
+                // User exists
+                cy.log('User exists')
+            } else {
+                // User does not exist
+                cy.get('a.page-title-action').click()
+
+                // Fill in the new user details.
+                cy.get('#eman').type(user_data.username)
+                cy.get('#liame').type(user_data.email)
+                cy.get('#create-user').click()
+            }
+        })
+    })
+})
+
+// -- Admin delete user Initialization -- //
+Cypress.Commands.add('deleteTestUser', (user_email) => {
+    const app_tab_url_path = '/wp-admin/users.php'
+
+    /**
+   * Ensure uncaught exceptions do not fail test run; however, any thrown
+   * exceptions must not be ignored and a ticket must be raised, in order
+   * to resolve identified exception.
+   *
+
+   */
+    cy.on('uncaught:exception', (err, runnable) => {
+        // Returning false here prevents Cypress from failing the test
+        return false
+    })
+
+    // Capture admin credentials.
+    const dt_config = cy.config('dt')
+    const username = dt_config.credentials.admin.username
+    const password = dt_config.credentials.admin.password
+
+    // Login to WP Admin area.
+    cy.loginAdmin(username, password)
+
+    // Access Home Screen plugin area on the apps tab.
+    cy.visit(app_tab_url_path)
+
+    cy.get('tr')
+        .contains('td', user_email)
+        .parent()
+        .find('.delete a')
+        .click({ force: true })
+    //confirm delete user
+    cy.get('input#submit.button.button-primary').click({ force: true })
 })
