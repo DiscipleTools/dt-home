@@ -2,13 +2,23 @@
 
 namespace DT\Home\Controllers\MagicLink;
 
+use Disciple_Tools_Users;
 use DT\Home\Psr\Http\Message\ResponseInterface;
+use DT\Home\Services\Analytics;
 use function DT\Home\config;
 use function DT\Home\redirect;
 use function DT\Home\route_url;
 
 class ShareController
 {
+
+    private Analytics $analytics;
+
+    public function __construct( Analytics $analytics )
+    {
+        $this->analytics = $analytics;
+    }
+
     /**
      * Show method.
      *
@@ -21,10 +31,10 @@ class ShareController
     public function show()
     {
         $user_id = get_current_user_id();
-        $contact = \Disciple_Tools_Users::get_contact_for_user( $user_id );
+        $contact = Disciple_Tools_Users::get_contact_for_user( $user_id );
 
         $this->set_cookie( $contact );
-
+        $this->analytics->event( 'Share Link', [ 'action' => 'snapshot', 'lib_name' => __CLASS__ ] );
         return redirect( route_url() );
     }
 
@@ -38,8 +48,9 @@ class ShareController
      *
      * @return void
      */
-    public function set_cookie( $contact ): void {
-        if ( ! $contact ) {
+    public function set_cookie( $contact ): void
+    {
+        if ( !$contact ) {
             return;
         }
 
