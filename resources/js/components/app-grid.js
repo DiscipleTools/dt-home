@@ -828,6 +828,7 @@ class AppGrid extends LitElement {
                                     class="app-grid__icon"
                                     name="${app.name}"
                                     icon="${app.icon}"
+                                    slug="${app.slug}"
                                 ></dt-home-app-icon>
                             </div>
                         `
