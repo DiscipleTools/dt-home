@@ -15,6 +15,7 @@ use function DT\Home\magic_url;
 use function DT\Home\namespace_string;
 use function DT\Home\response;
 use function DT\Home\template;
+use DT\Home\Services\Analytics;
 
 /**
  * Class AppController
@@ -28,10 +29,13 @@ class AppController
 
     private $user_apps;
 
-    public function __construct( Apps $apps, UserApps $user_apps )
+    private Analytics $analytics;
+
+    public function __construct( Apps $apps, UserApps $user_apps, Analytics $analytics )
     {
         $this->apps = $apps;
         $this->user_apps = $user_apps;
+        $this->analytics = $analytics;
     }
 
     /**
@@ -214,6 +218,8 @@ class AppController
      */
     public function store_apps( Request $request )
     {
+        $this->analytics->event( 'user-app-creation', [ 'action' => 'start', 'lib_name' => __CLASS__ ] );
+
         $data = extract_request_input( $request );
         $apps_array = $this->apps->from( 'user' );
         $apps_count = count( $apps_array );
@@ -230,6 +236,8 @@ class AppController
         $apps_array[] = $app_data;
         $this->user_apps->save( $apps_array );
 
+        $this->analytics->event( 'user-app-creation', [ 'action' => 'stop' ] );
+
         return response( [ 'message' => 'App has been added', 'app' => $app_data ] );
     }
 
@@ -242,6 +250,7 @@ class AppController
      */
     public function update_apps( Request $request, $params )
     {
+
         $data = extract_request_input( $request );
         $slug = $params['slug'];
         $apps_array = $this->apps->from( 'user' );
