@@ -25,59 +25,62 @@ $this->layout( 'layouts/settings', compact( 'tab', 'link', 'page_title' ) )
                 </span>
 
                 <br><br>
-
-                <table class="widefat striped" style="border-collapse: collapse; width: 110%;">
-                    <thead>
-                    <tr>
-                        <th style="border: 1px solid #ddd;"><?php esc_html_e( 'Name', 'dt-home' ); ?></th>
-                        <th style="border: 1px solid #ddd;"><?php esc_html_e( 'Embed Video', 'dt-home' ); ?></th>
-                        <th style="border: 1px solid #ddd;"><?php esc_html_e( 'Anchor', 'dt-home' ); ?></th>
-                        <th style="border: 1px solid #ddd; min-width: 100%;"><?php esc_html_e( 'Action', 'dt-home' ); ?></th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <?php foreach ( $data as $training ) : ?>
+                <div style="overflow-x:auto;">
+                    <table class="widefat striped" style="border-collapse: collapse; width: 100%; ">
+                        <thead>
                         <tr>
-                            <td style="border: 1px solid #ddd;"><?php echo esc_html( $training['name'] ); ?></td>
-                            <td style="border: 1px solid #ddd;"><?php echo stripslashes($training['embed_video']); //phpcs:ignore ?></td>
-                            <td style="border: 1px solid #ddd;"><?php echo esc_html( $training['anchor'] ); ?></td>
-                            <td style="border: 1px solid #ddd;">
-                                <div class="action-tooltip">
-                                    <a href="admin.php?page=dt_home&tab=training&action=up/<?php echo esc_attr( $training['id'] ); ?>">
-                                        <i class="fas fa-arrow-up action-icon"></i>
-                                    </a>
-                                    <span class="action-tooltip-text"><?php esc_html_e( 'Move Up', 'dt-home' ); ?></span>
-                                </div>
-                                &nbsp;|&nbsp;
-                                <div class="action-tooltip">
-                                    <a href="admin.php?page=dt_home&tab=training&action=down/<?php echo esc_attr( $training['id'] ); ?>">
-                                        <i class="fas fa-arrow-down action-icon"></i>
-                                    </a>
-                                    <span
-                                        class="action-tooltip-text"><?php esc_html_e( 'Move Down', 'dt-home' ); ?></span>
-                                </div>
-                                &nbsp;|&nbsp;
-                                <div class="action-tooltip">
-                                    <a href="admin.php?page=dt_home&tab=training&action=edit/<?php echo esc_attr( $training['id'] ); ?>">
-                                        <i class="fas fa-edit action-icon"></i>
-                                    </a>
-                                    <span class="action-tooltip-text"><?php esc_html_e( 'Edit', 'dt-home' ); ?></span>
-                                </div>
-                                &nbsp;|&nbsp;
-                                <div class="action-tooltip">
-                                    <a href="#" onclick="confirmDelete(<?php echo esc_attr( $training['id'] ); ?>)"
-                                       class="delete-apps">
-                                        <i class="fas fa-trash action-icon"></i>
-                                    </a>
-                                    <span class="action-tooltip-text"><?php esc_html_e( 'Delete', 'dt-home' ); ?></span>
-                                </div>
-                            </td>
-
+                            <th style="border: 1px solid #ddd;"><?php esc_html_e( 'Name', 'dt-home' ); ?></th>
+                            <th style="border: 1px solid #ddd;"><?php esc_html_e( 'Embed Video', 'dt-home' ); ?></th>
+                            <th style="border: 1px solid #ddd;"><?php esc_html_e( 'Anchor', 'dt-home' ); ?></th>
+                            <th class="training_action"
+                                style="border: 1px solid #ddd; width: 100%;"><?php esc_html_e( 'Action', 'dt-home' ); ?></th>
                         </tr>
-                    <?php endforeach; ?>
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                        <?php foreach ( $data as $training ) : ?>
+                            <tr>
+                                <td style="border: 1px solid #ddd;"><?php echo esc_html( $training['name'] ); ?></td>
+                                <td style="border: 1px solid #ddd;"><?php echo stripslashes($training['embed_video']); //phpcs:ignore ?></td>
+                                <td style="border: 1px solid #ddd;"><?php echo esc_html( $training['anchor'] ); ?></td>
+                                <td style="border: 1px solid #ddd;">
+                                    <div class="action-tooltip">
+                                        <a href="admin.php?page=dt_home&tab=training&action=up/<?php echo esc_attr( $training['id'] ); ?>">
+                                            <i class="fas fa-arrow-up action-icon"></i>
+                                        </a>
+                                        <span
+                                            class="action-tooltip-text"><?php esc_html_e( 'Move Up', 'dt-home' ); ?></span>
+                                    </div>
+                                    &nbsp;|&nbsp;
+                                    <div class="action-tooltip">
+                                        <a href="admin.php?page=dt_home&tab=training&action=down/<?php echo esc_attr( $training['id'] ); ?>">
+                                            <i class="fas fa-arrow-down action-icon"></i>
+                                        </a>
+                                        <span
+                                            class="action-tooltip-text"><?php esc_html_e( 'Move Down', 'dt-home' ); ?></span>
+                                    </div>
+                                    &nbsp;|&nbsp;
+                                    <div class="action-tooltip">
+                                        <a href="admin.php?page=dt_home&tab=training&action=edit/<?php echo esc_attr( $training['id'] ); ?>">
+                                            <i class="fas fa-edit action-icon"></i>
+                                        </a>
+                                        <span class="action-tooltip-text"><?php esc_html_e( 'Edit', 'dt-home' ); ?></span>
+                                    </div>
+                                    &nbsp;|&nbsp;
+                                    <div class="action-tooltip">
+                                        <a href="#" onclick="confirmDelete(<?php echo esc_attr( $training['id'] ); ?>)"
+                                           class="delete-apps">
+                                            <i class="fas fa-trash action-icon"></i>
+                                        </a>
+                                        <span
+                                            class="action-tooltip-text"><?php esc_html_e( 'Delete', 'dt-home' ); ?></span>
+                                    </div>
+                                </td>
 
+                            </tr>
+                        <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>

@@ -383,3 +383,16 @@ textarea.text-area {
         color: #0073aa;
     }
 }
+
+@media (min-width: 228px) and (max-width: 767px) {
+    .wp-core-ui .button, .wp-core-ui .button.button-large, .wp-core-ui .button.button-small, a.preview, input#publish, input#save-post {
+        padding: 1px !important;
+        min-height: 0px !important;
+        font-size: 10px;
+    }
+
+    .color-picker {
+        width: 35px;
+        height: 35px;
+    }
+}
