@@ -491,7 +491,7 @@ jQuery(document).ready(function ($) {
             import_apps_textarea.focus()
         }
     }
-});
+})
 
 /**
  * Handle apps icons toggle display.
@@ -534,4 +534,68 @@ jQuery(document).ready(function ($) {
         $(color_input).val('')
         $(color_input_hidden).val('deleted')
     })
+})
+
+/**
+ * Handles the analytics notice allow and dismiss actions.
+ *
+ * This function adds event listeners to elements with the classes
+ * \`.dt-home-analytics-allow\` and \`.dt-home-analytics-dismiss\`.
+ * When these elements are clicked, it sends a POST request to the server
+ * to either allow or dismiss the analytics notice, and then reloads the page.
+ *
+ * @function
+ * @name handleAnalyticsNoticeActions
+ * @returns {void}
+ */
+document.addEventListener('DOMContentLoaded', function () {
+    document
+        .querySelectorAll('.dt-home-analytics-allow')
+        .forEach(function (element) {
+            element.addEventListener('click', function (e) {
+                e.preventDefault()
+                fetch(ajaxurl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: new URLSearchParams({
+                        action: 'dt_home_analytics_notice',
+                        dt_home_analytics_action: 'allow',
+                    }),
+                }).then(function () {
+                    document
+                        .querySelectorAll('.dt-home-analytics-notice')
+                        .forEach(function (notice) {
+                            notice.remove()
+                        })
+                    location.reload()
+                })
+            })
+        })
+
+    document
+        .querySelectorAll('.dt-home-analytics-dismiss')
+        .forEach(function (element) {
+            element.addEventListener('click', function (e) {
+                e.preventDefault()
+                fetch(ajaxurl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: new URLSearchParams({
+                        action: 'dt_home_analytics_notice',
+                        dt_home_analytics_action: 'dismiss',
+                    }),
+                }).then(function () {
+                    document
+                        .querySelectorAll('.dt-home-analytics-notice')
+                        .forEach(function (notice) {
+                            notice.remove()
+                        })
+                    location.reload()
+                })
+            })
+        })
 })
