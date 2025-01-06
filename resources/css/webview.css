@@ -3,3 +3,16 @@
     height: 100lvh;
     width: 100lvw;
 }
+
+/* Add this CSS to your stylesheet */
+@media (prefers-color-scheme: dark) {
+    dt-home-app-json {
+        color: white;
+    }
+}
+
+@media (prefers-color-scheme: light) {
+    dt-home-app-json {
+        color: black;
+    }
+}
