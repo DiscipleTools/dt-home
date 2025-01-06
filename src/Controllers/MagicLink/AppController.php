@@ -28,10 +28,13 @@ class AppController
 
     private $user_apps;
 
-    public function __construct( Apps $apps, UserApps $user_apps )
+    private $roles_permissions;
+
+    public function __construct( Apps $apps, UserApps $user_apps, RolesPermissions $roles_permissions )
     {
         $this->apps = $apps;
         $this->user_apps = $user_apps;
+        $this->roles_permissions = $roles_permissions;
     }
 
     /**
@@ -215,6 +218,9 @@ class AppController
     public function store_apps( Request $request )
     {
         $data = extract_request_input( $request );
+        $user = wp_get_current_user();
+        $user_roles = $user->roles;
+        $roles = dt_recursive_sanitize_array( $user_roles ?? [] );
         $apps_array = $this->apps->from( 'user' );
         $apps_count = count( $apps_array );
         $app_data = [
@@ -225,6 +231,7 @@ class AppController
             'slug' => $data['slug'],
             'open_in_new_tab' => $data['open_in_new_tab'] ?? false,
             'sort' => $apps_count,
+            'roles' => $roles,
         ];
         $apps_array = $this->apps->from( 'user' );
         $apps_array[] = $app_data;
