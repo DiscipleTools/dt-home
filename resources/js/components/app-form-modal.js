@@ -422,12 +422,18 @@ class AppFormModal extends LitElement {
                             .value="${this.appData.slug || ''}"
                             ?disabled="${!!this.appData.slug}"
                         ></dt-text>
+
                         <dt-single-select
                             name="type"
                             require
                             label="${translate('type_label')}"
                             placeholder="${translate('select_type_label')}"
                             .options="${[
+                                {
+                                    id: '',
+                                    label: translate('select_type_label'),
+                                    selected: !this.appData.type,
+                                },
                                 { id: 'Web View', label: 'Web View' },
                                 { id: 'Link', label: 'Link' },
                             ]}"
