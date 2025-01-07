@@ -220,6 +220,24 @@ body {
     width: 30%;
 }
 
+@media (max-width: 600px) {
+    .popup-model {
+        width: 80%; /* Adjust the width for mobile screens */
+    }
+}
+
+@media (min-width: 601px) and (max-width: 1024px) {
+    .popup-model {
+        width: 50%; /* Adjust the width for tablet screens */
+    }
+}
+
+@media (min-width: 1025px) {
+    .popup-model {
+        width: 30%; /* Adjust the width for desktop screens */
+    }
+}
+
 .popup-content {
     width: 80%;
     margin: auto;
@@ -382,4 +400,18 @@ textarea.text-area {
     &:hover {
         color: #0073aa;
     }
+}
+
+.export-container {
+    display: flex;
+    align-items: center;
+}
+
+.export-container .form-control {
+    flex: 1;
+    margin-right: 10px;
+}
+
+.export-container .button {
+    white-space: nowrap;
 }
