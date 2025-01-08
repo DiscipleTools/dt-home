@@ -206,6 +206,11 @@ class HomeFooter extends LitElement {
                     margin-right: -60vw;
                     width: 60vw;
                 }
+
+                #custom_app_menu_bar {
+                    width: 132%;
+                    max-width: 290px;
+                }
             }
 
             /* Tablet */
@@ -228,6 +233,11 @@ class HomeFooter extends LitElement {
                     margin-right: -288px;
                     width: 288px;
                 }
+
+                #custom_app_menu_bar {
+                    width: 100%;
+                    max-width: 400px;
+                }
             }
 
             /* Desktop */
@@ -249,6 +259,11 @@ class HomeFooter extends LitElement {
                     left: calc(100vw - 350px) !important;
                     margin-right: -288px;
                     width: 288px;
+                }
+
+                #custom_app_menu_bar {
+                    width: 100%;
+                    max-width: 400px;
                 }
             }
 
