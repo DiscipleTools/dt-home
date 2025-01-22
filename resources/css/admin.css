@@ -224,6 +224,38 @@ body {
     }
 }
 
+/* General popup styling */
+.popup-model {
+    width: 30%;
+}
+
+@media (max-width: 600px) {
+    .popup-model {
+        width: 80%; /* Adjust the width for mobile screens */
+    }
+}
+
+@media (min-width: 601px) and (max-width: 1024px) {
+    .popup-model {
+        width: 50%; /* Adjust the width for tablet screens */
+    }
+}
+
+@media (min-width: 1025px) {
+    .popup-model {
+        width: 30%; /* Adjust the width for desktop screens */
+    }
+}
+
+.popup-content {
+    width: 80%;
+    margin: auto;
+    background: #fff;
+    border-radius: 8px;
+    padding: 15px;
+    font-size: 14px;
+}
+
 .popup-header h2 {
     font-size: 16px;
     margin: 0;
@@ -380,6 +412,20 @@ textarea.text-area {
     }
 }
 
+.export-container {
+    display: flex;
+    align-items: center;
+}
+
+.export-container .form-control {
+    flex: 1;
+    margin-right: 10px;
+}
+
+.export-container .button {
+    white-space: nowrap;
+}
+
 @media (min-width: 228px) and (max-width: 767px) {
     .wp-core-ui .button, .wp-core-ui .button.button-large, .wp-core-ui .button.button-small, a.preview, input#publish, input#save-post {
         padding: 1px !important;
@@ -392,3 +438,4 @@ textarea.text-area {
         height: 35px;
     }
 }
+
