@@ -9,7 +9,7 @@
 /* Styles for the tabs container */
 sp-tabs {
     display: flex;
-    border-bottom: 1px solid #ccc;
+    border-bottom: 0 solid #ccc !important;
 }
 
 /* Styles for each tab */
@@ -44,18 +44,16 @@ sp-tab[selected] {
     background-color: #fff; /* Set your desired background color */
     z-index: 1; /* Adjust the z-index as needed */
 }
+
 .border-tab sp-tab {
     border-right: 1px solid #074ee8 !important;
     border-left: 1px solid #074ee8 !important;
     border-top: 1px solid #074ee8 !important;
     border-bottom: 1px solid #074ee8 !important;
     background-color: #fff !important;
-    padding: 0px 60px !important;
+    padding: 0 60px !important;
     color: #074ee8 !important;
     font-size: 12px !important;
-}
-sp-tabs {
-    border-bottom: 0px solid #ccc !important;
 }
 
 .tab-container sp-tabs {
@@ -64,8 +62,9 @@ sp-tabs {
     align-items: center;
     padding: 10px;
 }
-@media (min-width: 230px) and (max-width: 950px) {
+
+@media (width >= 230px) and (width <= 950px) {
     .border-tab sp-tab {
-        padding: 0px 35px !important;
+        padding: 0 35px !important;
     }
 }

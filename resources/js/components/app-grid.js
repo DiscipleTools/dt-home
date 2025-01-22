@@ -333,7 +333,7 @@ class AppGrid extends LitElement {
     }
 
     visitApp(url, options) {
-        if (Boolean(JSON.parse(options.open_in_new_tab ?? false))) {
+        if (JSON.parse(options.open_in_new_tab ?? false)) {
             window.open(url, '_blank')
         } else {
             window.location.href = url
