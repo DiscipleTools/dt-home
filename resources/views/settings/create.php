@@ -57,7 +57,7 @@ require_once 'icons-functions.php';
             <td colspan="3">
                 <input style="min-width: 100%;" type="text" name="slug" id="slug" pattern=".*\S+.*"
                        title="<?php esc_attr_e('The name cannot be empty or just whitespace.', 'dt-home'); ?>"
-                       required/>
+                       required />
             </td>
         </tr>
         <tr>
@@ -96,7 +96,7 @@ require_once 'icons-functions.php';
     </span>
             </td>
             <td colspan="3">
-                <input style="min-width: 100%;" type="text" name="fallback_url_ios" id="fallback_url_ios"/>
+                <input style="min-width: 100%;" type="text" name="fallback_url_ios" id="fallback_url_ios" />
             </td>
         </tr>
         <tr id="fallback_url_android_row">
@@ -106,7 +106,7 @@ require_once 'icons-functions.php';
     </span>
             </td>
             <td colspan="3">
-                <input style="min-width: 100%;" type="text" name="fallback_url_android" id="fallback_url_android"/>
+                <input style="min-width: 100%;" type="text" name="fallback_url_android" id="fallback_url_android" />
             </td>
         </tr>
         <tr id="fallback_url_others_row">
@@ -116,41 +116,43 @@ require_once 'icons-functions.php';
     </span>
             </td>
             <td colspan="3">
-                <input style="min-width: 100%;" type="text" name="fallback_url_others" id="fallback_url_others"/>
+                <input style="min-width: 100%;" type="text" name="fallback_url_others" id="fallback_url_others" />
             </td>
         </tr>
         <tr>
             <td style="vertical-align: middle;"><?php esc_html_e('Icons', 'dt-home') ?>
                 <span class="tooltip">[?]
-                    <span class="tooltiptext"><?php esc_html_e('Upload an icon for the app and specify theme colors to be adopted during light and dark modes.', 'dt-home') ?></span>
+                    <span
+                        class="tooltiptext"><?php esc_html_e('Upload an icon for the app and specify theme colors to be adopted during light and dark modes.', 'dt-home') ?></span>
                 </span>
             </td>
             <td colspan="4">
-                <h2 class="nav-tab-wrapper">
-                    <a href="#" class="nav-tab nav-tab-active app-icon-tab" data-tab="app-icon-tab-light"><?php esc_html_e('Light Mode', 'dt-home') ?></a>
-                    <a href="#" class="nav-tab app-icon-tab" data-tab="app-icon-tab-dark"><?php esc_html_e('Dark Mode', 'dt-home') ?></a>
-                </h2>
-
+                <h3 class="nav-tab-wrapper">
+                    <a href="#" class="nav-tab nav-tab-active app-icon-tab"
+                       data-tab="app-icon-tab-light"><?php esc_html_e('Light Mode', 'dt-home') ?></a>
+                    <a href="#" class="nav-tab app-icon-tab"
+                       data-tab="app-icon-tab-dark"><?php esc_html_e('Dark Mode', 'dt-home') ?></a>
+                </h3>
                 <div class="app-icon-tab-content" style="margin-top: 15px; margin-bottom: 15px;">
                     <div class="app-icon-tab-light">
-                        <?php build_icon_tab_html( [
+                        <?php build_icon_tab_html([
                             'existing_svg_img' => $svg_images ?? '',
                             'existing_color' => '#000000',
                             'icon_input_name' => 'icon',
                             'selected_icon_placeholder_name' => 'icon_selected_placeholder',
                             'color_input_name' => 'icon_color',
                             'icon_input_required' => true
-                        ] ); ?>
+                        ]); ?>
                     </div>
                     <div class="app-icon-tab-dark" style="display: none;">
-                        <?php build_icon_tab_html( [
+                        <?php build_icon_tab_html([
                             'existing_svg_img' => $svg_images ?? '',
                             'existing_color' => '#F5F5F5',
                             'icon_input_name' => 'icon_dark',
                             'selected_icon_placeholder_name' => 'icon_dark_selected_placeholder',
                             'color_input_name' => 'icon_dark_color',
                             'icon_input_required' => false
-                        ] ); ?>
+                        ]); ?>
                     </div>
                 </div>
             </td>
@@ -206,7 +208,7 @@ require_once 'icons-functions.php';
                         <td style="padding-left: 0;" colspan="<?php echo esc_attr($max_row_count); ?>">
                             <div>
                                 <label>
-                                    <input type="checkbox" id="select_all_user_roles" checked/>
+                                    <input type="checkbox" id="select_all_user_roles" checked />
                                     <?php esc_html_e('Select all roles?', 'dt-home'); ?>
                                 </label>
                                 <hr>
@@ -214,10 +216,10 @@ require_once 'icons-functions.php';
                         </td>
                     </tr>
                     <?php
-                    $roles_permissions_srv = container()->get( RolesPermissions::class );
-                    $roles = Disciple_Tools_Roles::get_dt_roles_and_permissions( false );
-                    ksort( $roles );
-                    foreach ( $roles as $key => $role ) {
+                    $roles_permissions_srv = container()->get(RolesPermissions::class);
+                    $roles = Disciple_Tools_Roles::get_dt_roles_and_permissions(false);
+                    ksort($roles);
+                    foreach ($roles as $key => $role) {
                         // Determine if a new row should be started.
                         if ($counter === 0) {
                             ?>
@@ -230,7 +232,7 @@ require_once 'icons-functions.php';
                             <div>
                                 <label>
                                     <input type="checkbox" name="roles[]" class="apps-user-role"
-                                           value="<?php echo esc_attr($key); ?>" checked/>
+                                           value="<?php echo esc_attr($key); ?>" checked />
                                     <?php echo esc_html($role['label'] ?? $key); ?>
                                 </label>
                             </div>
@@ -297,9 +299,9 @@ require_once 'icons-functions.php';
         var fallbackUrlAndroidRow = document.getElementById('fallback_url_android_row')
         var fallbackUrlOthersRow = document.getElementById('fallback_url_others_row')
 
-        var fallbackUrlIos = document.getElementById('fallback_url_ios');
-        var fallbackUrlAndroid = document.getElementById('fallback_url_android');
-        var fallbackUrlOthers = document.getElementById('fallback_url_others');
+        var fallbackUrlIos = document.getElementById('fallback_url_ios')
+        var fallbackUrlAndroid = document.getElementById('fallback_url_android')
+        var fallbackUrlOthers = document.getElementById('fallback_url_others')
 
         if (!typeSelect || !urlFieldRow) {
             return
@@ -315,20 +317,20 @@ require_once 'icons-functions.php';
             fallbackUrlIosRow.style.display = ''
             fallbackUrlAndroidRow.style.display = ''
             fallbackUrlOthersRow.style.display = ''
-            fallbackUrlIos.required = true;
-            fallbackUrlAndroid.required = true;
-            fallbackUrlOthers.required = true;
+            fallbackUrlIos.required = true
+            fallbackUrlAndroid.required = true
+            fallbackUrlOthers.required = true
         } else {
             fallbackUrlIosRow.style.display = 'none'
             fallbackUrlAndroidRow.style.display = 'none'
             fallbackUrlOthersRow.style.display = 'none'
-            fallbackUrlIos.required = false;
-            fallbackUrlAndroid.required = false;
-            fallbackUrlOthers.required = false;
+            fallbackUrlIos.required = false
+            fallbackUrlAndroid.required = false
+            fallbackUrlOthers.required = false
         }
     }
 
-    document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', function() {
         toggleURLField()
         document.getElementById('type').addEventListener('change', toggleURLField)
     })
