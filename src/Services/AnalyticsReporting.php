@@ -46,7 +46,7 @@ class AnalyticsReporting
         }
 
         $stored_metrics = get_plugin_option( config( 'analytics.dt_home_analytics_reports' ), [] );
-        $db_metrics = [ 'admin-app-creation', 'user-app-creation', 'login', 'login-error' ];
+        $db_metrics = [ 'admin-app-creation', 'user-app-creation', 'login', 'login-error', 'logout' ];
 
         foreach ( $db_metrics as $metric ) {
             if ( in_array( $metric, $params ) ) {

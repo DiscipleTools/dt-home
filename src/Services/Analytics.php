@@ -22,6 +22,7 @@ use OpenTelemetry\SDK\Trace\SpanProcessor\SimpleSpanProcessor;
 use OpenTelemetry\SDK\Trace\TracerProvider;
 use OpenTelemetry\SemConv\ResourceAttributes;
 use function DT\Home\config;
+use function DT\Home\container;
 use function DT\Home\get_plugin_option;
 use function DT\Home\set_plugin_option;
 
@@ -237,6 +238,9 @@ class Analytics {
                         // Destroy telemetry span object element reference and update result variable.
                         unset( $this->events[$evt_name] );
                         $result = true;
+
+                        // Capture completed events for local reporting.
+                        container()->get( AnalyticsReporting::class )->log_admin_event( $evt_name );
                     }
                 }
                 break;
@@ -258,6 +262,9 @@ class Analytics {
                         $properties['attributes'] ?? []
                     )->spanBuilder( $evt_name )->startSpan()->end();
                     $result = true;
+
+                    // Capture completed events for local reporting.
+                    container()->get( AnalyticsReporting::class )->log_admin_event( $evt_name );
                 }
                 break;
         }
