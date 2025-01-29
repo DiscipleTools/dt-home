@@ -6,7 +6,6 @@ use DT\Home\CodeZone\WPSupport\Router\ServerRequestFactory;
 use DT\Home\GuzzleHttp\Psr7\ServerRequest as Request;
 use DT\Home\Psr\Http\Message\ResponseInterface;
 use DT\Home\Services\Analytics;
-use DT\Home\Services\AnalyticsReporting;
 use function DT\Home\extract_request_input;
 use function DT\Home\get_plugin_option;
 use function DT\Home\plugin_url;
@@ -23,12 +22,10 @@ class LoginController
 {
 
     private Analytics $analytics;
-    private AnalyticsReporting $analytics_reporting;
 
-    public function __construct( Analytics $analytics, AnalyticsReporting $analytics_reporting )
+    public function __construct( Analytics $analytics )
     {
         $this->analytics = $analytics;
-        $this->analytics_reporting = $analytics_reporting;
     }
 
     /**
@@ -54,7 +51,6 @@ class LoginController
 
             //If the error links to lost password, inject the 3/3rds redirect
             $error = str_replace( '?action=lostpassword', '?action=lostpassword?&redirect_to=/', $error );
-            $this->analytics_reporting->log_admin_event( 'login-error' );
             $this->analytics->event( 'login-error', [ 'action' => 'snapshot', 'lib_name' => __CLASS__, 'attributes' => [ 'error' => 'wp_error' ] ] );
             return $this->show_error( $error );
         }
@@ -66,7 +62,6 @@ class LoginController
             return $this->show_error( __( 'An unexpected error has occurred.', 'dt-home' ) );
         }
 
-        $this->analytics_reporting->log_admin_event( 'login' );
         wp_set_current_user( $user->ID );
 
         return redirect( route_url() );
