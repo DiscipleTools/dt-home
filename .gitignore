@@ -8,3 +8,4 @@ tmp-*
 dist/*
 dt-home.zip
 /yarn.lock
+.env

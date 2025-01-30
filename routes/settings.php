@@ -53,8 +53,3 @@ $r->group( '/wp-admin', function ( RouteCollectionInterface $r ) {
 	$r->post( '/admin.php?page=dt_home&tab=training&action=edit/{id}', [ TrainingSettingsController::class, 'update' ] );
 } )->middleware( new Nonce( 'dt_admin_form_nonce' ) )
     ->middleware( new HasCap( 'manage_dt' ) );
-
-$r->group( '/wp-admin', function ( RouteCollectionInterface $r ) {
-    $r->post( '/admin.php?page=dt_home&tab=app&action=import', [ AppSettingsController::class, 'import' ] );
-} )->middleware( new Nonce( 'wp_rest' ) )
-    ->middleware( new HasCap( 'manage_dt' ) );
