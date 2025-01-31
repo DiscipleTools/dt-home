@@ -1,5 +1,6 @@
 import '../css/admin.css'
 import '@disciple.tools/web-components'
+import './reports.js'
 
 /**
  * Toggles the visibility of the URL field based on the selected type.

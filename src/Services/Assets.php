@@ -382,7 +382,7 @@ class Assets
 
         dt_theme_enqueue_style( 'material-font-icons-local', 'dt-core/dependencies/mdi/css/materialdesignicons.min.css', [] );
         wp_enqueue_style( 'material-font-icons', 'https://cdn.jsdelivr.net/npm/@mdi/font@6.6.96/css/materialdesignicons.min.css' );
-
+        wp_localize_script( 'dt-home', config( 'assets.javascript_global_scope' ), apply_filters( namespace_string( 'javascript_globals' ), [] ) );
         wp_print_media_templates();
     }
 
@@ -419,11 +419,11 @@ class Assets
         $custom_logo = get_plugin_option( 'custom_ministry_logo' );
         $default_logo = plugin_url( 'resources/img/logo-color.png' );
         ?>
-        <meta property="og:type" content="website" />
-        <meta property="og:title" content="<?php echo esc_attr( get_bloginfo( 'name' ) ); ?>" />
-        <meta property="og:url" content="<?php echo esc_url( get_plugin_option( 'dt_home_plugin_url' ) ); ?>" />
+        <meta property="og:type" content="website"/>
+        <meta property="og:title" content="<?php echo esc_attr( get_bloginfo( 'name' ) ); ?>"/>
+        <meta property="og:url" content="<?php echo esc_url( get_plugin_option( 'dt_home_plugin_url' ) ); ?>"/>
         <meta property="og:image"
-              content="<?php echo esc_url( !empty( $custom_logo ) ? $custom_logo : $default_logo ); ?>" />
+              content="<?php echo esc_url( !empty( $custom_logo ) ? $custom_logo : $default_logo ); ?>"/>
         <meta name="color-scheme" content="light dark">
         <?php
     }
