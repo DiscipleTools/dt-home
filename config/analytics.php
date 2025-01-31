@@ -6,8 +6,9 @@
 
 use DT\Home\Services\Analytics;
 
-$config->merge( [
+$config->merge([
     'analytics' => [
+        'dt_home_analytics_reports' => 'dt_home_analytics_reports',
         'export_endpoints' => [
             'honeycomb' => [
                 'traces' => [
@@ -37,4 +38,4 @@ $config->merge( [
             ]
         ]
     ]
-] );
+]);

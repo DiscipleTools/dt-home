@@ -23,7 +23,8 @@ class LoginController
 
     private Analytics $analytics;
 
-    public function __construct( Analytics $analytics ) {
+    public function __construct( Analytics $analytics )
+    {
         $this->analytics = $analytics;
     }
 
@@ -50,7 +51,6 @@ class LoginController
 
             //If the error links to lost password, inject the 3/3rds redirect
             $error = str_replace( '?action=lostpassword', '?action=lostpassword?&redirect_to=/', $error );
-
             $this->analytics->event( 'login-error', [ 'action' => 'snapshot', 'lib_name' => __CLASS__, 'attributes' => [ 'error' => 'wp_error' ] ] );
             return $this->show_error( $error );
         }
