@@ -382,9 +382,8 @@ class AppSettingsController
      * @param Request $request The request instance.
      * @param array $params The route parameters.
      *
-     * @return ResponseInterface
      */
-    public function import( Request $request, array $params ): ResponseInterface
+    public function import( Request $request, array $params )
     {
         return response([
             'success' => $this->apps->import( extract_request_input( $request ) )

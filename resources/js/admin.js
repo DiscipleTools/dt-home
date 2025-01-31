@@ -469,7 +469,7 @@ jQuery(document).ready(function ($) {
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         data: JSON.stringify(json),
-        url: `${window.dt_admin_scripts.site_url}/wp-admin/admin.php?page=dt_home&tab=app&action=import`,
+        url: `${window.dt_admin_scripts.site_url}/apps/json/`,
         beforeSend: (xhr) => {
           xhr.setRequestHeader("X-WP-Nonce", window.dt_admin_scripts.nonce);
         },
