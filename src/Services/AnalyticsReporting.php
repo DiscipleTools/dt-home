@@ -138,7 +138,7 @@ class AnalyticsReporting
      *
      * @param string $eventName The event name
      */
-    public function log_admin_event( string $eventName ): void
+    public function log_admin_event( string $eventName, $eventValue = null ): void
     {
         [$wpdb, $table_name, $userId] = $this->initialize_db();
 
@@ -150,11 +150,16 @@ class AnalyticsReporting
                 'hist_time' => time(),
                 'object_type' => 'dt_home_event',
                 'object_name' => $eventName,
+                'object_note' => '',
+                'meta_key' => $eventName,
+                'meta_value' => $eventValue
             ],
             [
                 '%d',
                 '%s',
                 '%d',
+                '%s',
+                '%s',
                 '%s',
                 '%s',
                 '%s'
@@ -172,7 +177,7 @@ class AnalyticsReporting
     {
         [$wpdb, $table_name] = $this->initialize_db();
 
-        $query = "SELECT histid, user_id, action, object_type, object_name, FROM_UNIXTIME(hist_time) as hist_time FROM $table_name WHERE object_type = %s";
+        $query = "SELECT histid, user_id, action, object_type, object_name, object_note, meta_key, meta_value, FROM_UNIXTIME(hist_time) as hist_time FROM $table_name WHERE object_type = %s";
         $params = [ 'dt_home_event' ];
 
         if ( $eventName ) {
