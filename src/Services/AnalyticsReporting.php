@@ -94,6 +94,7 @@ class AnalyticsReporting
 
         $query .= " ORDER BY hist_time ASC";
 
+        //phpcs:ignore
         return $wpdb->get_results( $wpdb->prepare( $query, ...$params ), ARRAY_A );
     }
 }

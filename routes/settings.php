@@ -46,7 +46,6 @@ $r->group('/wp-admin', function ( RouteCollectionInterface $r ) {
 	]);
 
     $r->get( '/admin.php?page=dt_home&tab=reports', [ ReportsController::class, 'show' ] );
-
 })->middleware( new HasCap( 'manage_dt' ) );
 
 $r->group('/wp-admin', function ( RouteCollectionInterface $r ) {
