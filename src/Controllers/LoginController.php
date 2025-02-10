@@ -41,7 +41,7 @@ class LoginController
         $this->analytics->event( 'login', [ 'action' => 'start', 'lib_name' => __CLASS__ ] );
         $params = extract_request_input( $request );
         $user = wp_authenticate( $params['username'] ?? '', $params['password'] ?? '' );
-        $this->analytics->event( 'login', [ 'action' => 'stop' ] );
+
 
         if ( is_wp_error( $user ) ) {
             //phpcs:ignore
@@ -63,7 +63,7 @@ class LoginController
         }
 
         wp_set_current_user( $user->ID );
-
+        $this->analytics->event( 'login', [ 'action' => 'stop' ] );
         return redirect( route_url() );
     }
 
@@ -127,9 +127,10 @@ class LoginController
      */
     public function logout()
     {
-        wp_logout();
 
         $this->analytics->event( __FUNCTION__, [ 'action' => 'snapshot', 'lib_name' => __CLASS__ ] );
+
+        wp_logout();
 
         return redirect( route_url( 'login' ) );
     }

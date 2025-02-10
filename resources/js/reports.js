@@ -33,19 +33,39 @@ class CombinedChart extends LitElement {
     async firstUpdated() {
         await this.updateComplete
         this.fetchData()
+        this.listenForFilterChange()
+    }
+
+    listenForFilterChange() {
+        const form = document.getElementById('reportFilterForm')
+        if (form) {
+            form.addEventListener('submit', (event) => {
+                event.preventDefault() // Prevent full page reload
+                this.fetchData()
+                document.getElementById('loader').style.display = 'inline-block'
+            })
+        }
     }
 
     async fetchData() {
-        const url = route_url(
+        const dateStart = document.getElementById('date_start').value
+        const dateEnd = document.getElementById('date_end').value
+
+        let url = route_url(
             '/analytics-reports?metrics=login,total-active-apps-count,total-active-custom-apps-count,total-active-coded-apps-count,total-deleted-coded-apps-count,total-active-training-videos-count,login-error,logout,admin-app-creation'
         )
+        if (dateStart) url += `&date_start=${dateStart}`
+        if (dateEnd) url += `&date_end=${dateEnd}`
 
+        const fullUrl = url
         try {
-            const response = await fetch(url)
+            const response = await fetch(fullUrl)
             const data = await response.json()
             this.updateCharts(data.reports)
         } catch (error) {
             console.error('Error fetching data:', error)
+        } finally {
+            document.getElementById('loader').style.display = 'none'
         }
     }
 
@@ -56,7 +76,13 @@ class CombinedChart extends LitElement {
     }
 
     createAppsChart(data) {
-        let root = am5.Root.new(this.shadowRoot.getElementById('piechartdiv'))
+        const chartDiv = this.shadowRoot.getElementById('piechartdiv')
+        if (chartDiv._root) {
+            chartDiv._root.dispose()
+        }
+
+        let root = am5.Root.new(chartDiv)
+        chartDiv._root = root
 
         let chart = root.container.children.push(
             am5percent.PieChart.new(root, {
@@ -64,7 +90,6 @@ class CombinedChart extends LitElement {
                 paddingBottom: 50, // Adjust the padding as needed
             })
         )
-
         let pieData = [
             {
                 apps: `Total Active Apps (${data['total-active-apps-count']})`,
@@ -83,8 +108,9 @@ class CombinedChart extends LitElement {
                 appcounts: data['total-deleted-coded-apps-count'],
             },
             {
-                apps: `Total Admin Apps (${data['admin-app-creation']})`,
-                appcounts: data['admin-app-creation'],
+                apps: `Total Admin Apps (${data['activity-log']['admin-app-creation'].length})`,
+                appcounts:
+                    data['activity-log']['admin-app-creation'].length ?? 0,
             },
         ]
 
@@ -120,7 +146,13 @@ class CombinedChart extends LitElement {
     }
 
     createLoginChart(data) {
-        let root = am5.Root.new(this.shadowRoot.getElementById('barchartdiv'))
+        const chartDiv = this.shadowRoot.getElementById('barchartdiv')
+        if (chartDiv._root) {
+            chartDiv._root.dispose()
+        }
+
+        let root = am5.Root.new(chartDiv)
+        chartDiv._root = root
 
         let chart = root.container.children.push(
             am5xy.XYChart.new(root, {
@@ -214,9 +246,18 @@ class CombinedChart extends LitElement {
         )
 
         let barData = [
-            { metric: 'Login', value: data['login'] },
-            { metric: 'Logout', value: data['logout'] },
-            { metric: 'Login Error', value: data['login-error'] },
+            {
+                metric: 'Login',
+                value: data['activity-log']['login'].length ?? 0,
+            },
+            {
+                metric: 'Logout',
+                value: data['activity-log']['logout'].length ?? 0,
+            },
+            {
+                metric: 'Login Error',
+                value: data['activity-log']['login-error'].length ?? 0,
+            },
         ]
 
         xAxis.data.setAll(barData)
@@ -237,9 +278,15 @@ class CombinedChart extends LitElement {
     }
 
     createTrainingVideosChart(data) {
-        let root = am5.Root.new(
-            this.shadowRoot.getElementById('trainingvideoschartdiv')
+        const chartDiv = this.shadowRoot.getElementById(
+            'trainingvideoschartdiv'
         )
+        if (chartDiv._root) {
+            chartDiv._root.dispose()
+        }
+
+        let root = am5.Root.new(chartDiv)
+        chartDiv._root = root
 
         root.setThemes([am5themes_Animated.new(root)])
 
