@@ -15,7 +15,8 @@ use function DT\Home\routes_path;
  * settings page to the WordPress admin area.
  * @see https://developer.wordpress.org/reference/functions/add_submenu_page/
  */
-class Settings {
+class Settings
+{
 
     /**
      * Register the admin menu.
@@ -33,8 +34,9 @@ class Settings {
      * @return void
      * @see https://developer.wordpress.org/reference/functions/add_submenu_page/
      */
-    public function register_menu(): void {
-        $menu = add_submenu_page( 'dt_extensions',
+    public function register_menu(): void
+    {
+        $menu = add_submenu_page('dt_extensions',
             __( 'Home Screen', 'dt-home' ),
             __( 'Home Screen', 'dt-home' ),
             'manage_dt',
@@ -84,7 +86,8 @@ class Settings {
      *
      * @return void
      */
-    public function route(): void {
+    public function route(): void
+    {
         $request = container()->get( ServerRequestInterface::class );
         $query = $request->getQueryParams();
         $tab = $query['tab'] ?? 'general';

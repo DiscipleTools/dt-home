@@ -63,7 +63,7 @@ class LoginController
         $this->analytics->event( 'login', [ 'action' => 'snapshot', 'lib_name' => __CLASS__, 'attributes' => [] ] );
 
         wp_set_current_user( $user->ID );
-
+        $this->analytics->event( 'login', [ 'action' => 'stop' ] );
         return redirect( route_url() );
     }
 

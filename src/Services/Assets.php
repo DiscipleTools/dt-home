@@ -421,11 +421,11 @@ class Assets
         $custom_logo = get_plugin_option( 'custom_ministry_logo' );
         $default_logo = plugin_url( 'resources/img/logo-color.png' );
         ?>
-        <meta property="og:type" content="website" />
-        <meta property="og:title" content="<?php echo esc_attr( get_bloginfo( 'name' ) ); ?>" />
-        <meta property="og:url" content="<?php echo esc_url( get_plugin_option( 'dt_home_plugin_url' ) ); ?>" />
+        <meta property="og:type" content="website"/>
+        <meta property="og:title" content="<?php echo esc_attr( get_bloginfo( 'name' ) ); ?>"/>
+        <meta property="og:url" content="<?php echo esc_url( get_plugin_option( 'dt_home_plugin_url' ) ); ?>"/>
         <meta property="og:image"
-              content="<?php echo esc_url( !empty( $custom_logo ) ? $custom_logo : $default_logo ); ?>" />
+              content="<?php echo esc_url( !empty( $custom_logo ) ? $custom_logo : $default_logo ); ?>"/>
         <meta name="color-scheme" content="light dark">
         <?php
     }
