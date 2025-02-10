@@ -240,7 +240,7 @@ class Analytics {
                         $result = true;
 
                         // Capture completed events for local reporting.
-                        container()->get( AnalyticsReporting::class )->log_admin_event( $evt_name );
+                        container()->get( AnalyticsReporting::class )->log_event( $evt_name );
                     }
                 }
                 break;
@@ -264,7 +264,7 @@ class Analytics {
                     $result = true;
 
                     // Capture completed events for local reporting.
-                    container()->get( AnalyticsReporting::class )->log_admin_event( $evt_name );
+                    container()->get( AnalyticsReporting::class )->log_event( $evt_name );
                 }
                 break;
         }
@@ -360,6 +360,9 @@ class Analytics {
                     }
 
                     $result = true;
+
+                    // Capture completed events for local reporting.
+                    container()->get( AnalyticsReporting::class )->log_event( $metric_name, $metric_value );
                 }
                 break;
         }

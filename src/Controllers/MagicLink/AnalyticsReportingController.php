@@ -27,9 +27,11 @@ class AnalyticsReportingController
         // Get query parameters
         $queryParams = $request->getQueryParams();
         $metrics = $this->extract_metrics( $queryParams );
+        $start_date = $queryParams['date_start'] ?? null;
+        $end_date = $queryParams['date_end'] ?? null;
 
         // Fetch reports from the service
-        $reports = $this->analytics_reporting->get_reports( $metrics );
+        $reports = $this->analytics_reporting->get_reports( $metrics, $start_date, $end_date );
 
         // Return response as JSON
         return response( [ 'reports' => $reports ] );

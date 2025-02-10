@@ -88,10 +88,14 @@ class SettingsApps extends AppSource {
      * @param array $metrics Metrics to be captured.
      */
     public function capture_analytics_metric_counts( string $scope = __CLASS__, array $apps = null, array $metrics = [
+        'total-apps-count',
         'total-active-apps-count',
         'total-active-custom-apps-count',
         'total-active-coded-apps-count',
-        'total-deleted-coded-apps-count'
+        'total-deleted-coded-apps-count',
+        'total-apps-web-views-count',
+        'total-apps-links-count',
+        'total-apps-native-links-count'
     ] ): void {
 
         $analytics = container()->get( Analytics::class );
@@ -106,6 +110,16 @@ class SettingsApps extends AppSource {
         foreach ( $metrics as $metric ) {
             $properties = null;
             switch ( $metric ) {
+                case 'total-apps-count':
+                    $total_apps_count = count( $apps );
+
+                    $properties = [
+                        'lib_name' => $scope,
+                        'value' => $total_apps_count,
+                        'unit' => 'apps',
+                        'description' => 'Total Apps Count'
+                    ];
+                    break;
                 case 'total-active-apps-count':
                     $total_active_apps_count = count( array_filter( $apps, function ( $app ) {
                         return ( !isset( $app['is_deleted'] ) || $app['is_deleted'] === false );
@@ -154,6 +168,43 @@ class SettingsApps extends AppSource {
                         'description' => 'Total Deleted Coded Apps Count'
                     ];
                     break;
+                case 'total-apps-web-views-count':
+                    $total_apps_web_views_count = count( array_filter( $apps, function ( $app ) {
+                        return ( isset( $app['type'] ) && strtolower( trim( $app['type'] ) ) == 'web view' );
+                    } ) );
+
+                    $properties = [
+                        'lib_name' => $scope,
+                        'value' => $total_apps_web_views_count,
+                        'unit' => 'web-view-apps',
+                        'description' => 'Total Web View Apps Count'
+                    ];
+                    break;
+                case 'total-apps-links-count':
+                    $total_apps_links_count = count( array_filter( $apps, function ( $app ) {
+                        return ( isset( $app['type'] ) && strtolower( trim( $app['type'] ) ) == 'link' );
+                    } ) );
+
+                    $properties = [
+                        'lib_name' => $scope,
+                        'value' => $total_apps_links_count,
+                        'unit' => 'link-apps',
+                        'description' => 'Total Link Apps Count'
+                    ];
+                    break;
+                case 'total-apps-native-links-count':
+                    $total_apps_native_links_count = count( array_filter( $apps, function ( $app ) {
+                        return ( isset( $app['type'] ) && strtolower( trim( $app['type'] ) ) == 'native app link' );
+                    } ) );
+
+                    $properties = [
+                        'lib_name' => $scope,
+                        'value' => $total_apps_native_links_count,
+                        'unit' => 'native-link-apps',
+                        'description' => 'Total Native Link Apps Count'
+                    ];
+                    break;
+
             }
 
             // Generate metric exports on properties detection.

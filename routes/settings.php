@@ -8,6 +8,7 @@ use DT\Home\CodeZone\WPSupport\Middleware\HasCap;
 use DT\Home\Controllers\Admin\AppSettingsController;
 use DT\Home\Controllers\Admin\GeneralSettingsController;
 use DT\Home\Controllers\Admin\TrainingSettingsController;
+use DT\Home\Controllers\Admin\ReportsController;
 use DT\Home\CodeZone\WPSupport\Middleware\Nonce;
 use DT\Home\League\Route\RouteCollectionInterface;
 
@@ -42,6 +43,9 @@ $r->group( '/wp-admin', function ( RouteCollectionInterface $r ) {
 		TrainingSettingsController::class,
 		'delete'
 	]);
+
+    $r->get( '/admin.php?page=dt_home&tab=reports', [ ReportsController::class, 'show' ] );
+
 })->middleware( new HasCap( 'manage_dt' ) );
 
 $r->group( '/wp-admin', function ( RouteCollectionInterface $r ) {
