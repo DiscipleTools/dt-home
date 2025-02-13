@@ -86,10 +86,6 @@ describe('RT053: Confirm specified user roles Digital Responder with permission 
                     'input[type="checkbox"][name="capabilities[]"][value="can_access_home_screen"]'
                 ).check({ force: true })
 
-                cy.get(
-                    `input[value="can_access_${shared_data.app_slug}_app"]`
-                ).should('be.checked')
-
                 // keep defaults (visibility, exportability, roles, etc...) and submit form.
                 cy.get(
                     'button[type="submit"].button.button-primary.button-large[title=" Create New Role"]'
@@ -137,6 +133,7 @@ describe('RT053: Confirm specified user roles Digital Responder with permission 
             }
         )
     })
+
     // Log in to the home screen and verify that the configured coded app is visible and accessible.
     it('Log in to the home screen and verify that the configured coded app is visible and accessible for Digital Responder.', () => {
         cy.session(

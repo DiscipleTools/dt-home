@@ -36,8 +36,8 @@ describe('RT007 - Administrator can hide an app.', () => {
             // Specify app to be opened within new tab.
             cy.get('#open_in_new_tab').check()
 
-            // Ensure new app is visible.
-            cy.get('#is_hidden').uncheck()
+            // Ensure new app is hidden.
+            cy.get('#is_hidden').check()
 
             // Specify app font icon.
             const app_icon = shared_data.app_icon
@@ -56,9 +56,9 @@ describe('RT007 - Administrator can hide an app.', () => {
         })
     })
 
-    // Admin can Show the app list page.
-    it('Admin can Show the app list page.', () => {
-        cy.session('admin_can_show_the_app_list_page', () => {
+    // Admin confirms newly created app is listed and in a hidden state.
+    it('Admin confirms newly created app is listed and in a hidden state.', () => {
+        cy.session('admin_confirms_newly_created_app_is_listed_and_in_a_hidden_state', () => {
             cy.adminAppsSettingsInit()
 
             cy.on('uncaught:exception', (err, runnable) => {
@@ -67,31 +67,18 @@ describe('RT007 - Administrator can hide an app.', () => {
             })
 
             const app_name = shared_data.app_name
-            // Confirm the app list page is displayed.
-            cy.get(`a[data-slug="${shared_data.app_slug}"]`, {
-                timeout: 10000,
-            }).click()
-            cy.contains(app_name)
 
-            cy.get(`a[data-slug-edit="${shared_data.app_slug}"]`, {
-                timeout: 10000,
-            }).click()
+            // Confirm newly created app is listed.
+            cy.contains(app_name);
 
-            cy.get('#is_hidden').then(($checkbox) => {
-                if ($checkbox.prop('checked')) {
-                    cy.get('#is_hidden').uncheck()
-                } else {
-                    cy.get('#is_hidden').check()
-                }
-            })
+            // Click edit app button and navigate to edit app view.
+            cy.get(`a[href*="admin.php?page=dt_home&tab=app&action=edit/${shared_data.app_slug}"]`).click()
 
-            cy.on('uncaught:exception', (err, runnable) => {
-                // Handle the exception
-            })
+            // Confirm app is in a hidden state.
+            cy.get('#is_hidden').should('be.checked')
         })
     })
 
-    // Login to D.T frontend and obtain home screen plugin magic link.
     // Login to D.T frontend and obtain home screen plugin magic link.
     it('Login to D.T frontend and obtain home screen plugin magic link.', () => {
         cy.session('dt_frontend_login_and_obtain_home_screen_plugin_ml', () => {
@@ -121,10 +108,11 @@ describe('RT007 - Administrator can hide an app.', () => {
             })
         })
     })
-    // Confirm new app is visible within home screen frontend.
-    it('Confirm new app is visible within home screen frontend.', () => {
+
+    // Confirm new app is hidden within home screen frontend.
+    it('Confirm new app is hidden within home screen frontend.', () => {
         cy.session(
-            'confirm_new_app_is_visible_within_home_screen_frontend.',
+            'confirm_new_app_is_hidden_within_home_screen_frontend.',
             () => {
                 cy.on('uncaught:exception', (err, runnable) => {
                     // Returning false here prevents Cypress from failing the test
@@ -138,7 +126,7 @@ describe('RT007 - Administrator can hide an app.', () => {
                 cy.get('dt-home-app-grid')
                     .shadow()
                     .find(`dt-home-app-icon[name*="${shared_data.app_name}"]`)
-                    .should('exist')
+                    .should('not.be.visible')
             }
         )
     })
@@ -147,8 +135,8 @@ describe('RT007 - Administrator can hide an app.', () => {
     it('Admin can delete an app.', () => {
         cy.session('admin_can_delete_an_app', () => {
             cy.adminAppsSettingsInit()
-            // Locate the app row and click the delete button.
 
+            // Locate the app row and click the delete button.
             cy.contains('tr', shared_data.app_slug, { timeout: 10000 })
                 .should('have.lengthOf', 1)
                 .find(`.delete-apps`, { timeout: 10000 })
@@ -158,7 +146,7 @@ describe('RT007 - Administrator can hide an app.', () => {
             cy.on('window:confirm', () => true)
 
             // Confirm refreshed apps lists does not contain deleted app.
-            cy.contains('Updated Cypress Test App').should('not.exist')
+            cy.contains(shared_data.app_name).should('not.exist')
             cy.contains(shared_data.app_slug).should('not.exist')
         })
     })

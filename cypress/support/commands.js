@@ -26,10 +26,14 @@
 
 // -- Initialization NPM Home Screen Plugin Environment -- //
 Cypress.Commands.add('npmHomeScreenInit', () => {
-    cy.exec('composer install')
-    cy.exec('composer update')
-    cy.exec('npm install')
-    cy.exec('npm run build')
+    /**
+     * RUN COMPOSER & NPM COMMANDS PRIOR TO RUNNING TEST SUITE.
+     *
+     *   cy.exec('composer install')
+     *   cy.exec('composer update')
+     *   cy.exec('npm install')
+     *   cy.exec('npm run build')
+     */
     cy.exec(
         'cp -R ./node_modules/@disciple.tools/web-components/dist/generated ./dist/assets/'
     )
@@ -230,7 +234,8 @@ Cypress.Commands.add(
 )
 // Reset frontend apps
 Cypress.Commands.add('resetFrontendApps', () => {
-    // click the + button to display the popup model
+
+    // Click the + button to display the popup model
     cy.get('dt-home-footer')
         .shadow()
         .find('sp-button.trigger-button[slot="trigger"]')
