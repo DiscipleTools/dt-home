@@ -42,7 +42,7 @@ $this->layout( 'layouts/settings', compact( 'tab', 'link', 'page_title' ) )
                                 <td style="border: 1px solid #ddd;"><?php echo esc_html( $training['name'] ); ?></td>
                                 <td style="border: 1px solid #ddd;"><?php echo stripslashes($training['embed_video']); //phpcs:ignore ?></td>
                                 <td style="border: 1px solid #ddd;"><?php echo esc_html( $training['anchor'] ); ?></td>
-                                <td style="border: 1px solid #ddd;">
+                                <td style="border: 1px solid #ddd; white-space: nowrap;">
                                     <div class="action-tooltip">
                                         <a href="admin.php?page=dt_home&tab=training&action=up/<?php echo esc_attr( $training['id'] ); ?>">
                                             <i class="fas fa-arrow-up action-icon"></i>

@@ -137,7 +137,7 @@ $this->layout( 'layouts/settings', compact( 'tab', 'link', 'page_title' ) )
                                     <?php endif; ?>
                                 </td>
                                 <td style="border: 1px solid #ddd;"><?php echo esc_attr( $app['slug'] ); ?></td>
-                                <td style="border: 1px solid #ddd;">
+                                <td style="border: 1px solid #ddd; white-space: nowrap;">
                                     <div class="action-tooltip">
                                         <a href="admin.php?page=dt_home&tab=app&action=up/<?php echo esc_attr( $app['slug'] ); ?>">
                                             <i class="fas fa-arrow-up action-icon"></i>
@@ -250,72 +250,72 @@ $this->layout( 'layouts/settings', compact( 'tab', 'link', 'page_title' ) )
         })
 
 
-    document.addEventListener('DOMContentLoaded', () => {
-        const tabs = document.querySelectorAll('.tabs .tab');
-        const contents = document.querySelectorAll('.tab-content');
-        const copyButton = document.getElementById('copyButton');
+        document.addEventListener('DOMContentLoaded', () => {
+            const tabs = document.querySelectorAll('.tabs .tab')
+            const contents = document.querySelectorAll('.tab-content')
+            const copyButton = document.getElementById('copyButton')
 
-        tabs.forEach(tab => {
-            tab.addEventListener('click', () => {
-                // Remove active class from all tabs and contents
-                tabs.forEach(t => t.classList.remove('active'));
-                contents.forEach(content => content.classList.remove('active'));
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    // Remove active class from all tabs and contents
+                    tabs.forEach(t => t.classList.remove('active'))
+                    contents.forEach(content => content.classList.remove('active'))
 
-                // Add active class to clicked tab and corresponding content
-                tab.classList.add('active');
-                const contentId = tab.getAttribute('data-tab');
-                document.getElementById(contentId).classList.add('active');
+                    // Add active class to clicked tab and corresponding content
+                    tab.classList.add('active')
+                    const contentId = tab.getAttribute('data-tab')
+                    document.getElementById(contentId).classList.add('active')
 
-                // Toggle visibility of the copy button
-                if (contentId === 'copyContent') {
-                    copyButton.style.display = 'inline-block';
-                } else {
-                    copyButton.style.display = 'none';
-                }
-            });
-        });
+                    // Toggle visibility of the copy button
+                    if (contentId === 'copyContent') {
+                        copyButton.style.display = 'inline-block'
+                    } else {
+                        copyButton.style.display = 'none'
+                    }
+                })
+            })
 
-        // Initially hide the copy button if the share tab is active
-        if (document.querySelector('.tab.active').getAttribute('data-tab') !== 'copyContent') {
-            copyButton.style.display = 'none';
-        }
-    });
-    document.addEventListener('DOMContentLoaded', () => {
-        const copyLinkButton = document.getElementById('copyLinkButton');
-        const exportLink = document.getElementById('exportLink');
-        const closeButtons = document.querySelectorAll('.close-button');
-        const exportPopup = document.getElementById('exportPopup');
-        const overlay = document.getElementById('overlay');
-        const qrCodeImage = document.getElementById('qrCodeImage');
-
-        copyLinkButton.addEventListener('click', async () => {
-            try {
-                // Copy the URL from the exportLink input field to the clipboard
-                await navigator.clipboard.writeText(exportLink.value);
-                exportLink.classList.add('copied');
-                //alert('URL copied to clipboard');
-            } catch (err) {
-                console.error('Failed to copy the URL: ', err);
+            // Initially hide the copy button if the share tab is active
+            if (document.querySelector('.tab.active').getAttribute('data-tab') !== 'copyContent') {
+                copyButton.style.display = 'none'
             }
-        });
+        })
+        document.addEventListener('DOMContentLoaded', () => {
+            const copyLinkButton = document.getElementById('copyLinkButton')
+            const exportLink = document.getElementById('exportLink')
+            const closeButtons = document.querySelectorAll('.close-button')
+            const exportPopup = document.getElementById('exportPopup')
+            const overlay = document.getElementById('overlay')
+            const qrCodeImage = document.getElementById('qrCodeImage')
 
-        closeButtons.forEach((button) => {
-            button.addEventListener('click', () => {
-                // Close the export popup and reset the styles
-                exportPopup.style.display = 'none';
-                overlay.style.display = 'none';
-                document.body.style.overflow = 'auto';
-                exportLink.classList.remove('copied');
+            copyLinkButton.addEventListener('click', async () => {
+                try {
+                    // Copy the URL from the exportLink input field to the clipboard
+                    await navigator.clipboard.writeText(exportLink.value)
+                    exportLink.classList.add('copied')
+                    //alert('URL copied to clipboard');
+                } catch (err) {
+                    console.error('Failed to copy the URL: ', err)
+                }
+            })
 
-                // Reset the exportLink input field and QR code image
-                exportLink.value = '';
-                qrCodeImage.src = '';
-            });
-        });
-    });
+            closeButtons.forEach((button) => {
+                button.addEventListener('click', () => {
+                    // Close the export popup and reset the styles
+                    exportPopup.style.display = 'none'
+                    overlay.style.display = 'none'
+                    document.body.style.overflow = 'auto'
+                    exportLink.classList.remove('copied')
 
-</script>
-<?php $this->start( 'right' ) ?>
+                    // Reset the exportLink input field and QR code image
+                    exportLink.value = ''
+                    qrCodeImage.src = ''
+                })
+            })
+        })
+
+    </script>
+    <?php $this->start( 'right' ) ?>
 
     <!-- Add some content to the right side -->
 
