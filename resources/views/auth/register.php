@@ -16,8 +16,7 @@ $this->layout( 'layouts/auth' );
             <div class="logo">
                 <?php if ( !empty( $custom_ministry_logo ) ) : ?>
                     <img
-                        src="
-                <?php echo esc_url( $custom_ministry_logo ) ?>"
+                        src="<?php echo esc_url( $custom_ministry_logo ) ?>?ts=<?php echo esc_attr( time() ) ?>"
                         alt="Disciple.Tools"
                         class="logo__image">
                 <?php else : ?>
