@@ -80,9 +80,7 @@ class AppController
      */
     public function show( Request $request, $params )
     {
-
         // Fetch the app
-        $key = $params['key'];
         $slug = $params['slug'];
         $user_id = get_current_user_id();
         $app = $this->apps->find_for( $slug, $user_id );
@@ -131,7 +129,7 @@ class AppController
             return response( __( 'Not Found', 'dt-home' ), 404 );
         }
 
-        return template( 'web-view', compact( 'key', 'app', 'url' ) );
+        return template( 'web-view', compact( 'app', 'url' ) );
     }
 
 
@@ -235,12 +233,7 @@ class AppController
             'sort' => $apps_count,
             'roles' => $roles,
         ];
-        // validate the slug to ensure it is unique for the user
-        foreach ( $apps_array as $app ) {
-            if ( $app['slug'] == $app_data['slug'] ) {
-                return response( [ 'error' => 'App with the same slug already exists' ], 400 );
-            }
-        }
+        $apps_array = $this->apps->from( 'user' );
         $apps_array[] = $app_data;
         $this->user_apps->save( $apps_array );
 

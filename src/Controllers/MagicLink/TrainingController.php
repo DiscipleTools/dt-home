@@ -2,7 +2,6 @@
 
 namespace DT\Home\Controllers\MagicLink;
 
-use DT\Home\GuzzleHttp\Psr7\ServerRequest as Request;
 use DT\Home\Psr\Http\Message\ResponseInterface;
 use DT\Home\Sources\Trainings;
 use function DT\Home\template;
@@ -21,9 +20,8 @@ class TrainingController
      *
      * @return ResponseInterface
      */
-    public function show( Request $request, $params )
+    public function show()
     {
-        $key = $params['key'];
         $training_data = array_values( $this->trainings->all() );
         $data = json_encode( $training_data );
         $training_data_json_escaped = htmlspecialchars( $data );
@@ -33,8 +31,7 @@ class TrainingController
             'data',
             'training_data',
             'training_data_json_escaped',
-            'page_title',
-            'key'
+            'page_title'
         ));
     }
 }
