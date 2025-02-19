@@ -4,6 +4,7 @@ namespace DT\Home\Controllers\Admin;
 
 use DT\Home\GuzzleHttp\Psr7\ServerRequest as Request;
 use DT\Home\Psr\Http\Message\ResponseInterface;
+use DT\Home\Services\Cache;
 use DT\Home\Services\RolesPermissions;
 use function DT\Home\config;
 use function DT\Home\extract_request_input;
@@ -59,6 +60,8 @@ class GeneralSettingsController
         set_plugin_option( 'custom_ministry_logo', $dt_home_file_upload );
 
         container()->get( RolesPermissions::class )->enabled( $dt_home_use_capabilities === 'on' );
+
+        container()->get( Cache::class )->delete( ['custom_ministry_logo'] );
 
         $redirect_url = add_query_arg( 'message', 'updated', admin_url( 'admin.php?page=dt_home' ) );
 
