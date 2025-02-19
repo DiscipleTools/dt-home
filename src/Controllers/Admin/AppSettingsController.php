@@ -103,7 +103,7 @@ class AppSettingsController
         $fallback_url_android = sanitize_text_field( $input['fallback_url_android'] ?? '' );
         $fallback_url_others = sanitize_text_field( $input['fallback_url_others'] ?? '' );
         $slug = sanitize_text_field( $input['slug'] ?? '' );
-        $sort = sanitize_text_field( $input['sort'] ?? '' );
+        $sort = sanitize_text_field( $input['sort'] ?? count( $this->settings_apps->raw() ) );
         $is_hidden = filter_var( $input['is_hidden'] ?? '0', FILTER_SANITIZE_NUMBER_INT );
         $is_exportable = filter_var( $input['is_exportable'] ?? '0', FILTER_SANITIZE_NUMBER_INT );
         $open_in_new_tab = filter_var( $input['open_in_new_tab'] ?? '0', FILTER_SANITIZE_NUMBER_INT );
