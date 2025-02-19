@@ -34,7 +34,7 @@ class ShareController
         $contact = Disciple_Tools_Users::get_contact_for_user( $user_id );
 
         $this->set_cookie( $contact );
-        $this->analytics->event( 'Share Link', [ 'action' => 'snapshot', 'lib_name' => __CLASS__ ] );
+        $this->analytics->event( 'share-link', [ 'action' => 'snapshot', 'lib_name' => __CLASS__ ] );
         return redirect( route_url() );
     }
 

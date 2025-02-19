@@ -8,6 +8,7 @@ use DT\Home\Services\Apps;
 use DT\Home\Services\RolesPermissions;
 use DT\Home\Sources\SettingsApps;
 use DT\Home\Sources\UserApps;
+use DT\Home\Services\Analytics;
 use function DT\Home\container;
 use function DT\Home\extract_request_input;
 use function DT\Home\get_plugin_option;
@@ -15,7 +16,6 @@ use function DT\Home\magic_url;
 use function DT\Home\namespace_string;
 use function DT\Home\response;
 use function DT\Home\template;
-use DT\Home\Services\Analytics;
 
 /**
  * Class AppController

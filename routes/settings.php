@@ -29,26 +29,23 @@ $r->group('/wp-admin', function ( RouteCollectionInterface $r ) {
     $r->get( '/admin.php?page=dt_home&tab=app&action=softdelete/{slug}', [ AppSettingsController::class, 'soft_delete_app' ] );
     $r->get( '/admin.php?page=dt_home&tab=app&action=restore_app/{slug}', [ AppSettingsController::class, 'restore_app' ] );
 
-    $r->get( '/admin.php?page=dt_home&tab=training', [ TrainingSettingsController::class, 'show' ] );
-    $r->get('/admin.php?page=dt_home&tab=training&action=create', [
-        TrainingSettingsController::class,
-        'create'
-    ]);
-    $r->get('/admin.php?page=dt_home&tab=training&action=edit/{id}', [
-        TrainingSettingsController::class,
-        'edit'
-    ]);
-    $r->get( '/admin.php?page=dt_home&tab=training&action=up/{id}', [ TrainingSettingsController::class, 'up' ] );
-    $r->get( '/admin.php?page=dt_home&tab=training&action=down/{id}', [ TrainingSettingsController::class, 'down' ] );
-    $r->get('/admin.php?page=dt_home&tab=training&action=delete/{id}', [
-        TrainingSettingsController::class,
-        'delete'
-    ]);
-    //reports
-    $r->get('/admin.php?page=dt_home&tab=reports', [
-        ReportsController::class,
-        'report'
-    ]);
+	$r->get( '/admin.php?page=dt_home&tab=training', [ TrainingSettingsController::class, 'show' ] );
+	$r->get('/admin.php?page=dt_home&tab=training&action=create', [
+		TrainingSettingsController::class,
+		'create'
+	]);
+	$r->get('/admin.php?page=dt_home&tab=training&action=edit/{id}', [
+		TrainingSettingsController::class,
+		'edit'
+	]);
+	$r->get( '/admin.php?page=dt_home&tab=training&action=up/{id}', [ TrainingSettingsController::class, 'up' ] );
+	$r->get( '/admin.php?page=dt_home&tab=training&action=down/{id}', [ TrainingSettingsController::class, 'down' ] );
+	$r->get('/admin.php?page=dt_home&tab=training&action=delete/{id}', [
+		TrainingSettingsController::class,
+		'delete'
+	]);
+
+    $r->get( '/admin.php?page=dt_home&tab=reports', [ ReportsController::class, 'show' ] );
 })->middleware( new HasCap( 'manage_dt' ) );
 
 $r->group('/wp-admin', function ( RouteCollectionInterface $r ) {

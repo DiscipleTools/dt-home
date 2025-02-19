@@ -4,33 +4,21 @@ namespace DT\Home\Services;
 
 class AnalyticsReporting
 {
+
+    public function __construct() {
+    }
+
     /**
      * Get the analytics reports
      *
      * @param array $params The parameters
      * @return array The analytics reports
      */
-    public function get_reports( array $params = [], $start_date = null, $end_date = null ): array
-    {
+    public function get_reports( array $params = [], $start_date = null, $end_date = null ): array {
         $reports = [];
 
-        $db_metrics = [
-            'admin-app-creation',
-            'user-app-creation',
-            'login',
-            'login-error',
-            'logout',
-            'total-active-apps-count',
-            'total-active-custom-apps-count',
-            'total-active-coded-apps-count',
-            'total-deleted-coded-apps-count',
-            'total-active-training-videos-count'
-        ];
-
-        foreach ( $db_metrics as $metric ) {
-            if ( in_array( $metric, $params ) ) {
-                $reports[$metric] = $this->get_activity_logs( $metric, $start_date, $end_date );
-            }
+        foreach ( $params as $metric ) {
+            $reports[$metric] = $this->get_activity_logs( $metric, $start_date, $end_date );
         }
 
         return $reports;
@@ -41,35 +29,33 @@ class AnalyticsReporting
      *
      * @return array The database connection, table name, and user ID
      */
-    private function initialize_db(): array
-    {
+    private function initialize_db(): array {
         global $wpdb;
         $table_name = $wpdb->prefix . 'dt_activity_log';
-        $userId = get_current_user_id();
+        $user_id = get_current_user_id();
 
-        return [ $wpdb, $table_name, $userId ];
+        return [ $wpdb, $table_name, $user_id ];
     }
 
     /**
-     * Log an admin event
+     * Log an event
      *
-     * @param string $eventName The event name
+     * @param string $event_name The event name
      */
-    public function log_admin_event( string $eventName, $eventValue = null ): void
-    {
-        [$wpdb, $table_name, $userId] = $this->initialize_db();
+    public function log_event( string $event_name, $event_value = '' ): void {
+        [ $wpdb, $table_name, $user_id ] = $this->initialize_db();
 
         $wpdb->insert(
             $table_name,
             [
-                'user_id' => $userId,
-                'action' => $eventName,
+                'user_id' => $user_id,
+                'action' => $event_name,
                 'hist_time' => time(),
                 'object_type' => 'dt_home_event',
-                'object_name' => $eventName,
+                'object_name' => $event_name,
                 'object_note' => '',
-                'meta_key' => $eventName,
-                'meta_value' => $eventValue
+                'meta_key' => $event_name,
+                'meta_value' => $event_value
             ],
             [
                 '%d',
@@ -87,20 +73,18 @@ class AnalyticsReporting
     /**
      * Get the activity logs
      *
-     * @param string $eventName The event name
+     * @param string $event_name The event name
      * @return array The activity logs
      */
-    private function get_activity_logs( string $eventName, $start_date = null, $end_date = null ): array
-    {
-        [$wpdb, $table_name] = $this->initialize_db();
-
-        $query = "SELECT histid, user_id, action, object_type, object_name, object_note, meta_key, meta_value, FROM_UNIXTIME(hist_time) as hist_time FROM $table_name WHERE object_type = %s";
-        $params = [ 'dt_home_event' ];
-
-        if ( $eventName ) {
-            $query .= " AND action = %s";
-            $params[] = $eventName;
+    private function get_activity_logs( string $event_name, $start_date = null, $end_date = null ): array {
+        if ( empty( $event_name ) ) {
+            return [];
         }
+
+        [ $wpdb, $table_name ] = $this->initialize_db();
+
+        $query = "SELECT hist_time as evt_timestamp, action as event, meta_value as value FROM $table_name WHERE object_type = %s AND action = %s";
+        $params = [ 'dt_home_event', $event_name ];
 
         if ( $start_date && $end_date ) {
             $query .= " AND hist_time BETWEEN %s AND %s";
@@ -108,8 +92,9 @@ class AnalyticsReporting
             $params[] = strtotime( $end_date );
         }
 
-        $results = $wpdb->get_results( $wpdb->prepare( $query, ...$params ), ARRAY_A );
+        $query .= " ORDER BY hist_time ASC";
 
-        return $results;
+        //phpcs:ignore
+        return $wpdb->get_results( $wpdb->prepare( $query, ...$params ), ARRAY_A );
     }
 }

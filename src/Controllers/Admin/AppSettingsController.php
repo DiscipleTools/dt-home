@@ -335,6 +335,8 @@ class AppSettingsController
     {
         $this->settings_apps->destroy( $params['slug'] ?? '' );
 
+        $this->analytics->event( 'deleted-custom-app', [ 'action' => 'snapshot', 'lib_name' => __CLASS__ ] );
+
         $this->settings_apps->capture_analytics_metric_counts( __CLASS__ );
 
         return redirect( 'admin.php?page=dt_home&tab=app&updated=true' );

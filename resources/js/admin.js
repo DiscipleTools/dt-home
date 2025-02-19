@@ -1,6 +1,10 @@
 import '../css/admin.css'
 import '@disciple.tools/web-components'
-import './reports.js'
+import './components/reports-chart-count.js'
+import './components/reports-chart-pie.js'
+import './components/reports-chart-v-bar.js'
+import './components/reports-chart-h-bar.js'
+import './components/reports-filter-date-range.js'
 
 /**
  * Toggles the visibility of the URL field based on the selected type.
@@ -600,3 +604,246 @@ document.addEventListener('DOMContentLoaded', function () {
             })
         })
 })
+
+/**
+ * Handle analytics reporting events & flow.
+ */
+
+jQuery(document).ready(function ($) {
+
+  /**
+   * Establish initial metric states and reports to be shown.
+   */
+
+  $('h2.nav-tab-analytics-reports-wrapper').each((idx, wrapper) => {
+    const default_metric = $(wrapper).find('#default_metric').val();
+
+    if (default_metric) {
+      $(wrapper).find('a.analytics-reports-tab').each((tab_idx, tab) => {
+        const metric = $(tab).data('metric');
+
+        if (metric === default_metric) {
+
+          /**
+           * Select metric tab and also fetch associated analytics report chart.
+           */
+
+          const events = $(tab).data('events');
+          const calculation_type = $(tab).data('calculation_type');
+          const chart_type = $(tab).data('chart_type');
+          const tab_content = $(tab).data('tab');
+          const filters = $(tab).data('filters').split(',');
+
+          const tab_content_dom = $(`#${tab_content}`);
+
+          $(tab).addClass('nav-tab-active');
+          handle_metric_selection(metric, events, calculation_type, chart_type, filters, [], function (filters_html, charts_html) {
+            $(tab_content_dom).find('#analytics_reports_tab_filters').html(filters_html);
+            $(tab_content_dom).find('#analytics_reports_tab_charts').html(charts_html);
+            $(tab_content_dom).slideDown('slow');
+          });
+
+        } else {
+          $(tab).removeClass('nav-tab-active');
+        }
+      });
+    }
+  });
+
+  /**
+   * Handle metric selections.
+   */
+
+  $('a.analytics-reports-tab').click(function (e) {
+    e.preventDefault();
+
+    const selected_tab = $(e.currentTarget)
+    const tab_content = $(selected_tab).data('tab');
+    const metric = $(selected_tab).data('metric');
+    const events = $(selected_tab).data('events');
+    const chart_type = $(selected_tab).data('chart_type');
+    const calculation_type = $(selected_tab).data('calculation_type');
+
+    const filters = $(selected_tab).data('filters').split(',');
+
+    if (!tab_content || !metric || !events || !chart_type) {
+      return;
+    }
+
+    // Update tab selection (active) visuals.
+    $(selected_tab).parent().find('a.analytics-reports-tab').removeClass('nav-tab-active');
+    $(selected_tab).addClass('nav-tab-active');
+
+    // Refresh identified tab metrics.
+    const tab_content_dom = $(`#${tab_content}`);
+    $(tab_content_dom).slideUp('fast', function () {
+      handle_metric_selection(metric, events, calculation_type, chart_type, filters, [], function (filters_html, charts_html) {
+        $(tab_content_dom).find('#analytics_reports_tab_filters').html(filters_html);
+        $(tab_content_dom).find('#analytics_reports_tab_charts').html(charts_html);
+        $(tab_content_dom).slideDown('slow');
+      });
+    });
+  });
+
+  document.addEventListener('reports_date_range_filter', (e) => {
+    if (e.detail && e.detail['metric'] && e.detail['start_date'] && e.detail['end_date']) {
+      handle_date_range_filter_events(e.detail['metric'], [
+        `date_start=${e.detail['start_date']}`,
+        `date_end=${e.detail['end_date']}`
+      ]);
+    }
+  });
+
+  document.addEventListener('reports_date_range_reset', (e) => {
+    if (e.detail && e.detail['metric']) {
+      handle_date_range_filter_events(e.detail['metric']);
+    }
+  });
+
+  function handle_date_range_filter_events(metric, params = []) {
+    const metric_tab = $(`a.analytics-reports-tab[data-metric="${metric}"]`);
+    if (metric_tab) {
+      const metric = $(metric_tab).data('metric');
+      const events = $(metric_tab).data('events');
+      const calculation_type = $(metric_tab).data('calculation_type');
+      const chart_type = $(metric_tab).data('chart_type');
+      const tab_content = $(metric_tab).data('tab');
+      const filters = $(metric_tab).data('filters').split(',');
+
+      const tab_content_dom = $(`#${tab_content}`);
+      const tab_content_charts = $(tab_content_dom).find('#analytics_reports_tab_charts');
+      $(tab_content_charts).slideUp('fast', function () {
+        handle_metric_selection(metric, events, calculation_type, chart_type, filters, params, function (filters_html, charts_html) {
+          $(tab_content_charts).html(charts_html);
+          $(tab_content_charts).slideDown('slow');
+        });
+      });
+    }
+  }
+
+  function handle_metric_selection(metric, events, calculation_type, chart_type, filters, url_params = [], callback = function (filters_html, charts_html) {
+    console.log(filters_html, charts_html);
+  }) {
+
+    const request_params = (url_params.length > 0) ? `&${url_params.join('&')}` : '';
+
+    // Fetch identified metric events.
+    $.ajax({
+      type: 'GET',
+      contentType: 'application/json; charset=utf-8',
+      dataType: 'json',
+      data: '',
+      url: `${window.dt_admin_scripts.site_url}/apps/analytics-reports?metrics=${events}${request_params}`,
+      beforeSend: (xhr) => {
+        xhr.setRequestHeader(
+          'X-WP-Nonce',
+          window.dt_admin_scripts.nonce
+        )
+      },
+    })
+    .done(function (response) {
+      if (response['reports']) {
+
+        /**
+         * First, boil the returned metrics down to simplified
+         * values or counts.
+         */
+
+        const reports = simplify_reports(response['reports'], calculation_type);
+
+        /**
+         * Display charts accordingly by specified chart types.
+         */
+
+        let chart_tag = 'dt-analytics-reports-chart-count';
+        switch (chart_type) {
+          case 'pie':
+            chart_tag = 'dt-analytics-reports-chart-pie';
+            break;
+          case 'v-bar':
+            chart_tag = 'dt-analytics-reports-chart-v-bar';
+            break;
+          case 'h-bar':
+            chart_tag = 'dt-analytics-reports-chart-h-bar';
+            break;
+        }
+
+        /**
+         * Construct tab content html and prefix filters accordingly.
+         */
+
+        let filters_html = '';
+        if (filters.includes('date-range')) {
+          filters_html += `<dt-analytics-reports-filter-date-range metric="${metric}"></dt-analytics-reports-filter-date-range>`;
+        }
+
+        const charts_html = `<${chart_tag} reports="${encodeURIComponent(JSON.stringify(reports))}"></${chart_tag}>`;
+
+        callback(filters_html, charts_html);
+      }
+    })
+    .fail(function (fail) {
+      console.log(fail);
+    });
+
+  }
+
+  function simplify_reports( reports, calculation_type ) {
+    let simplified_reports = [];
+
+    /**
+     * Simplification logic will be as follows....
+     *
+     * 1. Determine if report metrics contain any valid values.
+     * 2. If valid values are identified, then sum total values for given metric.
+     *  2.1. Assume original analytical report is of type event metric (e.g. total-active-apps-count, etc.).
+     * 3. If no valid values are identified, then capture the array length (count) of returned metrics associated to report.
+     *  3.1. Assume original analytical report is of type event trace (e.g. login, etc.).
+     */
+
+    // 1. Determine if report metrics contain any valid values.
+    Object.entries(reports).forEach(([event, metrics]) => {
+
+      // 2. If valid values are identified, then sum total values for given metric.
+      const metric_values = metrics.filter( (metric) => metric['value'] && !Number.isNaN( metric['value'] ) );
+      if (metric_values.length > 0) {
+
+        if ( metric_values.length === 1 ) {
+          simplified_reports.push({
+            'event': event,
+            'value': parseFloat( metric_values[0]['value'] )
+          });
+        } else {
+          const event_value = metric_values.reduce( (accumulator, metric) => {
+
+            // Reduce value accordingly by calculation_type.
+            switch ( calculation_type ) {
+
+              // Returned results already sorted by timestamp in ascending order.
+              case 'latest':
+                return parseFloat( metric['value'] );
+
+              // TODO: delta support - difference between accumulator and current metric values.
+
+              // cumulative
+              default:
+                return parseFloat( accumulator['value'] ) + parseFloat( metric['value'] );
+            }
+          } );
+          simplified_reports.push({
+            'event': event,
+            'value': event_value
+          });
+        }
+      } else {
+        // 3. If no valid values are identified, then capture the array length (count) of returned metrics associated to report.
+        simplified_reports.push({
+          'event': event,
+          'value': metrics.length
+        });
+      }
+    });
+
+    return simplified_reports;
+  }
+});

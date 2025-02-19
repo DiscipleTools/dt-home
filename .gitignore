@@ -9,3 +9,4 @@ dist/*
 dt-home.zip
 /yarn.lock
 .env
+.DS_Store

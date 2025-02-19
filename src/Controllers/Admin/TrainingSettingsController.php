@@ -4,8 +4,10 @@ namespace DT\Home\Controllers\Admin;
 
 use DT\Home\GuzzleHttp\Psr7\ServerRequest as Request;
 use DT\Home\Psr\Http\Message\ResponseInterface;
+use DT\Home\Services\Analytics;
 use DT\Home\Services\Trainings;
 use DT\Home\Sources\Trainings as TrainingsSource;
+use function DT\Home\container;
 use function DT\Home\extract_request_input;
 use function DT\Home\redirect;
 use function DT\Home\sanitize_youtube_iframe;
@@ -184,6 +186,8 @@ class TrainingSettingsController
         }
 
         $result = $this->trainings_source->delete( $id );
+
+        container()->get( Analytics::class )->event( 'deleted-training-video', [ 'action' => 'snapshot', 'lib_name' => __CLASS__ ] );
 
         $this->trainings_source->capture_analytics_metric_counts( __CLASS__ );
 

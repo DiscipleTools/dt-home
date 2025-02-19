@@ -205,6 +205,7 @@ class Plugin
         $notice .= '<p>' . esc_html( $install_notice_label ) . ' <a href="#" class="dt-home-analytics-allow">' . esc_html( $allow_label ) . '</a> or <a href="#" class="dt-home-analytics-dismiss">' . esc_html( $dismiss_label ) . '</a></p>';
         $notice .= '</div>';
 
+        //phpcs:ignore
         echo $notice;
     }
 

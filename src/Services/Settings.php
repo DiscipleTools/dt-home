@@ -61,6 +61,7 @@ class Settings
                 'label' => __( 'Reports', 'dt-home' ),
                 'tab' => 'reports'
             ];
+
             return $menu;
         }, 10, 1);
 

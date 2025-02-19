@@ -25,10 +25,11 @@ class AnalyticsReportingController
     public function get_analytics_reports( Request $request ): ResponseInterface
     {
         // Get query parameters
-        $queryParams = $request->getQueryParams();
-        $metrics = $this->extract_metrics( $queryParams );
-        $start_date = $queryParams['date_start'] ?? null;
-        $end_date = $queryParams['date_end'] ?? null;
+        $query_params = $request->getQueryParams();
+        $metrics = $this->extract_metrics( $query_params );
+        $start_date = $query_params['date_start'] ?? null;
+        $end_date = $query_params['date_end'] ?? null;
+
         // Fetch reports from the service
         $reports = $this->analytics_reporting->get_reports( $metrics, $start_date, $end_date );
 
@@ -39,11 +40,11 @@ class AnalyticsReportingController
     /**
      * Extract metrics from the query parameters.
      *
-     * @param array $queryParams The query parameters.
+     * @param array $query_params The query parameters.
      * @return array The extracted metrics.
      */
-    private function extract_metrics( array $queryParams ): array
+    private function extract_metrics( array $query_params ): array
     {
-        return isset( $queryParams['metrics'] ) ? explode( ',', $queryParams['metrics'] ) : [];
+        return isset( $query_params['metrics'] ) ? explode( ',', $query_params['metrics'] ) : [];
     }
 }
