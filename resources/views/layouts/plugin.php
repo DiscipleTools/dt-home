@@ -6,15 +6,28 @@ $user = wp_get_current_user();
 $home = DT\Home\route_url();
 $dashboard = '/';
 $menu_items = [];
+$require_login = get_option( 'dt_home_require_login', true );
+// Find the cookie name dynamically
+$cookie_name = '';
+foreach ( $_COOKIE as $name => $value ) {
+    if ( strpos( $name, 'wordpress_logged_in_' ) === 0 ) {
+        $cookie_name = $name;
+        break;
+    }
+}
 
 // Adding default menu items
-$menu_items[] = [ 'label' => __( 'Apps', 'dt-home' ), 'href' => $home ];
+$menu_items[] = [ 'label' => __( 'Apps', 'dt-home' ), 'href' => magic_url() ];
 $menu_items[] = [ 'label' => __( 'Training', 'dt-home' ), 'href' => magic_url( 'training' ) ];
-//if ( get_option( 'dt_home_require_login', true ) ) {
-$menu_items[] = [ 'label' => __( 'Log Out', 'dt-home' ), 'href' => magic_url( 'logout' ) ];
-//}
 
+if ( is_user_logged_in() && $require_login != " " && !empty( $cookie_name ) ) {
+    $menu_items[] = [ 'label' => __( 'Log Out', 'dt-home' ), 'href' => magic_url( 'logout' ) ];
+} elseif ( $require_login == 1 ) {
+    // Add logic for when $require_login is 1 if needed
+}
 $menu_items_json = wp_json_encode( $menu_items );
+
+
 ?>
 
 <sp-theme
