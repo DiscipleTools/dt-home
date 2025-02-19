@@ -5,7 +5,7 @@ export default defineConfig({
     setupNodeEvents(on, config) {
       // implement node event listeners here
     },
-    baseUrl: 'http://dtdev.local'
+    baseUrl: 'https://wp.ddev.site:8443'
   },
   dt: {
     credentials: {

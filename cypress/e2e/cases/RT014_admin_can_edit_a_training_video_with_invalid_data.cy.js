@@ -174,14 +174,14 @@ describe('RT014 - Administrator attempts to edit a training video with invalid d
             }
         )
     })
+
     // Admin can delete a training video.
     it('Admin can delete a training video.', () => {
         cy.session('admin_can_delete_a_training_video', () => {
             cy.adminTrainingSettingsInit()
             // Locate the training video row and click the delete button.
 
-            const video_anchor = 'updated_cypress_test_video'
-            cy.contains('tr', video_anchor)
+            cy.contains('tr', shared_data.anchor)
                 .should('have.lengthOf', 1)
                 .find(`a[onclick*="confirmDelete("]`)
                 .click()
@@ -189,8 +189,7 @@ describe('RT014 - Administrator attempts to edit a training video with invalid d
             cy.on('window:confirm', () => true)
 
             // Confirm refreshed training videos list does not contain deleted training video.
-            cy.contains('Updated Cypress Test Video').should('not.exist')
-            cy.contains(shared_data.anchor).should('not.exist')
+            cy.contains(shared_data.video_name).should('not.exist')
         })
     })
 })

@@ -84,6 +84,11 @@ describe('RT044: The administrator can delete a custom app and view the deleted 
                     return false
                 })
 
+                // Ensure the reset option has been enabled beforehand.
+                cy.adminGeneralSettingsInit()
+                cy.get('#dt_home_reset_apps').check()
+                cy.get('#ml_email_main_col_update_but').click()
+
                 cy.visit(shared_data['home_screen_ml'])
 
                 cy.resetFrontendApps()
@@ -96,6 +101,7 @@ describe('RT044: The administrator can delete a custom app and view the deleted 
             }
         )
     })
+
     // Restore the deleted app
     it('The administrator can restore the deleted custom app', () => {
         cy.session('admin_can_restore_deleted_custom_app', () => {

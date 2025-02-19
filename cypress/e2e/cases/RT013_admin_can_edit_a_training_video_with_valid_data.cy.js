@@ -169,7 +169,7 @@ describe('RT013 - Administrator can edit an Training video with valid data.', ()
         )
     })
 
-    // Admin can delete an training video.
+    // Admin can delete training video.
     it('Can delete video.', () => {
         cy.session('can_delete_video', () => {
             cy.adminTrainingSettingsInit()
@@ -178,8 +178,7 @@ describe('RT013 - Administrator can edit an Training video with valid data.', ()
                 return false
             })
             // Locate and click delete option for previously created video.
-            const video_anchor = 'cypress_test_video'
-            cy.contains('tr', video_anchor)
+            cy.contains('tr', shared_data.video_name)
                 .should('have.lengthOf', 1)
                 .find(`a[onclick*="confirmDelete("]`)
                 .click()
@@ -188,7 +187,7 @@ describe('RT013 - Administrator can edit an Training video with valid data.', ()
             cy.on('window:confirm', () => true)
 
             // Following page refresh, confirm video has been deleted.
-            cy.contains(video_anchor).should('not.exist')
+            cy.contains(shared_data.video_name).should('not.exist')
         })
     })
 })

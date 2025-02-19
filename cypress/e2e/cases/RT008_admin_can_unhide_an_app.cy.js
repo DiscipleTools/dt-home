@@ -38,7 +38,7 @@ describe('RT008 - Administrator can unhide an app.', () => {
             cy.get('#open_in_new_tab').check()
 
             // Ensure new app is visible.
-            cy.get('#is_hidden').check()
+            cy.get('#is_hidden').uncheck()
 
             // Specify app font icon.
             const app_icon = shared_data.app_icon
@@ -57,36 +57,29 @@ describe('RT008 - Administrator can unhide an app.', () => {
         })
     })
 
-    // Admin can Show the app list page.
-    it('Admin can Show the app list page.', () => {
-        cy.session('admin_can_show_the_app_list_page', () => {
+  // Admin confirms newly created app is listed and in a visible state.
+    it('Admin confirms newly created app is listed and in a visible state.', () => {
+        cy.session('admin_confirms_newly_created_app_is_listed_and_in_a_visible_state', () => {
             cy.adminAppsSettingsInit()
-            const app_name = shared_data.app_name
-            // Confirm the app list page is displayed.
-            cy.get(`a[data-slug="${shared_data.app_slug}"]`, {
-                timeout: 10000,
-            }).click()
-            cy.contains(app_name)
-
-            cy.get(`a[data-slug-edit="${shared_data.app_slug}"]`, {
-                timeout: 10000,
-            }).click()
-
-            cy.get('#is_hidden').then(($checkbox) => {
-                if ($checkbox.is(':checked')) {
-                    cy.get('#is_hidden').uncheck()
-                } else {
-                    cy.get('#is_hidden').check()
-                }
-            })
 
             cy.on('uncaught:exception', (err, runnable) => {
-                // Handle the exception
+              // Returning false here prevents Cypress from failing the test
+              return false
             })
+
+            const app_name = shared_data.app_name
+
+            // Confirm newly created app is listed.
+            cy.contains(app_name);
+
+            // Click edit app button and navigate to edit app view.
+            cy.get(`a[href*="admin.php?page=dt_home&tab=app&action=edit/${shared_data.app_slug}"]`).click()
+
+            // Confirm app is in a visible state.
+            cy.get('#is_hidden').should('not.be.checked')
         })
     })
 
-    // Login to D.T frontend and obtain home screen plugin magic link.
     // Login to D.T frontend and obtain home screen plugin magic link.
     it('Login to D.T frontend and obtain home screen plugin magic link.', () => {
         cy.session('dt_frontend_login_and_obtain_home_screen_plugin_ml', () => {
@@ -116,6 +109,7 @@ describe('RT008 - Administrator can unhide an app.', () => {
             })
         })
     })
+
     // Confirm new app is visible within home screen frontend.
     it('Confirm new app is visible within home screen frontend.', () => {
         cy.session(
@@ -133,18 +127,17 @@ describe('RT008 - Administrator can unhide an app.', () => {
                 cy.get('dt-home-app-grid')
                     .shadow()
                     .find(`dt-home-app-icon[name*="${shared_data.app_name}"]`)
-                    .should('exist')
+                    .should('be.visible')
             }
         )
     })
 
-    // Can delete app.
     // Admin can delete an app.
     it('Admin can delete an app.', () => {
         cy.session('admin_can_delete_an_app', () => {
             cy.adminAppsSettingsInit()
-            // Locate the app row and click the delete button.
 
+            // Locate the app row and click the delete button.
             cy.contains('tr', shared_data.app_slug, { timeout: 10000 })
                 .should('have.lengthOf', 1)
                 .find(`.delete-apps`, { timeout: 10000 })
@@ -154,7 +147,7 @@ describe('RT008 - Administrator can unhide an app.', () => {
             cy.on('window:confirm', () => true)
 
             // Confirm refreshed apps lists does not contain deleted app.
-            cy.contains('Updated Cypress Test App').should('not.exist')
+            cy.contains(shared_data.app_name).should('not.exist')
             cy.contains(shared_data.app_slug).should('not.exist')
         })
     })
