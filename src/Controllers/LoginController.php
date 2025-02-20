@@ -11,6 +11,7 @@ use function DT\Home\plugin_url;
 use function DT\Home\redirect;
 use function DT\Home\route_url;
 use function DT\Home\template;
+use DT_Login_Fields;
 
 /**
  * Class LoginController
@@ -86,6 +87,9 @@ class LoginController
     public function show( Request $request )
     {
         $params = extract_request_input( $request );
+        if ( $params['login'] ?? null === 'failed' && !array_key_exists( 'error', $params ) ) {
+            $params['error'] = __( 'ERROR: Invalid username/password combination. Lost your password?', 'dt-home' );
+        }
         $register_url = route_url( 'register' );
         $form_action = route_url( 'login' );
         $username = sanitize_text_field( $params['username'] ?? '' );
