@@ -89,7 +89,6 @@ class Assets
                 'css-only' => false, // Optional. Set to true to only load style assets in production mode.
                 'in-footer' => true, // Optional. Defaults to false.
         ]);
-        dt_theme_enqueue_style( 'material-font-icons-local', 'dt-core/dependencies/mdi/css/materialdesignicons.min.css', [] );
         wp_localize_script( 'dt-home', config( 'assets.javascript_global_scope' ), apply_filters( namespace_string( 'javascript_globals' ), [] ) );
     }
 
