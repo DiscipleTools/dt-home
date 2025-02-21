@@ -64,9 +64,8 @@ body {
     left: 50%;
     margin-left: -100px; /* Center the tooltip */
     opacity: 0;
-    transition:
-        opacity 0.3s,
-        transform 0.3s;
+    transition: opacity 0.3s,
+    transform 0.3s;
     box-shadow: 0 4px 8px rgb(0 0 0 / 20%);
     transform: translateY(10px); /* Slight upward movement */
 }
@@ -174,9 +173,8 @@ body {
     border: 1px solid #ccc;
     z-index: 1000;
     width: 30%; /* Adjusted width */
-    box-shadow:
-        0 4px 8px rgb(0 0 0 / 10%),
-        0 6px 20px rgb(0 0 0 / 10%); /* Add shadow */
+    box-shadow: 0 4px 8px rgb(0 0 0 / 10%),
+    0 6px 20px rgb(0 0 0 / 10%); /* Add shadow */
 
     border-radius: 8px; /* Optional: Add rounded corners */
 }
@@ -439,3 +437,23 @@ textarea.text-area {
     }
 }
 
+/* 17-02-2022 */
+@media (max-width: 600px) {
+    .icon-button-container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+}
+
+@media (min-width: 228px) and (max-width: 767px) {
+    .icon-button-container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+}
+
+.icon-button-container .button {
+    margin-right: 10px; /* Adjust the value as needed */
+}
