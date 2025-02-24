@@ -5,7 +5,6 @@ namespace DT\Home;
 use DT\Home\CodeZone\WPSupport\Config\ConfigInterface;
 use DT\Home\CodeZone\WPSupport\Rewrites\RewritesInterface;
 use DT\Home\League\Container\Container;
-use DT_Login_Fields;
 
 /**
  * This is the entry-object for the plugin.
@@ -121,27 +120,9 @@ class Plugin
             return;
         }
 
-        if ( !class_exists( 'DT_Login_Fields' ) || ( DT_Login_Fields::get( 'login_enabled' ) === 'on' ) ) {
-            add_action( 'wp_login_failed', [ $this, 'dt_home_login_failed' ], 1, 1 );
-        }
-
         if ( !defined( 'DT_FUNCTIONS_READY' ) ) {
             require_once get_template_directory() . '/dt-core/global-functions.php';
         }
-    }
-
-    /**
-     * Handle login failures and redirect to the Home Screen login page
-     * @return void
-     * @since 1.1.0
-     * @see https://developer.wordpress.org/reference/hooks/wp_login_failed/
-     * @see https://developer.wordpress.org/reference/functions/wp_redirect/
-     */
-
-    function dt_home_login_failed()
-    {
-        wp_redirect( route_url( 'login' ) . '?login=failed' );
-        exit;
     }
 
     /**
