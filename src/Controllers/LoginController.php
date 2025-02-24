@@ -11,6 +11,7 @@ use function DT\Home\plugin_url;
 use function DT\Home\redirect;
 use function DT\Home\route_url;
 use function DT\Home\template;
+use DT_Login_Fields;
 
 /**
  * Class LoginController
@@ -19,6 +20,30 @@ use function DT\Home\template;
  */
 class LoginController
 {
+    /**
+     * LoginController constructor.
+     * This constructor initializes the login controller.
+     * It also sets up the login failed action and removes the default login redirect filter.
+     * @return void
+     */
+    public function __construct()
+    {
+        if ( !class_exists( 'DT_Login_Fields' ) || ( DT_Login_Fields::get( 'login_enabled' ) === 'on' ) ) {
+            add_action( 'wp_login_failed', [ $this, 'dt_home_login_failed' ], 9, 1 );
+        }
+    }
+
+    /**
+     * Redirect the user to the login page with a failed login message.
+     * This method redirects the user to the login page with a failed login message.
+     * It is triggered when the login fails.
+     * @return void
+     */
+    public function dt_home_login_failed()
+    {
+        wp_redirect( route_url( 'login' ) . '?login=failed' );
+        exit;
+    }
 
     /**
      * Process the login form submission.
@@ -86,6 +111,11 @@ class LoginController
     public function show( Request $request )
     {
         $params = extract_request_input( $request );
+
+        // If the login failed, display an error message.
+        if ( $params['login'] ?? null === 'failed' && !array_key_exists( 'error', $params ) ) {
+            $params['error'] = __( 'ERROR: Invalid username/password combination. Lost your password?', 'dt-home' );
+        }
         $register_url = route_url( 'register' );
         $form_action = route_url( 'login' );
         $username = sanitize_text_field( $params['username'] ?? '' );
