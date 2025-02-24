@@ -61,7 +61,7 @@ class GeneralSettingsController
 
         container()->get( RolesPermissions::class )->enabled( $dt_home_use_capabilities === 'on' );
 
-        container()->get( Cache::class )->delete( ['custom_ministry_logo'] );
+        container()->get( Cache::class )->delete( [ 'custom_ministry_logo' ] );
 
         $redirect_url = add_query_arg( 'message', 'updated', admin_url( 'admin.php?page=dt_home' ) );
 

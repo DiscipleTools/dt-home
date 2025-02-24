@@ -2,6 +2,7 @@
 
 namespace DT\Home\Controllers;
 
+use DT_Login_Fields;
 use DT\Home\CodeZone\WPSupport\Router\ServerRequestFactory;
 use DT\Home\GuzzleHttp\Psr7\ServerRequest as Request;
 use DT\Home\Psr\Http\Message\ResponseInterface;
@@ -11,7 +12,6 @@ use function DT\Home\plugin_url;
 use function DT\Home\redirect;
 use function DT\Home\route_url;
 use function DT\Home\template;
-use DT_Login_Fields;
 
 /**
  * Class LoginController

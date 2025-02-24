@@ -36,7 +36,7 @@ use function DT\Home\route_url;
     }
 </style>
 
-<a href="<?php echo esc_url( route_url() ) . 'launcher/' . $key; ?>" class="icon-link">
+<a href="<?php echo esc_url( route_url() ) . 'launcher/' . esc_attr( $key ); ?>" class="icon-link">
     <div class="icon-link__inner">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36" role="img" fill="currentColor" height="24"
              width="24" aria-hidden="true" aria-label="">

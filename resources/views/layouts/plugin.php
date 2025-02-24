@@ -22,8 +22,6 @@ $menu_items[] = [ 'label' => __( 'Training', 'dt-home' ), 'href' => magic_url( '
 
 if ( is_user_logged_in() && $require_login != " " && !empty( $cookie_name ) ) {
     $menu_items[] = [ 'label' => __( 'Log Out', 'dt-home' ), 'href' => magic_url( 'logout' ) ];
-} elseif ( $require_login == 1 ) {
-    // Add logic for when $require_login is 1 if needed
 }
 $menu_items_json = wp_json_encode( $menu_items );
 
