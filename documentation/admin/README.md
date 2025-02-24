@@ -14,6 +14,10 @@ for non-logged in users, wanting to gain direct access.
 
 Simply Un/Select checkbox; Save and refresh Home Screen; for functionality to take effect.
 
+See links below, for further descriptions of related topics.
+
+- [Kinsta Caching](./topics/kinsta/README.md)
+
 ## Apps Tab
 
 The main Apps Tab view, presents a complete list of installed apps; in addition to actions to create, update, remove and adjust app Home Screen ordering.
