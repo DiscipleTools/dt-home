@@ -18,7 +18,7 @@ class AppControllerTest extends TestCase
         $request = ServerRequestFactory::from_globals();
         $app = app_factory();
         $controller = container()->get( AppController::class );
-        $response = $controller->show( $request, [ 'slug' => $app['slug'] ] );
+        $response = $controller->show( $request, [ 'key' => $app['key'], 'slug' => $app['slug'] ] );
         $this->assertEquals( 404, $response->getStatusCode() );
     }
 
@@ -41,7 +41,7 @@ class AppControllerTest extends TestCase
 
         update_user_option( $user_id, 'dt_home_apps', $data );
         $controller = container()->get( AppController::class );
-        $response = $controller->show( $request, [ 'slug' => $app['slug'] ] );
+        $response = $controller->show( $request, [ 'key' => $app['key'], 'slug' => $app['slug'] ] );
         $this->assertEquals( 200, $response->getStatusCode() );
     }
 
