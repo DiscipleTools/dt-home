@@ -11,6 +11,7 @@ function app_factory( $params = [] ) {
     $faker = Faker::create();
 
     return array_merge( [
+        'key' => $faker->randomKey(),
         'name' => $faker->words( 3, true ),
         'type' => $faker->randomElement( [ 'Web View', 'Link' ] ),
         'creation_type' => 'custom',
@@ -27,6 +28,7 @@ function training_factory( $params = [] ) {
     $faker = Faker::create();
 
     return array_merge( [
+        'key' => $faker->randomKey(),
         'name' => $faker->words( 3, true ),
         'embed_video' => $faker->url,
         'anchor' => $faker->slug,
