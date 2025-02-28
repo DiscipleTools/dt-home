@@ -423,6 +423,7 @@ class AppFormModal extends LitElement {
               label="${translate("type_label")}"
               placeholder="${translate("select_type_label")}"
               .options="${[
+                { id: "", label: `${translate("select_type_label")}` },
                 { id: "Web View", label: "Web View" },
                 { id: "Link", label: "Link" },
               ]}"

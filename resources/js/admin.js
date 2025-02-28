@@ -529,3 +529,55 @@ jQuery(document).ready(function ($) {
     $(color_input_hidden).val("deleted");
   });
 });
+
+document.addEventListener("DOMContentLoaded", function () {
+  const scrollableTable = document.querySelector(".scrollable-table");
+  const scrollTip = createScrollTip();
+
+  function createScrollTip() {
+    const tip = document.createElement("div");
+    tip.classList.add("scroll-tip");
+    tip.innerHTML = `<i class="fas fa-arrow-right" style="font-size: 10px; color: white;"></i>`;
+
+    const tooltip = document.createElement("span");
+    tooltip.classList.add("tooltip-text");
+    tooltip.innerText = "You can scroll the table";
+    tip.appendChild(tooltip);
+
+    return tip;
+  }
+
+  function handleResize() {
+    if (window.innerWidth <= 767) {
+      if (!scrollableTable.contains(scrollTip)) {
+        scrollableTable.appendChild(scrollTip);
+      }
+    } else {
+      if (scrollableTable.contains(scrollTip)) {
+        scrollTip.remove();
+      }
+    }
+  }
+
+  window.addEventListener("resize", handleResize);
+  handleResize(); // Initial check
+
+  // Add touch event listeners for iOS devices
+  scrollTip.addEventListener("touchstart", function () {
+    scrollTip.classList.add("touch-active");
+  });
+
+  scrollTip.addEventListener("touchend", function () {
+    setTimeout(function () {
+      scrollTip.classList.remove("touch-active");
+    }, 3000); // Adjust the timeout as needed
+  });
+
+  // Add click event listener to nudge the table slightly to the right
+  scrollTip.addEventListener("click", function () {
+    scrollableTable.scrollBy({
+      left: 100, // Adjust the value to control the nudge distance
+      behavior: "smooth",
+    });
+  });
+});
