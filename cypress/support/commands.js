@@ -67,7 +67,7 @@ Cypress.Commands.add('loginHomeScreen', (username, password) => {
         // Returning false here prevents Cypress from failing the test
         return false
     })
-  
+
     // Navigate to Home Screen login page.
     cy.visit('/apps/login')
 
@@ -190,6 +190,36 @@ Cypress.Commands.add('adminTrainingSettingsInit', () => {
 
     // Access Home Screen plugin area on the apps tab.
     cy.visit(training_tab_url_path)
+})
+
+// -- Admin Reports Settings Initialization -- //
+Cypress.Commands.add('adminReportsSettingsInit', () => {
+  const reports_tab_url_path = '/wp-admin/admin.php?page=dt_home&tab=reports';
+
+  /**
+   * Ensure uncaught exceptions do not fail test run; however, any thrown
+   * exceptions must not be ignored and a ticket must be raised, in order
+   * to resolve identified exception.
+   *
+   * TODO:
+   *  - Resolve any identified exceptions.
+   */
+
+  cy.on('uncaught:exception', (err, runnable) => {
+    // Returning false here prevents Cypress from failing the test
+    return false
+  })
+
+  // Capture admin credentials.
+  const dt_config = cy.config('dt')
+  const username = dt_config.credentials.admin.username
+  const password = dt_config.credentials.admin.password
+
+  // Login to WP Admin area.
+  cy.loginAdmin(username, password)
+
+  // Access reports tab.
+  cy.visit(reports_tab_url_path)
 })
 
 // -- Frontend D.T Login & Fetch User Settings Home Screen Plugin Magic Link -- //
