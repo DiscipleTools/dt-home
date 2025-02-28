@@ -18,14 +18,14 @@ $this->layout( 'layouts/settings', compact( 'tab', 'link', 'page_title' ) )
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-12">
-                <span style="float:right;">
-                    <a href="admin.php?page=dt_home&tab=training&action=create" class="button float-right">
+                <span>
+                    <a href="admin.php?page=dt_home&tab=training&action=create" class="button" style="float:right;">
                         <i class="fa fa-plus"></i> <?php esc_html_e( 'Add Training', 'dt-home' ); ?>
                     </a>
                 </span>
 
                 <br><br>
-                <div style="overflow-x:auto;">
+                <div class="scrollable-table">
                     <table class="widefat striped" style="border-collapse: collapse; width: 100%; ">
                         <thead>
                         <tr>

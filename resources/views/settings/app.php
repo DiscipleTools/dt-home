@@ -64,30 +64,29 @@ $this->layout( 'layouts/settings', compact( 'tab', 'link', 'page_title' ) )
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-12">
-                <span>
-                    <a href="admin.php?page=dt_home&tab=app&action=create" class="button">
-                        <i class="fa fa-plus"></i> <?php esc_html_e( 'Add App', 'dt-home' ); ?>
-                    </a>
-                </span>
-                <span>
-                    <a href="admin.php?page=dt_home&tab=app&action=available_app" class="button float-right">
-                        <i class="fas fa-trash-restore"></i> <?php esc_html_e( 'Available Apps', 'dt-home' ); ?>
-                    </a>
-                </span>
                 <div class="apps-btn">
                     <span>
-                        <a id="import_apps_but" href="#" class="button float-right">
+                        <a href="admin.php?page=dt_home&tab=app&action=create" class="button">
+                            <i class="fa fa-plus"></i> <?php esc_html_e( 'Add App', 'dt-home' ); ?>
+                        </a>
+                    </span>
+                    <span>
+                        <a href="admin.php?page=dt_home&tab=app&action=available_app" class="button float-right">
+                            <i class="fas fa-trash-restore"></i> <?php esc_html_e( 'Available Apps', 'dt-home' ); ?>
+                        </a>
+                    </span>
+                    <span>
+                        <a id="import_apps_but" href="#" class="button" style="float: right">
                             <i class="fas fa-file-import"></i> <?php esc_html_e( 'Import Apps', 'dt-home' ); ?>
                         </a>
                     </span>
                     <span>
-                        <button class="button" id="exportButton" disabled>
+                        <button class="button" id="exportButton" disabled style="float: right">
                            <i class="fas fa-file-export"></i> <?php esc_html_e( 'Export Apps', 'dt-home' ); ?>
                         </button>
                     </span>
                 </div>
-                <br>
-                <div style="overflow-x:auto;">
+                <div class="scrollable-table">
                     <table class="widefat striped" style="border-collapse: collapse; width: 100%;">
                         <thead>
                         <tr>

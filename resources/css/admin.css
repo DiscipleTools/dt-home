@@ -125,9 +125,9 @@ body {
     margin-left: -3px;
 }
 
-.apps-btn {
-    float: right;
-}
+/*.apps-btn .button {*/
+/*    float: right;*/
+/*}*/
 
 /* Custom Copy Button Styles */
 .text-area {
@@ -341,18 +341,6 @@ textarea.text-area {
     resize: none;
 }
 
-/* Buttons styling */
-.button {
-    display: inline-block;
-    padding: 8px 12px;
-    font-size: 13px;
-    background: #007bff;
-    color: #fff;
-    text-align: center;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
 
 /* Action icon size */
 .action-icon {
@@ -426,7 +414,7 @@ textarea.text-area {
 
 @media (min-width: 228px) and (max-width: 767px) {
     .wp-core-ui .button, .wp-core-ui .button.button-large, .wp-core-ui .button.button-small, a.preview, input#publish, input#save-post {
-        padding: 1px !important;
+        /*padding: 1px !important;*/
         min-height: 0px !important;
         font-size: 10px;
     }
@@ -452,6 +440,68 @@ textarea.text-area {
         align-items: center;
         justify-content: space-between;
     }
+
+    .apps-btn .button {
+        float: none !important;
+    }
+
+    .scrollable-table {
+        position: relative;
+        overflow-x: auto;
+    }
+
+    .scroll-tip {
+        position: fixed;
+        top: 95%;
+        left: 90%;
+        background: #0073aa;
+        padding: 5px;
+        border-radius: 50%;
+        cursor: pointer;
+        transition: opacity 0.3s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 10px;
+        height: 10px;
+    }
+
+    .scrollable-table:hover .scroll-tip {
+        opacity: 1;
+    }
+
+    .tooltip-text {
+        visibility: hidden;
+        background-color: #333;
+        color: white;
+        text-align: center;
+        border-radius: 4px;
+        position: absolute;
+        top: 50%;
+        right: 150%; /* Position to the left of the icon */
+        transform: translateY(-50%);
+        white-space: nowrap;
+        font-size: 12px;
+        padding: inherit;
+    }
+
+    .tooltip-text::before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 100%; /* Position the arrow to the right of the tooltip */
+        margin-top: -5px; /* Center the arrow vertically */
+        border-width: 5px;
+        border-style: solid;
+        border-color: transparent transparent transparent #333; /* Creates a small triangle pointing to the right */
+    }
+
+    .scroll-tip:hover .tooltip-text,
+    .scroll-tip:focus .tooltip-text,
+    .scroll-tip.touch-active .tooltip-text {
+        visibility: visible;
+    }
+
 }
 
 .icon-button-container .button {
