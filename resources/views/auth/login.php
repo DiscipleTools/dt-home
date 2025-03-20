@@ -57,8 +57,8 @@ $this->layout( 'layouts/auth' );
                                variant="secondary"
                                tabindex="4"
                                <?php echo !get_option( 'users_can_register' ) ? esc_attr( 'disabled' ) : ''; ?>
-                               title="<?php echo !get_option( 'users_can_register' ) ? 
-                                   esc_attr__( 'Registration is currently disabled', 'dt-home' ) : 
+                               title="<?php echo !get_option( 'users_can_register' ) ?
+                                   esc_attr__( 'Registration is currently disabled', 'dt-home' ) :
                                    esc_attr__( 'Create Account', 'disciple-tools-autolink' ); ?>">
                         <span><?php esc_html_e( 'Create Account', 'disciple-tools-autolink' ) ?></span>
                     </sp-button>
