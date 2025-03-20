@@ -30,6 +30,11 @@ class RegisterController {
         $password    = $params['password'] ?? '';
         $logo_path   = plugin_url( 'resources/img/logo-color.png' );
 
+        //@todo disable here?
+        if ( ! get_option( 'users_can_register' ) ) {
+            // return false;
+        }
+
         return template( 'auth/register', [
 
             'form_action' => $form_action,
@@ -50,6 +55,10 @@ class RegisterController {
      * @return ResponseInterface The response.
      */
 	public function process( Request $request ) {
+		// Check if registration is allowed
+		if ( ! get_option( 'users_can_register' ) ) {
+			return $this->show_error( __( 'Registration is not allowed.', 'dt-home' ) );
+		}
 
 		$input = extract_request_input( $request );
 
