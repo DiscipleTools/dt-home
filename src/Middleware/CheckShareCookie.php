@@ -71,7 +71,7 @@ class CheckShareCookie implements MiddlewareInterface {
 			$this->remove_cookie();
 		}
 
-		if ( ! count( $contact_record['coached_by'] ) ) {
+		if ( ! count( $contact_record['coached_by'] ?? [] ) ) {
 			$fields = [
 				"coached_by"  => [
 					"values"       => [
