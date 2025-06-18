@@ -20,8 +20,12 @@ $this->layout( 'layouts/auth' );
                     class="logo__image">
             </div>
 
-            <form action="<?php echo esc_attr( $form_action ) ?>"
-                  method="POST">
+            <?php if ( ! get_option( 'users_can_register' ) ) : ?>
+                <dt-alert context="alert">
+                    <?php esc_html_e( 'Registration is currently disabled. Please contact the site administrator for more information.', 'dt-home' ); ?>
+                </dt-alert>
+            <?php endif; ?>
+            <form action="<?php echo esc_attr( $form_action ) ?>" method="POST">
                 <?php wp_nonce_field( 'dt_home' ) ?>
 
                 <?php if ( !empty( $error ) ) : ?>

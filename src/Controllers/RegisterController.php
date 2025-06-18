@@ -50,6 +50,10 @@ class RegisterController {
      * @return ResponseInterface The response.
      */
 	public function process( Request $request ) {
+		// Check if registration is allowed
+		if ( ! get_option( 'users_can_register' ) ) {
+			return $this->show_error( __( 'Registration is not allowed.', 'dt-home' ) );
+		}
 
 		$input = extract_request_input( $request );
 

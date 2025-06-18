@@ -59,6 +59,26 @@ $this->layout( 'layouts/settings', compact( 'tab', 'link', 'page_title' ) )
 	</table>
 </form>
 
+<div class="registration-status" style="margin-top: 20px; padding: 10px; background: #f8f9fa; border-left: 4px solid #007cba;">
+    <p>
+        <?php
+        if ( is_multisite() ) {
+            $settings_link = network_admin_url( 'settings.php' );
+            $settings_text = __( 'Network Settings', 'dt-home' );
+        } else {
+			$settings_link = admin_url( 'options-general.php' );
+            $settings_text = __( 'General Settings', 'dt-home' );
+        }
+		$registration_status = get_option( 'users_can_register' ) ? 'enabled' : 'disabled';
+        ?>
+        <strong><?php esc_html_e( 'Outside users can register and existing users can invite new users:', 'dt-home' ); ?></strong> 
+        <?php echo esc_html( $registration_status === 'enabled' ? __( 'Yes', 'dt-home' ) : __( 'No', 'dt-home' ) ); ?>
+        <br>
+        <?php esc_html_e( 'To change registration settings, visit:', 'dt-home' ); ?> 
+        <a href="<?php echo esc_url( $settings_link ); ?>"><?php echo esc_html( $settings_text ); ?></a>
+    </p>
+</div>
+
 <?php $this->start( 'right' ); ?>
 
 <!-- Add some content to the right side -->
