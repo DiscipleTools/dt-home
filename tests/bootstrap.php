@@ -18,6 +18,24 @@ if ( ! file_exists( $_tests_dir . '/includes/functions.php' ) ) {
 // Give access to tests_add_filter() function.
 require_once $_tests_dir . '/includes/functions.php';
 
+// Polyfill for getallheaders() function which is not available in CLI environments
+if ( ! function_exists( 'getallheaders' ) ) {
+    /**
+     * Get all HTTP header key/values as an associative array for the current request.
+     *
+     * @return array The HTTP header key/value pairs.
+     */
+    function getallheaders() {
+        $headers = [];
+        foreach ( $_SERVER as $name => $value ) {
+            if ( substr( $name, 0, 5 ) == 'HTTP_' ) {
+                $headers[ str_replace( ' ', '-', ucwords( strtolower( str_replace( '_', ' ', substr( $name, 5 ) ) ) ) ) ] = $value;
+            }
+        }
+        return $headers;
+    }
+}
+
 /**
  * Registers theme
  */
