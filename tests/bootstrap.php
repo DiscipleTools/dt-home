@@ -70,5 +70,10 @@ $_register_theme = function () use ( $_tests_dir, $_core_dir, $_theme_dir, $_plu
 
 tests_add_filter( 'muplugins_loaded', $_register_theme );
 
+// Enable user registration for tests
+tests_add_filter( 'muplugins_loaded', function() {
+    update_option( 'users_can_register', 1 );
+} );
+
 // Start up the WP testing environment.
 require $_tests_dir . '/includes/bootstrap.php';
