@@ -342,4 +342,58 @@ class TrainingSettingsController
 
         return redirect( 'admin.php?page=dt_home&tab=training&updated=true' );
     }
+
+    /**
+     * Handle GET-based reorder requests.
+     *
+     * @param Request $request The request object.
+     *
+     * @return ResponseInterface
+     */
+    public function reorder_get( Request $request )
+    {
+        $input = extract_request_input( $request );
+        $ordered_ids = isset( $input['ordered_ids'] ) ? explode( ',', $input['ordered_ids'] ) : [];
+
+        if ( empty( $ordered_ids ) ) {
+            return redirect( 'admin.php?page=dt_home&tab=training&error=1' );
+        }
+
+        // Get current training data
+        $trainings_array = get_plugin_option( 'trainings' );
+        
+        // Create a lookup array for existing data
+        $trainings_lookup = [];
+        foreach ( $trainings_array as $training ) {
+            if ( isset( $training['id'] ) ) {
+                $trainings_lookup[$training['id']] = $training;
+            }
+        }
+
+        // Reorder based on the provided IDs and update sort values
+        $reordered_trainings = [];
+        $processed_ids = [];
+        
+        foreach ( $ordered_ids as $index => $training_id ) {
+            if ( isset( $trainings_lookup[$training_id] ) ) {
+                $training = $trainings_lookup[$training_id];
+                $training['sort'] = $index + 1;
+                $reordered_trainings[] = $training;
+                $processed_ids[] = $training_id;
+            }
+        }
+
+        // Add any missing items to the end to prevent data loss
+        foreach ( $trainings_array as $training ) {
+            if ( isset( $training['id'] ) && !in_array( $training['id'], $processed_ids ) ) {
+                $training['sort'] = count( $reordered_trainings ) + 1;
+                $reordered_trainings[] = $training;
+            }
+        }
+
+        // Save the updated training order back to the option
+        set_plugin_option( 'trainings', $reordered_trainings );
+
+        return redirect( 'admin.php?page=dt_home&tab=training&updated=true' );
+    }
 }

@@ -26,6 +26,7 @@ $r->group( '/wp-admin', function ( RouteCollectionInterface $r ) {
 	$r->get( '/admin.php?page=dt_home&tab=app&action=delete/{slug}', [ AppSettingsController::class, 'delete' ] );
 	$r->get( '/admin.php?page=dt_home&tab=app&action=softdelete/{slug}', [ AppSettingsController::class, 'soft_delete_app' ] );
 	$r->get( '/admin.php?page=dt_home&tab=app&action=restore_app/{slug}', [ AppSettingsController::class, 'restore_app' ] );
+	$r->get( '/admin.php?page=dt_home&tab=app&action=reorder', [ AppSettingsController::class, 'reorder_get' ] );
 
 	$r->get( '/admin.php?page=dt_home&tab=training', [ TrainingSettingsController::class, 'show' ] );
 	$r->get('/admin.php?page=dt_home&tab=training&action=create', [
@@ -42,6 +43,7 @@ $r->group( '/wp-admin', function ( RouteCollectionInterface $r ) {
 		TrainingSettingsController::class,
 		'delete'
 	]);
+	$r->get( '/admin.php?page=dt_home&tab=training&action=reorder', [ TrainingSettingsController::class, 'reorder_get' ] );
 })->middleware( new HasCap( 'manage_dt' ) );
 
 $r->group( '/wp-admin', function ( RouteCollectionInterface $r ) {
