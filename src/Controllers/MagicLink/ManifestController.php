@@ -43,4 +43,4 @@ class ManifestController {
         return response( $json_manifest )
             ->withHeader( 'Content-Type', 'application/json' );
     }
-} 
+}
