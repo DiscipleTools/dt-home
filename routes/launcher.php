@@ -10,6 +10,7 @@ use DT\Home\CodeZone\WPSupport\Middleware\Nonce;
 use DT\Home\Controllers\LoginController;
 use DT\Home\Controllers\MagicLink\AppController;
 use DT\Home\Controllers\MagicLink\LauncherController;
+use DT\Home\Controllers\MagicLink\ManifestController;
 use DT\Home\Controllers\MagicLink\ShareController;
 use DT\Home\Controllers\MagicLink\TrainingController;
 use DT\Home\League\Route\RouteCollectionInterface;
@@ -23,6 +24,7 @@ $r->group('/apps/launcher/{key}', function ( RouteCollectionInterface $r ) {
     $r->get( '/', [ LauncherController::class, 'show' ] );
     $r->get( '/training', [ TrainingController::class, 'show' ] );
     $r->get( '/logout', [ LoginController::class, 'logout' ] );
+    $r->get( '/manifest.json', [ ManifestController::class, 'show' ] );
 })->middleware( new LoggedIn() )
     ->middleware( new CheckShareCookie() );
 

@@ -19,7 +19,6 @@ $config->merge( [
         'javascript_global_scope' => '$home',
         'javascript_globals' => [
             'translations' => [
-                'remove_app_confirmation' => __( 'Are you sure you want to remove this app?', 'dt-home' ),
                 'installAppLabel' => 'Install as App',
                 'hiddenAppLabel' => 'Hidden Apps',
                 'buttonLabel' => 'Ok',

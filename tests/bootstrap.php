@@ -18,6 +18,24 @@ if ( ! file_exists( $_tests_dir . '/includes/functions.php' ) ) {
 // Give access to tests_add_filter() function.
 require_once $_tests_dir . '/includes/functions.php';
 
+// Polyfill for getallheaders() function which is not available in CLI environments
+if ( ! function_exists( 'getallheaders' ) ) {
+    /**
+     * Get all HTTP header key/values as an associative array for the current request.
+     *
+     * @return array The HTTP header key/value pairs.
+     */
+    function getallheaders() {
+        $headers = [];
+        foreach ( $_SERVER as $name => $value ) {
+            if ( substr( $name, 0, 5 ) == 'HTTP_' ) {
+                $headers[ str_replace( ' ', '-', ucwords( strtolower( str_replace( '_', ' ', substr( $name, 5 ) ) ) ) ) ] = $value;
+            }
+        }
+        return $headers;
+    }
+}
+
 /**
  * Registers theme
  */
@@ -51,6 +69,11 @@ $_register_theme = function () use ( $_tests_dir, $_core_dir, $_theme_dir, $_plu
 };
 
 tests_add_filter( 'muplugins_loaded', $_register_theme );
+
+// Enable user registration for tests
+tests_add_filter( 'muplugins_loaded', function () {
+    update_option( 'users_can_register', 1 );
+} );
 
 // Start up the WP testing environment.
 require $_tests_dir . '/includes/bootstrap.php';

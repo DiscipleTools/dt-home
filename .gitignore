@@ -7,3 +7,5 @@ temp-*
 tmp-*
 dist/*
 dt-home.zip
+.DS_Store
+.env
