@@ -24,6 +24,7 @@ get_template_part('dt-core/admin/menu/tabs/dialog-icon-selector');
         <th><?php esc_html_e('Apps', 'dt-home') ?></th>
         <th></th>
         <th></th>
+        <th></th>
     </tr>
     </thead>
     <tbody>
@@ -33,7 +34,7 @@ get_template_part('dt-core/admin/menu/tabs/dialog-icon-selector');
                 <span class="tooltiptext"><?php esc_html_e('Enter the name of the app.', 'dt-home') ?></span>
             </span>
         </td>
-        <td colspan="2">
+        <td colspan="3">
             <input style="min-width: 100%;" class="form-control" type="text" name="name" id="name" pattern=".*\S+.*" title="<?php esc_attr_e('The name cannot be empty or just whitespace.', 'dt-home'); ?>" required/>
         </td>
     </tr>
@@ -43,7 +44,7 @@ get_template_part('dt-core/admin/menu/tabs/dialog-icon-selector');
                 <span class="tooltiptext"><?php esc_html_e('Select the type of the app.', 'dt-home') ?></span>
             </span>
         </td>
-        <td colspan="2">
+        <td colspan="3">
             <select style="min-width: 100%;" name="type" id="type" required onchange="toggleURLField()">
                 <option value=""><?php esc_html_e('Please select', 'dt-home') ?></option>
                 <option value="Web View"><?php esc_html_e('Web View', 'dt-home') ?></option>
@@ -58,7 +59,7 @@ get_template_part('dt-core/admin/menu/tabs/dialog-icon-selector');
                 <span class="tooltiptext"><?php esc_html_e('Check this box to open the link in a new tab.', 'dt-home') ?></span>
             </span>
         </td>
-        <td colspan="2">
+        <td colspan="3">
             <input type="checkbox" name="open_in_new_tab" id="open_in_new_tab" value="1">
         </td>
     </tr>
@@ -82,7 +83,7 @@ get_template_part('dt-core/admin/menu/tabs/dialog-icon-selector');
                 <span class="tooltiptext"><?php esc_html_e('Enter the URL for the app.', 'dt-home') ?></span>
             </span>
         </td>
-        <td colspan="2">
+        <td colspan="3">
             <input style="min-width: 100%;" type="text" name="url" id="url"/>
         </td>
     </tr>
@@ -92,7 +93,7 @@ get_template_part('dt-core/admin/menu/tabs/dialog-icon-selector');
                 <span class="tooltiptext"><?php esc_html_e('Enter a slug for the app.', 'dt-home') ?></span>
             </span>
         </td>
-        <td colspan="2">
+        <td colspan="3">
             <input style="min-width: 100%;" type="text" name="slug" id="slug" pattern=".*\S+.*" title="<?php esc_attr_e('The name cannot be empty or just whitespace.', 'dt-home'); ?>" required/>
         </td>
     </tr>
@@ -102,7 +103,7 @@ get_template_part('dt-core/admin/menu/tabs/dialog-icon-selector');
                 <span class="tooltiptext"><?php esc_html_e('Check this box to hide the app.', 'dt-home') ?></span>
             </span>
         </td>
-        <td colspan="2">
+        <td colspan="3">
             <input type="checkbox" name="is_hidden" id="is_hidden" value="1">
         </td>
     </tr>
