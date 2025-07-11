@@ -1,19 +1,19 @@
 <?php
 /**
  * Plugin Name: DT Home
- * Plugin URI: https://github.com/thecodezone/dt-home
+ * Plugin URI: https://github.com/DiscipleTools/dt-home
  * Description: An app home screen for disciple.tools. Part of the DT Toolbox.
  * Text Domain: dt-home
  * Domain Path: /languages
- * Version:  1.0.4
- * Author URI: https://github.com/thecodezone
- * GitHub Plugin URI: https://github.com/thecodezone/dt-home
+ * Version:  1.0.6
+ * Author URI: https://github.com/DiscipleTools
+ * GitHub Plugin URI: https://github.com/DiscipleTools/dt-home
  * Requires at least: 4.7.0
  * (Requires 4.7+ because of the integration of the REST API at 4.7 and the security requirements of this milestone version.)
- * Tested up to: 5.6
+ * Tested up to: 6.3
  *
  * @package Disciple_Tools
- * @link    https://github.com/thecodezone
+ * @link    https://github.com/DiscipleTools
  * @license GPL-2.0 or later
  *          https://www.gnu.org/licenses/gpl-2.0.html
  */

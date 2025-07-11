@@ -83,7 +83,9 @@ class Assets
                 'css-only' => false, // Optional. Set to true to only load style assets in production mode.
                 'in-footer' => true, // Optional. Defaults to false.
         ]);
-        wp_localize_script( 'dt-home', config( 'assets.javascript_global_scope' ), apply_filters( \DT\Home\namespace_string( 'javascript_globals' ), [] ) );
+        $javascript_globals = config( 'assets.javascript_globals' );
+        $javascript_globals['translations']['remove_app_confirmation'] = __( 'Are you sure you want to remove this app?', 'dt-home' );
+        wp_localize_script( 'dt-home', config( 'assets.javascript_global_scope' ), apply_filters( \DT\Home\namespace_string( 'javascript_globals' ), $javascript_globals ) );
     }
 
     /**
