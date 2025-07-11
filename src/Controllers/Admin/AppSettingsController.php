@@ -597,7 +597,7 @@ class AppSettingsController {
         // Get current app data
         $apps = container()->get( Apps::class );
         $apps_array = $apps->all();
-        
+
         // Create a lookup array for existing data
         $apps_lookup = [];
         foreach ( $apps_array as $app ) {
@@ -609,7 +609,7 @@ class AppSettingsController {
         // Reorder based on the provided slugs and update sort values
         $reordered_apps = [];
         $processed_slugs = [];
-        
+
         foreach ( $ordered_slugs as $index => $app_slug ) {
             if ( isset( $apps_lookup[$app_slug] ) ) {
                 $app = $apps_lookup[$app_slug];

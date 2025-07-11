@@ -361,7 +361,7 @@ class TrainingSettingsController
 
         // Get current training data
         $trainings_array = get_plugin_option( 'trainings' );
-        
+
         // Create a lookup array for existing data
         $trainings_lookup = [];
         foreach ( $trainings_array as $training ) {
@@ -373,7 +373,7 @@ class TrainingSettingsController
         // Reorder based on the provided IDs and update sort values
         $reordered_trainings = [];
         $processed_ids = [];
-        
+
         foreach ( $ordered_ids as $index => $training_id ) {
             if ( isset( $trainings_lookup[$training_id] ) ) {
                 $training = $trainings_lookup[$training_id];
