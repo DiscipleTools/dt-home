@@ -1,7 +1,7 @@
-import {css, html, LitElement} from 'lit'
-import {customElement} from 'lit-element'
-import {property, queryAll} from 'lit/decorators.js'
-import {magic_url} from '../helpers.js'
+import { css, html, LitElement } from 'lit'
+import { customElement } from 'lit-element'
+import { property, queryAll } from 'lit/decorators.js'
+import { magic_url } from '../helpers.js'
 
 /**
  * Custom element representing an application grid.
@@ -21,6 +21,147 @@ class AppGrid extends LitElement {
             gap: 20px;
             padding: 20px 0;
             justify-items: center;
+        }
+
+        .links-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            padding: 20px 0;
+        }
+
+        .link-item {
+            display: flex;
+            align-items: center;
+            padding: 16px;
+            border-radius: 12px;
+            background-color: #f0f0f0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .link-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+        }
+
+        .link-item:before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 4px;
+            background: linear-gradient(45deg, #4a90e2, #63b3ed);
+            border-radius: 4px 0 0 4px;
+        }
+
+        .link-item__icon {
+            width: 40px;
+            height: 40px;
+            margin-right: 16px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .link-item__icon img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+        }
+
+        .link-item__icon i {
+            font-size: 24px;
+            color: #4a90e2;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+        }
+
+        .link-item__content {
+            flex: 1;
+            min-width: 0;
+            padding: 0 8px;
+        }
+
+        .link-item__title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1a202c;
+            margin-bottom: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .link-item__url {
+            color: #718096;
+            text-decoration: none;
+            font-size: 13px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: block;
+            transition: color 0.2s ease;
+        }
+
+        .link-item__url:hover {
+            color: #4a90e2;
+        }
+
+        .link-item__copy {
+            background: linear-gradient(45deg, #4a90e2, #63b3ed);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            margin-left: 16px;
+            flex-shrink: 0;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 6px rgba(74, 144, 226, 0.3);
+        }
+
+        .link-item__copy i {
+            font-size: 18px;
+        }
+
+        .link-item__copy:hover {
+            transform: translateY(-1px) rotate(5deg);
+            box-shadow: 0 4px 8px rgba(74, 144, 226, 0.4);
+        }
+
+        .link-item__remove {
+            background: linear-gradient(45deg, #e53e3e, #fc8181);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            margin-left: 12px;
+            flex-shrink: 0;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 6px rgba(229, 62, 62, 0.3);
+        }
+
+        .link-item__remove i {
+            font-size: 18px;
+        }
+
+        .link-item__remove:hover {
+            transform: translateY(-1px) rotate(5deg);
+            box-shadow: 0 4px 8px rgba(229, 62, 62, 0.4);
         }
 
         .app-grid__item {
@@ -205,7 +346,7 @@ class AppGrid extends LitElement {
     }
 
     visitApp(url, options) {
-        if ( Boolean( JSON.parse( options.open_in_new_tab ?? false ) ) ) {
+        if (Boolean(JSON.parse(options.open_in_new_tab ?? false))) {
             window.open(url, '_blank')
         } else {
             window.location.href = url
@@ -435,68 +576,229 @@ class AppGrid extends LitElement {
     }
 
     /**
+     * Handles copying a link URL to clipboard.
+     * @param {Event} event - The click event.
+     * @param {Object} link - The link object.
+     */
+    handleCopy(event, link) {
+        event.stopPropagation()
+        event.preventDefault()
+
+        // Get the button element that was clicked
+        const button = event.target.closest('.link-item__copy')
+
+        if (navigator.clipboard) {
+            navigator.clipboard
+                .writeText(link.url)
+                .then(() => {
+                    this.showCopyFeedback(button)
+                })
+                .catch(() => {
+                    this.fallbackCopy(link, button)
+                })
+        } else {
+            this.fallbackCopy(link, button)
+        }
+    }
+
+    /**
+     * Fallback copy method for older browsers.
+     * @param {Object} link - The link object.
+     * @param {Element} button - The button element.
+     */
+    fallbackCopy(link, button) {
+        const textArea = document.createElement('textarea')
+        textArea.value = link.url
+        document.body.appendChild(textArea)
+        textArea.select()
+        document.execCommand('copy')
+        document.body.removeChild(textArea)
+        this.showCopyFeedback(button)
+    }
+
+    /**
+     * Shows visual feedback when URL is copied.
+     * @param {Element} button - The button element.
+     */
+    showCopyFeedback(button) {
+        // Store the original icon
+        const originalIcon = button.innerHTML
+        const originalBackground = button.style.background
+
+        // Change to checkmark icon and success color
+        button.innerHTML = '<i class="mdi mdi-check"></i>'
+        button.style.background = 'linear-gradient(45deg, #38a169, #68d391)'
+        button.style.transform = 'scale(1.1)'
+        button.style.boxShadow = '0 4px 8px rgba(56, 161, 105, 0.4)'
+
+        // Reset after animation
+        setTimeout(() => {
+            button.innerHTML = originalIcon
+            button.style.background = originalBackground
+            button.style.transform = 'scale(1)'
+            button.style.boxShadow = '0 2px 6px rgba(74, 144, 226, 0.3)'
+        }, 1500)
+    }
+
+    /**
      * Renders the AppGrid element.
      * @returns {TemplateResult} HTML template result.
      */
     render() {
         return html`
-            <div class="app-grid">
-                ${this.appData
-                    .filter((app) => app.is_hidden !== 1) // Filter out hidden apps
-                    .map(
-                        (app, index) => html`
-                            <div
-                                class="app-grid__item ${this.editing
-                                    ? 'editing'
-                                    : ''}"
-                                data-index="${index}"
-                                @touchstart="${(event) =>
-                                    this.handleTouchStart(event, index, app)}"
-                                @touchend="${this.handleTouchEnd}"
-                                @touchcancel="${this.handleTouchEnd}"
-                                @click="${(event) =>
-                                    !this.editing &&
-                                    this.handleClick(event, app.slug, app)}"
-                                @mousedown="${(event) =>
-                                    this.handleMouseDown(event, index, app)}"
-                                @dragstart="${(event) =>
-                                    this.handleDragStart(event, index, app)}"
-                                @dragend="${(event) =>
-                                    this.handleDragEnd(event, index, app)}"
-                                @dragover="${(event) =>
-                                    this.handleDragOver(event, index, app)}"
-                                @dragleave="${(event) =>
-                                    this.handleDragLeave(event, index, app)}"
-                                @drop="${(event) =>
-                                    this.handleDrop(event, index, app)}"
-                                draggable="${this.editing ? 'true' : 'false'}"
-                            >
-                                ${this.editing
-                                    ? html`
-                                          <span
-                                              class="app-grid__remove-icon ${this
-                                                  .showRemoveIconId
-                                                  ? ''
-                                                  : 'hidden'}"
-                                              @click="${(event) =>
-                                                  this.handleRemove(
-                                                      event,
-                                                      index,
-                                                      app
-                                                  )}"
-                                          >
-                                              <sp-icon-close></sp-icon-close>
-                                          </span>
-                                      `
-                                    : ''}
-                                <dt-home-app-icon
-                                    class="app-grid__icon"
-                                    name="${app.name}"
-                                    icon="${app.icon}"
-                                ></dt-home-app-icon>
-                            </div>
-                        `
-                    )}
+            <style>
+                @import url('https://cdn.jsdelivr.net/npm/@mdi/font/css/materialdesignicons.min.css');
+            </style>
+            <div>
+                <h2>Apps</h2>
+
+                <div class="app-grid">
+                    ${this.appData
+                        .filter(
+                            (app) =>
+                                app.is_hidden !== 1 &&
+                                app.magic_link_meta !== undefined
+                        ) // Filter out hidden apps
+                        .map(
+                            (app, index) => html`
+                                <div
+                                    class="app-grid__item ${this.editing
+                                        ? 'editing'
+                                        : ''}"
+                                    data-index="${index}"
+                                    @touchstart="${(event) =>
+                                        this.handleTouchStart(
+                                            event,
+                                            index,
+                                            app
+                                        )}"
+                                    @touchend="${this.handleTouchEnd}"
+                                    @touchcancel="${this.handleTouchEnd}"
+                                    @click="${(event) =>
+                                        !this.editing &&
+                                        this.handleClick(event, app.slug, app)}"
+                                    @mousedown="${(event) =>
+                                        this.handleMouseDown(
+                                            event,
+                                            index,
+                                            app
+                                        )}"
+                                    @dragstart="${(event) =>
+                                        this.handleDragStart(
+                                            event,
+                                            index,
+                                            app
+                                        )}"
+                                    @dragend="${(event) =>
+                                        this.handleDragEnd(event, index, app)}"
+                                    @dragover="${(event) =>
+                                        this.handleDragOver(event, index, app)}"
+                                    @dragleave="${(event) =>
+                                        this.handleDragLeave(
+                                            event,
+                                            index,
+                                            app
+                                        )}"
+                                    @drop="${(event) =>
+                                        this.handleDrop(event, index, app)}"
+                                    draggable="${this.editing
+                                        ? 'true'
+                                        : 'false'}"
+                                >
+                                    ${this.editing
+                                        ? html`
+                                              <span
+                                                  class="app-grid__remove-icon ${this
+                                                      .showRemoveIconId
+                                                      ? ''
+                                                      : 'hidden'}"
+                                                  @click="${(event) =>
+                                                      this.handleRemove(
+                                                          event,
+                                                          index,
+                                                          app
+                                                      )}"
+                                              >
+                                                  <sp-icon-close></sp-icon-close>
+                                              </span>
+                                          `
+                                        : ''}
+                                    <dt-home-app-icon
+                                        class="app-grid__icon"
+                                        name="${app.name}"
+                                        icon="${app.icon}"
+                                    ></dt-home-app-icon>
+                                </div>
+                            `
+                        )}
+                </div>
+            </div>
+            <div>
+                <h2>Links</h2>
+                <div class="links-list">
+                    ${this.appData
+                        .filter(
+                            (app) =>
+                                app.is_hidden !== 1 &&
+                                app.magic_link_meta === undefined
+                        ) // Filter out hidden apps
+                        .map(
+                            (link, index) => html`
+                                <div class="link-item">
+                                    <div class="link-item__icon">
+                                        ${link.icon.startsWith('http') ||
+                                        link.icon.startsWith('/')
+                                            ? html`<img
+                                                  src="${link.icon}"
+                                                  alt="${link.name || 'Link'}"
+                                              />`
+                                            : html`<i
+                                                  class="${link.icon}"
+                                                  aria-hidden="true"
+                                              ></i>`}
+                                    </div>
+                                    <div class="link-item__content">
+                                        <div class="link-item__title">
+                                            ${link.name || 'Link'}
+                                        </div>
+                                        <a
+                                            href="${link.url}"
+                                            class="link-item__url"
+                                            target="${link.open_in_new_tab
+                                                ? '_blank'
+                                                : '_self'}"
+                                        >
+                                            ${link.url}
+                                        </a>
+                                    </div>
+                                    <button
+                                        class="link-item__copy"
+                                        @click="${(event) =>
+                                            this.handleCopy(event, link)}"
+                                        title="Copy link"
+                                    >
+                                        <i class="mdi mdi-content-copy"></i>
+                                    </button>
+                                    ${this.editing
+                                        ? html`
+                                              <button
+                                                  class="link-item__remove"
+                                                  @click="${(event) =>
+                                                      this.handleRemove(
+                                                          event,
+                                                          index,
+                                                          link
+                                                      )}"
+                                                  title="Remove link"
+                                              >
+                                                  <i class="mdi mdi-delete"></i>
+                                              </button>
+                                          `
+                                        : ''}
+                                </div>
+                            `
+                        )}
+                </div>
             </div>
         `
     }
