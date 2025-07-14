@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name: DT Home
+ * Plugin Name: D.T Home
  * Plugin URI: https://github.com/DiscipleTools/dt-home
  * Description: An app home screen for disciple.tools. Part of the DT Toolbox.
  * Text Domain: dt-home

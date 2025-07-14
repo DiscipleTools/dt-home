@@ -12,8 +12,8 @@ use function DT\Home\routes_path;
  */
 class Launcher extends MagicLink {
 
-	public $page_title = 'DT Home';
-	public $page_description = 'DT home screen.';
+	public $page_title = 'D.T Home';
+	public $page_description = 'D.T home screen.';
 	public $root = 'apps';
 	public $type = 'launcher';
 	public $post_type = 'user';
