@@ -21,8 +21,6 @@ $r->group( '/wp-admin', function ( RouteCollectionInterface $r ) {
 	$r->get( '/admin.php?page=dt_home&tab=app&action=edit/{slug}', [ AppSettingsController::class, 'edit' ] );
 	$r->get( '/admin.php?page=dt_home&tab=app&action=unhide/{slug}', [ AppSettingsController::class, 'unhide' ] );
 	$r->get( '/admin.php?page=dt_home&tab=app&action=hide/{slug}', [ AppSettingsController::class, 'hide' ] );
-	$r->get( '/admin.php?page=dt_home&tab=app&action=up/{slug}', [ AppSettingsController::class, 'up' ] );
-	$r->get( '/admin.php?page=dt_home&tab=app&action=down/{slug}', [ AppSettingsController::class, 'down' ] );
 	$r->get( '/admin.php?page=dt_home&tab=app&action=delete/{slug}', [ AppSettingsController::class, 'delete' ] );
 	$r->get( '/admin.php?page=dt_home&tab=app&action=softdelete/{slug}', [ AppSettingsController::class, 'soft_delete_app' ] );
 	$r->get( '/admin.php?page=dt_home&tab=app&action=restore_app/{slug}', [ AppSettingsController::class, 'restore_app' ] );
@@ -37,8 +35,6 @@ $r->group( '/wp-admin', function ( RouteCollectionInterface $r ) {
 		TrainingSettingsController::class,
 		'edit'
 	]);
-	$r->get( '/admin.php?page=dt_home&tab=training&action=up/{id}', [ TrainingSettingsController::class, 'up' ] );
-	$r->get( '/admin.php?page=dt_home&tab=training&action=down/{id}', [ TrainingSettingsController::class, 'down' ] );
 	$r->get('/admin.php?page=dt_home&tab=training&action=delete/{id}', [
 		TrainingSettingsController::class,
 		'delete'

@@ -64,14 +64,12 @@ $this->layout( 'layouts/settings', compact( 'tab', 'link', 'page_title' ) )
                             </td>
                             <td style="border: 1px solid #ddd;"><?php echo esc_attr( $app['slug'] ); ?></td>
                             <td style="border: 1px solid #ddd;">
-                                <a href="admin.php?page=dt_home&tab=app&action=up/<?php echo esc_attr( $app['slug'] ); ?>"><?php esc_html_e( 'Up', 'dt-home' ); ?></a>&nbsp;|&nbsp;
                                 <?php if ( $app['is_hidden'] == 1 ) { ?>
                                     <a href="admin.php?page=dt_home&tab=app&action=unhide/<?php echo esc_attr( $app['slug'] ); ?>"><?php esc_html_e( 'Unhide', 'dt-home' ); ?></a>&nbsp;|&nbsp;
                                 <?php } else { ?>
                                     <a href="admin.php?page=dt_home&tab=app&action=hide/<?php echo esc_attr( $app['slug'] ); ?>"><?php esc_html_e( 'Hide', 'dt-home' ); ?></a>&nbsp;|&nbsp;
                                 <?php } ?>
-                                <a href="admin.php?page=dt_home&tab=app&action=edit/<?php echo esc_attr( $app['slug'] ); ?>"><?php esc_html_e( 'Edit', 'dt-home' ); ?></a>&nbsp;|&nbsp;
-                                <a href="admin.php?page=dt_home&tab=app&action=down/<?php echo esc_attr( $app['slug'] ); ?>"><?php esc_html_e( 'Down', 'dt-home' ); ?></a>&nbsp;
+                                <a href="admin.php?page=dt_home&tab=app&action=edit/<?php echo esc_attr( $app['slug'] ); ?>"><?php esc_html_e( 'Edit', 'dt-home' ); ?></a>&nbsp;
                                 <?php if ( !isset( $app['creation_type'] ) || ( $app['creation_type'] != 'code' ) ) { ?>
                                     |&nbsp;
                                     <a href="#" onclick="deleteApp('<?php echo esc_attr( $app['slug'] ); ?>')" class="delete-apps">

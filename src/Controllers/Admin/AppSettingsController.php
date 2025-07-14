@@ -248,135 +248,15 @@ class AppSettingsController {
         }
         $apps       = container()->get( Apps::class );
         $apps_array = $apps->all();
-
         // Find the app with the specified ID and update its 'is_hidden' status
         foreach ( $apps_array as $key => $app ) {
             if ( isset( $app['slug'] ) && $app['slug'] == $slug ) {
-                $apps_array[ $key ]['is_hidden'] = 1; // Set 'is_hidden' to 1 (hide)
-                break; // Exit the loop once the app is found and updated
-            }
-        }
-
-        // Save the updated array back to the option
-        set_plugin_option( 'apps', $apps_array );
-
-        return redirect( 'admin.php?page=dt_home&tab=app&updated=true' );
-    }
-
-    /**
-     * Updates the sort order of an app.
-     *
-     * @param Request $request The request instance.
-     * @param array $params The route parameters.
-     *
-     * @return ResponseInterface The RedirectResponse instance.
-     */
-
-    public function up( Request $request, $params ) {
-        $slug = $params['slug'] ?? '';
-        if ( empty( $slug ) ) {
-            return redirect( 'admin.php?page=dt_home&tab=app&updated=false' );
-        }
-
-        // Retrieve the existing array of apps
-        $apps       = container()->get( Apps::class );
-        $apps_array = $apps->all();
-
-        // Find the index of the app and its current sort value
-        $current_index = null;
-        $current_sort  = null;
-        foreach ( $apps_array as $key => $app ) {
-            if ( $app['slug'] == $slug ) {
-                $current_index = $key;
-                $current_sort  = (int) $app['sort'];
+                $apps_array[ $key ]['is_hidden'] = 1;
                 break;
             }
         }
-
-        // Adjust the sort values
-        foreach ( $apps_array as $key => &$app ) {
-            if ( $app['sort'] == $current_sort - 1 ) {
-                // Increment the sort value of the app that's currently one position above
-                $app['sort']++;
-            }
-        }
-
-        // Decrement the sort value of the current app
-        if ( $current_sort > 0 ) {
-            $apps_array[ $current_index ]['sort']--;
-        }
-
-        // Normalize the sort values to ensure they are positive and sequential
-        usort( $apps_array, function ( $a, $b ) {
-            return (int) $a['sort'] - (int) $b['sort'];
-        } );
-
-        foreach ( $apps_array as $key => &$app ) {
-            $app['sort'] = $key;
-        }
-
         // Save the updated array back to the option
         set_plugin_option( 'apps', $apps_array );
-
-        return redirect( 'admin.php?page=dt_home&tab=app&updated=true' );
-    }
-
-    /**
-     * Move an app down in the list of apps.
-     *
-     * @param Request $request The request instance.
-     * @param array $params The route parameters.
-     *
-     * @return ResponseInterface The RedirectResponse instance.
-     */
-    public function down( Request $request, $params ) {
-        // Retrieve the existing array of apps
-        $slug = $params['slug'] ?? '';
-        if ( empty( $slug ) ) {
-            return redirect( 'admin.php?page=dt_home&tab=app&updated=false' );
-        }
-        $apps       = container()->get( Apps::class );
-        $apps_array = $apps->all();
-
-        // Find the index of the app and its current sort value
-        $current_index = null;
-        $current_sort  = null;
-        foreach ( $apps_array as $key => $app ) {
-            if ( $app['slug'] == $slug ) {
-                $current_index = $key;
-                $current_sort  = $app['sort'];
-                break;
-            }
-        }
-
-        // Determine the maximum sort value
-        $max_sort = count( $apps_array );
-
-        // Only proceed if the app was found and it's not already at the bottom
-        if ( $current_index !== null && $current_sort < $max_sort ) {
-            // Adjust the sort values
-            foreach ( $apps_array as $key => &$app ) {
-                if ( $app['sort'] == (int) $current_sort + 1 ) {
-                    // Decrement the sort value of the app that's currently one position below
-                    $app['sort']--;
-                }
-            }
-            // Increment the sort value of the current app
-            $apps_array[ $current_index ]['sort']++;
-
-            // Re-sort the array
-            usort( $apps_array, function ( $a, $b ) {
-                return (int) $a['sort'] - (int) $b['sort'];
-            } );
-
-            foreach ( $apps_array as $key => &$app ) {
-                $app['sort'] = $key;
-            }
-
-            // Save the updated array back to the option
-            set_plugin_option( 'apps', $apps_array );
-
-        }
 
         return redirect( 'admin.php?page=dt_home&tab=app&updated=true' );
     }

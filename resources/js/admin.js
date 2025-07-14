@@ -103,7 +103,6 @@ class SortableTable {
     init() {
         this.addDragHandles();
         this.bindEvents();
-        this.hideUpDownLinks();
         console.log('SortableTable: Initialization complete');
     }
     
@@ -311,14 +310,31 @@ class SortableTable {
     }
     
     sendOrderUpdate(orderedIds) {
-        // Use GET request with query parameters (simpler and more reliable)
+        // Use GET request with query parameters (AJAX)
         const params = new URLSearchParams();
         params.append('ordered_ids', orderedIds.join(','));
-        
         const url = `${this.config.endpoint}&${params.toString()}`;
-        
-        // Redirect to the reorder URL
-        window.location.href = url;
+
+        // Show a loading message
+        this.showMessage('Saving order...', 'success');
+
+        fetch(url, {
+            method: 'GET',
+            credentials: 'same-origin',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+            },
+        })
+        .then(response => {
+            if (response.ok) {
+                this.showMessage('Order saved!', 'success');
+            } else {
+                this.showMessage('Failed to save order.', 'error');
+            }
+        })
+        .catch(() => {
+            this.showMessage('Failed to save order.', 'error');
+        });
     }
     
     showMessage(text, type) {
@@ -346,42 +362,6 @@ class SortableTable {
         setTimeout(() => {
             messageEl.style.display = 'none';
         }, 3000);
-    }
-    
-    hideUpDownLinks() {
-        const actionCells = this.table.querySelectorAll('td:last-child');
-        actionCells.forEach(cell => {
-            const upLinks = cell.querySelectorAll('a[href*="action=up"]');
-            const downLinks = cell.querySelectorAll('a[href*="action=down"]');
-            
-            upLinks.forEach(link => {
-                link.style.display = 'none';
-                
-                // Hide the separator after the Up link
-                let nextNode = link.nextSibling;
-                while (nextNode && nextNode.nodeType === Node.TEXT_NODE) {
-                    if (nextNode.textContent.includes('|')) {
-                        nextNode.textContent = nextNode.textContent.replace(/\s*\|\s*/, '');
-                    }
-                    nextNode = nextNode.nextSibling;
-                }
-            });
-            
-            downLinks.forEach(link => {
-                link.style.display = 'none';
-                
-                // Hide the separator before the Down link
-                let prevNode = link.previousSibling;
-                while (prevNode && prevNode.nodeType === Node.TEXT_NODE) {
-                    if (prevNode.textContent.includes('|')) {
-                        prevNode.textContent = prevNode.textContent.replace(/\s*\|\s*/, '');
-                    }
-                    prevNode = prevNode.previousSibling;
-                }
-            });
-        });
-        
-
     }
 }
 
