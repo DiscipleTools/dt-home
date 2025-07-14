@@ -10,18 +10,11 @@
 $this->layout( 'layouts/plugin' );
 ?>
 
-<header id="app-header">
-    <dt-home-tooltip translations='
-        <?php
-        echo wp_json_encode(
-            [
-                'helpText' => __( 'Copy this link and share it with people you are coaching', 'dt-home' ),
-            ]
-        )
-        ?>
-        '
-        ></dt-home-tooltip>
-    <dt-copy-text value="<?php echo esc_url( $magic_link ); ?>"></dt-copy-text>
+<header id="app-header" style="display: flex; align-items: center; justify-content: space-between; padding: 0.5rem 0;">
+    <h1 style="margin: 0; font-size: 1.5rem; font-weight: 700; text-align: left;">
+        <?php echo esc_html__( 'Home Screen', 'dt-home' ); ?>
+    </h1>
+    <!-- The hamburger menu is rendered by the layout -->
 </header>
 
 <dt-home-app-grid id="appGrid" app-data='<?php echo esc_attr( htmlspecialchars( $data ) ); ?>'
