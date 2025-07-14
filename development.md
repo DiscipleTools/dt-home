@@ -2,12 +2,13 @@
 
 ## Locally
 
-Run 
-```
-npm run dev
-``` 
+- Copy source code to `/wp-content/plugins/dt-home/` on local site.
+- Within the site plugin directory (above):
+  - Run `composer install`
+  - Run `npm install`
+  - Run `npm run dev`
 
-while working locally.
+Note: If vendor-scoped folder is not generated or `composer install` always says php-scoped needs to be installed, make sure the [Composer bin folder is in your PATH](https://stackoverflow.com/a/64545124/92876).
 
 ## Packaging for production
 
