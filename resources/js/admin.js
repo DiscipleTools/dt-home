@@ -344,12 +344,14 @@ class SortableTable {
             messageEl = document.createElement('div');
             messageEl.className = 'sortable-message';
             messageEl.style.position = 'fixed';
-            messageEl.style.top = '20px';
+            messageEl.style.bottom = '20px'; // Move to bottom
             messageEl.style.right = '20px';
-            messageEl.style.padding = '10px 20px';
-            messageEl.style.borderRadius = '4px';
+            messageEl.style.top = '';
+            messageEl.style.padding = '14px 28px';
+            messageEl.style.borderRadius = '6px';
             messageEl.style.color = 'white';
             messageEl.style.fontWeight = 'bold';
+            messageEl.style.fontSize = '1.25rem'; // Larger font
             messageEl.style.zIndex = '9999';
             document.body.appendChild(messageEl);
         }
@@ -358,10 +360,10 @@ class SortableTable {
         messageEl.style.backgroundColor = type === 'success' ? '#46b450' : '#dc3232';
         messageEl.style.display = 'block';
         
-        // Auto-hide after 3 seconds
+        // Auto-hide after 5 seconds
         setTimeout(() => {
             messageEl.style.display = 'none';
-        }, 3000);
+        }, 10000);
     }
 }
 
