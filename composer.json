@@ -27,6 +27,8 @@
     }
   ],
   "scripts": {
+    "lint": "vendor/bin/phpcs",
+    "lintfix": "vendor/bin/phpcbf",
     "pre-install-cmd": [
       "bin/setup-scoper.sh"
     ]
