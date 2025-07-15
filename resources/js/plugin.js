@@ -39,6 +39,7 @@ import './components/menu.js'
 import './components/training-video.js'
 import './components/app-icon.js'
 import './components/tool-tip.js'
+import './components/invite-modal.js'
 
 /**
  * CSS

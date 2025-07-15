@@ -106,6 +106,22 @@ msgstr "ऐप्स"
 msgid "Training"
 msgstr "प्रशिक्षण"
 
+#: resources/views/layouts/plugin.php:13
+msgid "Invite"
+msgstr "आमंत्रित करें"
+
+msgid "Copy this link and share it with people you are coaching. They will create their own account and have their own Home Screen."
+msgstr "इस लिंक को कॉपी करें और इसे उन लोगों के साथ साझा करें जिन्हें आप कोचिंग दे रहे हैं। वे अपना खुद का खाता बनाएंगे और अपनी खुद की होम स्क्रीन प्राप्त करेंगे।"
+
+msgid "Copy"
+msgstr "कॉपी करें"
+
+msgid "Close"
+msgstr "बंद करें"
+
+msgid "Link copied!"
+msgstr "लिंक कॉपी हो गया!"
+
 #: resources/views/layouts/plugin.php:14
 msgid "Log Out"
 msgstr "लॉग आउट"

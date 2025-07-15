@@ -108,6 +108,22 @@ msgstr ""
 msgid "Training"
 msgstr ""
 
+#: resources/views/layouts/plugin.php:13
+msgid "Invite"
+msgstr ""
+
+msgid "Copy this link and share it with people you are coaching. They will create their own account and have their own Home Screen."
+msgstr ""
+
+msgid "Copy"
+msgstr ""
+
+msgid "Close"
+msgstr ""
+
+msgid "Link copied!"
+msgstr ""
+
 #: resources/views/layouts/plugin.php:14
 msgid "Log Out"
 msgstr ""
@@ -443,4 +459,7 @@ msgstr ""
 
 #. Author URI of the plugin/theme
 msgid "https://github.com/thecodezone"
+msgstr ""
+
+msgid "Home Screen"
 msgstr ""

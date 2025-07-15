@@ -110,6 +110,7 @@ class Menu extends LitElement {
   `
   @property({type: Boolean}) isOpen = false
   @property({type: Array}) menuItems = []
+  @property({type: Object}) translations = {}
 
   render() {
     return html`
@@ -148,7 +149,7 @@ class Menu extends LitElement {
                 html`
                   <sp-menu-item
                     class="menu-item"
-                    @click="${() => this.navigate(item.href)}"
+                    @click="${() => this.handleMenuClick(item)}"
                   >
                     ${item.label}
                   </sp-menu-item>`
@@ -156,7 +157,28 @@ class Menu extends LitElement {
           </sp-menu>
         </sp-popover>
       </sp-overlay>
+      
+      <dt-home-invite-modal id="inviteModal" .translations=${this.translations}></dt-home-invite-modal>
     `
+  }
+
+  handleMenuClick(item) {
+    if (item.action === 'invite') {
+      // Open invite modal
+      const inviteModal = this.shadowRoot.getElementById('inviteModal')
+      if (inviteModal) {
+        inviteModal.open()
+      }
+      // Try dispatching a 'close' event on the overlay
+      const overlay = this.shadowRoot.querySelector('sp-overlay')
+      if (overlay) {
+        overlay.dispatchEvent(new CustomEvent('close', { bubbles: true, composed: true }))
+      }
+      this.isOpen = false
+    } else {
+      // Navigate to href
+      this.navigate(item.href)
+    }
   }
 
   navigate(href) {
