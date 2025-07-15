@@ -108,6 +108,22 @@ msgstr "Aplicaciones"
 msgid "Training"
 msgstr "Formación"
 
+#: resources/views/layouts/plugin.php:13
+msgid "Invite"
+msgstr "Invitar"
+
+msgid "Copy this link and share it with people you are coaching. They will create their own account and have their own Home Screen."
+msgstr "Copia este enlace y compártelo con las personas a las que estás entrenando. Ellos crearán su propia cuenta y tendrán su propia pantalla de inicio."
+
+msgid "Copy"
+msgstr "Copiar"
+
+msgid "Close"
+msgstr "Cerrar"
+
+msgid "Link copied!"
+msgstr "¡Enlace copiado!"
+
 #: resources/views/layouts/plugin.php:14
 msgid "Log Out"
 msgstr "Cerrar sesión"
