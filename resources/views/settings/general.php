@@ -7,6 +7,7 @@
  * @var string $page_title
  * @var string $dt_home_require_login
  * @var string $dt_home_reset_apps
+ * @var string $dt_home_invite_others
  */
 $this->layout( 'layouts/settings', compact( 'tab', 'link', 'page_title' ) )
 ?>
@@ -36,7 +37,17 @@ $this->layout( 'layouts/settings', compact( 'tab', 'link', 'page_title' ) )
 				</label>
 			</td>
 		</tr>
-		<!--For giving some space between the field and the button.-->
+        <tr>
+            <td>
+                <label for="invite_others">
+                    <input type="checkbox" id="dt_home_invite_others"
+                           name="dt_home_invite_others" <?php checked( $dt_home_invite_others ); ?>
+                    >
+                    <?php esc_html_e( 'Allow users to invite others?', 'dt-home' ); ?>
+                </label>
+            </td>
+        </tr>
+        <!--For giving some space between the field and the button.-->
 		<tr>
 			<td></td>
 		</tr>
@@ -71,10 +82,10 @@ $this->layout( 'layouts/settings', compact( 'tab', 'link', 'page_title' ) )
         }
 		$registration_status = get_option( 'users_can_register' ) ? 'enabled' : 'disabled';
         ?>
-        <strong><?php esc_html_e( 'Outside users can register and existing users can invite new users:', 'dt-home' ); ?></strong> 
+        <strong><?php esc_html_e( 'Outside users can register and existing users can invite new users:', 'dt-home' ); ?></strong>
         <?php echo esc_html( $registration_status === 'enabled' ? __( 'Yes', 'dt-home' ) : __( 'No', 'dt-home' ) ); ?>
         <br>
-        <?php esc_html_e( 'To change registration settings, visit:', 'dt-home' ); ?> 
+        <?php esc_html_e( 'To change registration settings, visit:', 'dt-home' ); ?>
         <a href="<?php echo esc_url( $settings_link ); ?>"><?php echo esc_html( $settings_text ); ?></a>
     </p>
 </div>
