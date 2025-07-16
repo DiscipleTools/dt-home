@@ -164,10 +164,17 @@ install_db() {
 }
 
 install_theme() {
-    DOWNLOAD_URL=$(curl -sL https://api.github.com/repos/DiscipleTools/disciple-tools-theme/releases/latest | jq -r '.assets[].browser_download_url')
-    curl -s -L --create-dirs "$DOWNLOAD_URL"  -o disciple-tools-theme.zip
+    # Download the latest stable release directly from GitHub
+    # This approach uses the source code archive instead of release assets
+    DOWNLOAD_URL="https://github.com/DiscipleTools/disciple-tools-theme/archive/refs/heads/master.zip"
+    
+    curl -s -L --create-dirs "$DOWNLOAD_URL" -o disciple-tools-theme.zip
     rm -rf $WP_THEME_DIR/disciple-tools-theme
-    unzip disciple-tools-theme -d $WP_THEME_DIR
+    unzip -q disciple-tools-theme.zip -d $WP_THEME_DIR
+    
+    # Rename the extracted folder to the expected name
+    mv $WP_THEME_DIR/disciple-tools-theme-master $WP_THEME_DIR/disciple-tools-theme 2>/dev/null || true
+    
     rm disciple-tools-theme.zip
 }
 

@@ -24,6 +24,7 @@ get_template_part('dt-core/admin/menu/tabs/dialog-icon-selector');
         <th></th>
         <th></th>
         <th></th>
+        <th></th>
     </tr>
     </thead>
    <tbody>
@@ -33,7 +34,7 @@ get_template_part('dt-core/admin/menu/tabs/dialog-icon-selector');
                 <span class="tooltiptext"><?php esc_html_e('Enter the name of the app.', 'dt-home') ?></span>
             </span>
         </td>
-        <td colspan="3">
+        <td colspan="4">
             <input style="min-width: 100%;" type="text" name="name" id="name" class="form-control"
                    pattern=".*\S+.*" title="<?php esc_attr_e('The name cannot be empty or just whitespace.', 'dt-home'); ?>"
                    value="<?php echo esc_attr($existing_data['name']); ?>" required>
@@ -45,7 +46,7 @@ get_template_part('dt-core/admin/menu/tabs/dialog-icon-selector');
                 <span class="tooltiptext"><?php esc_html_e('Select the type of the app.', 'dt-home') ?></span>
             </span>
         </td>
-        <td colspan="3">
+        <td colspan="4">
             <select style="min-width: 100%;" id="type" name="type" required onchange="toggleURLField()">
                 <option value="" <?php echo empty($existing_data['type']) ? 'selected' : ''; ?>>
                     <?php esc_html_e('Please select', 'dt-home') ?>
@@ -66,7 +67,7 @@ get_template_part('dt-core/admin/menu/tabs/dialog-icon-selector');
                 <span class="tooltiptext"><?php esc_html_e('Check this box to open the link in a new tab.', 'dt-home') ?></span>
             </span>
         </td>
-        <td colspan="2">
+        <td colspan="4">
             <input type="checkbox" name="open_in_new_tab" id="open_in_new_tab" value="1"
                 <?php checked($existing_data['open_in_new_tab'] ?? 0, 1); ?>>
         </td>
@@ -77,13 +78,13 @@ get_template_part('dt-core/admin/menu/tabs/dialog-icon-selector');
                 <span class="tooltiptext"><?php esc_html_e('Upload an icon for the app.', 'dt-home') ?></span>
             </span>
         </td>
-        <td style="vertical-align: middle;">
+        <td style="vertical-align: middle; text-align: center; padding: 8px;">
             <?php if (!empty($existing_data['icon'])) : ?>
                 <?php if (filter_var($existing_data['icon'], FILTER_VALIDATE_URL) || strpos($existing_data['icon'], '/wp-content/') === 0) : ?>
                     <img src="<?php echo esc_url($existing_data['icon']); ?>" alt="<?php esc_attr_e('Icon', 'dt-home'); ?>"
-                         style="width: 50px; height: 50px;">
+                         style="width: 32px; height: 32px; object-fit: contain;">
                 <?php elseif (preg_match('/^mdi\smdi-/', $existing_data['icon'])) : ?>
-                    <i class="<?php echo esc_attr($existing_data['icon']); ?>" style="font-size: 50px;"></i>
+                    <i class="<?php echo esc_attr($existing_data['icon']); ?>" style="font-size: 32px;"></i>
                 <?php endif; ?>
             <?php endif; ?>
         </td>
@@ -107,7 +108,7 @@ get_template_part('dt-core/admin/menu/tabs/dialog-icon-selector');
                     <span class="tooltiptext"><?php esc_html_e('Enter the URL for the app.', 'dt-home') ?></span>
                 </span>
             </td>
-            <td colspan="3">
+            <td colspan="4">
                 <input style="min-width: 100%;" type="text" name="url" id="url" class="form-control"
                        value="<?php echo esc_url(isset($existing_data['url']) ? $existing_data['url'] : ''); ?>">
             </td>
@@ -120,7 +121,7 @@ get_template_part('dt-core/admin/menu/tabs/dialog-icon-selector');
                 <span class="tooltiptext"><?php esc_html_e('Enter a slug for the app.', 'dt-home') ?></span>
             </span>
         </td>
-        <td colspan="2">
+        <td colspan="4">
             <input style="min-width: 100%;" type="text" name="slug" id="slug" readonly
                    value="<?php echo esc_attr(isset($existing_data['slug']) ? $existing_data['slug'] : ''); ?>"
                    required/>
@@ -132,7 +133,7 @@ get_template_part('dt-core/admin/menu/tabs/dialog-icon-selector');
                 <span class="tooltiptext"><?php esc_html_e('Check this box to hide the app.', 'dt-home') ?></span>
             </span>
         </td>
-        <td colspan="3">
+        <td colspan="4">
             <input type="checkbox" name="is_hidden" id="is_hidden"
                    value="1" <?php checked($existing_data['is_hidden'], 1); ?>>
         </td>
