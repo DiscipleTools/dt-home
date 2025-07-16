@@ -24,6 +24,7 @@ $r->group('/apps/launcher/{key}', function ( RouteCollectionInterface $r ) {
     $r->get( '/', [ LauncherController::class, 'show' ] );
     $r->get( '/training', [ TrainingController::class, 'show' ] );
     $r->get( '/logout', [ LoginController::class, 'logout' ] );
+    $r->get( '/reset-apps', [ AppController::class, 'reset_apps' ] );
     $r->get( '/manifest.json', [ ManifestController::class, 'show' ] );
 })->middleware( new LoggedIn() )
     ->middleware( new CheckShareCookie() );

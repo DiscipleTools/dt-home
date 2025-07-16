@@ -236,109 +236,55 @@ class TrainingSettingsController
     }
 
     /**
-     * Retrieves the training data from the plugin option, finds the specified training by its ID, and moves it up in the sort order.
-     * If successful, it saves the updated array to the plugin option and redirects to the training page.
-     * If the specified ID is not found or the training is already at the top, it redirects back to the training page without making any changes.
+     * Handle GET-based reorder requests.
      *
-     * @param Request $request The current server request object.
-     * @param array $params An array of parameters passed to the method.
-     * @return ResponseInterface A redirect response to the training page with an "updated" parameter set to "true".
+     * @param Request $request The request object.
+     *
+     * @return ResponseInterface
      */
-    public function up( Request $request, $params )
+    public function reorder_get( Request $request )
     {
-        $id = $params['id'] ?? null;
+        $input = extract_request_input( $request );
+        $ordered_ids = isset( $input['ordered_ids'] ) ? explode( ',', $input['ordered_ids'] ) : [];
 
-        if ( !$id ) {
-            return redirect( 'admin.php?page=dt_home&tab=training' );
+        if ( empty( $ordered_ids ) ) {
+            return redirect( 'admin.php?page=dt_home&tab=training&error=1' );
         }
 
-        // Retrieve the existing array of apps
+        // Get current training data
         $trainings_array = get_plugin_option( 'trainings' );
 
-        // Find the index of the app and its current sort value
-        $current_index = null;
-        $current_sort = null;
-        foreach ( $trainings_array as $key => $training ) {
-            if ( $training['id'] == $id ) {
-                $current_index = $key;
-                $current_sort = $training['sort'];
-                break;
+        // Create a lookup array for existing data
+        $trainings_lookup = [];
+        foreach ( $trainings_array as $training ) {
+            if ( isset( $training['id'] ) ) {
+                $trainings_lookup[$training['id']] = $training;
             }
         }
 
-        // Only proceed if the app was found and it's not already at the top
-        if ( $current_index !== null && $current_sort > 1 ) {
-            // Adjust the sort values
-            foreach ( $trainings_array as $key => &$training ) {
-                if ( $training['sort'] == $current_sort - 1 ) {
-                    // Increment the sort value of the app that's currently one position above
-                    $training['sort']++;
-                }
-            }
-            // Decrement the sort value of the current app
-            $trainings_array[$current_index]['sort']--;
+        // Reorder based on the provided IDs and update sort values
+        $reordered_trainings = [];
+        $processed_ids = [];
 
-            // Re-sort the array
-            usort($trainings_array, function ( $a, $b ) {
-                return $a['sort'] - $b['sort'];
-            });
-
-            // Save the updated array back to the option
-            set_plugin_option( 'trainings', $trainings_array );
-        }
-
-        return redirect( 'admin.php?page=dt_home&tab=training&updated=true' );
-    }
-
-    /**
-     * Handles the request to move the training down in the list.
-     *
-     * @param Request $request The HTTP Request object.
-     * @param array $params The request parameters.
-     *
-     * @return ResponseInterface The redirect response to the admin page.
-     */
-    public function down( Request $request, $params )
-    {
-        $id = $params['id'] ?? null;
-
-        // Retrieve the existing array of apps
-        $trainings_array = get_plugin_option( 'trainings' );
-
-        // Find the index of the app and its current sort value
-        $current_index = null;
-        $current_sort = null;
-        foreach ( $trainings_array as $key => $app ) {
-            if ( $app['id'] == $id ) {
-                $current_index = $key;
-                $current_sort = $app['sort'];
-                break;
+        foreach ( $ordered_ids as $index => $training_id ) {
+            if ( isset( $trainings_lookup[$training_id] ) ) {
+                $training = $trainings_lookup[$training_id];
+                $training['sort'] = $index + 1;
+                $reordered_trainings[] = $training;
+                $processed_ids[] = $training_id;
             }
         }
 
-        // Determine the maximum sort value
-        $max_sort = count( $trainings_array );
-
-        // Only proceed if the app was found and it's not already at the bottom
-        if ( $current_index !== null && $current_sort < $max_sort ) {
-            // Adjust the sort values
-            foreach ( $trainings_array as $key => &$app ) {
-                if ( $app['sort'] == $current_sort + 1 ) {
-                    // Decrement the sort value of the app that's currently one position below
-                    $app['sort']--;
-                }
+        // Add any missing items to the end to prevent data loss
+        foreach ( $trainings_array as $training ) {
+            if ( isset( $training['id'] ) && !in_array( $training['id'], $processed_ids ) ) {
+                $training['sort'] = count( $reordered_trainings ) + 1;
+                $reordered_trainings[] = $training;
             }
-            // Increment the sort value of the current app
-            $trainings_array[$current_index]['sort']++;
-
-            // Re-sort the array
-            usort($trainings_array, function ( $a, $b ) {
-                return $a['sort'] - $b['sort'];
-            });
-
-            // Save the updated array back to the option
-            set_plugin_option( 'trainings', $trainings_array );
         }
+
+        // Save the updated training order back to the option
+        set_plugin_option( 'trainings', $reordered_trainings );
 
         return redirect( 'admin.php?page=dt_home&tab=training&updated=true' );
     }

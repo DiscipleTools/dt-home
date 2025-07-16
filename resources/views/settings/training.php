@@ -42,10 +42,8 @@ $this->layout( 'layouts/settings', compact( 'tab', 'link', 'page_title' ) )
                                 <td style="border: 1px solid #ddd;"><?php echo stripslashes( $training['embed_video'] ); //phpcs:ignore ?></td>
                                 <td style="border: 1px solid #ddd;"><?php echo esc_html( $training['anchor'] ); ?></td>
                                 <td style="border: 1px solid #ddd;">
-                                    <a href="admin.php?page=dt_home&tab=training&action=up/<?php echo esc_attr( $training['id'] ); ?>"><?php esc_html_e( 'Up', 'dt-home' ); ?></a>&nbsp;|&nbsp;
                                     <a href="admin.php?page=dt_home&tab=training&action=edit/<?php echo esc_attr( $training['id'] ); ?>"><?php esc_html_e( 'Edit', 'dt-home' ); ?></a>&nbsp;|&nbsp;
-                                    <a href="#" onclick="confirmDelete(<?php echo esc_attr( $training['id'] ); ?>)"><?php esc_html_e( 'Delete', 'dt-home' ); ?></a>&nbsp;|&nbsp;
-                                    <a href="admin.php?page=dt_home&tab=training&action=down/<?php echo esc_attr( $training['id'] ); ?>"><?php esc_html_e( 'Down', 'dt-home' ); ?></a>
+                                    <a href="#" onclick="confirmDelete(<?php echo esc_attr( $training['id'] ); ?>)"><?php esc_html_e( 'Delete', 'dt-home' ); ?></a>
                                 </td>
                             </tr>
                         <?php endforeach; ?>
