@@ -34,6 +34,7 @@ class AppController
         $slug = $params['slug'];
         $apps = container()->get( Apps::class );
         $user_id = get_current_user_id();
+        $apps_array = $apps->for_user( $user_id );
         $app  = $apps->find_for_user( $user_id, $slug );
 
         if ( ! $app ) {
@@ -70,7 +71,7 @@ class AppController
             return response( __( 'Not Found', 'dt-home' ), 404 );
         }
 
-        return template( 'web-view', compact( 'app', 'url' ) );
+        return template( 'web-view', compact( 'app', 'url', 'apps_array' ) );
     }//end show()
 
 
