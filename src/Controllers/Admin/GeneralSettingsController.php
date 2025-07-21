@@ -22,8 +22,9 @@ class GeneralSettingsController {
 		$page_title            = 'Home Settings';
 		$dt_home_require_login = get_plugin_option( 'require_login' );
 		$dt_home_reset_apps    = get_plugin_option( 'reset_apps' );
+        $dt_home_invite_others    = get_plugin_option( 'invite_others' );
 
-		return view( 'settings/general', compact( 'tab', 'link', 'page_title', 'dt_home_require_login', 'dt_home_reset_apps' ) );
+		return view( 'settings/general', compact( 'tab', 'link', 'page_title', 'dt_home_require_login', 'dt_home_reset_apps', 'dt_home_invite_others' ) );
 	}
 
 	/**
@@ -37,9 +38,11 @@ class GeneralSettingsController {
 		$input        = extract_request_input( $request );
 		$require_user = $input['dt_home_require_login'] ?? 'off';
 		$reset_apps   = $input['dt_home_reset_apps'] ?? 'off';
+        $invite_others   = $input['dt_home_invite_others'] ?? 'off';
 
 		set_plugin_option( 'require_login', $require_user === 'on' );
 		set_plugin_option( 'reset_apps', $reset_apps === 'on' );
+        set_plugin_option( 'invite_others', $invite_others === 'on' );
 
 		$redirect_url = add_query_arg( 'message', 'updated', admin_url( 'admin.php?page=dt_home' ) );
 

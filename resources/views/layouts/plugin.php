@@ -1,5 +1,6 @@
 <?php
 
+use function DT\Home\get_plugin_option;
 use function DT\Home\magic_url;
 
 $user = wp_get_current_user();
@@ -10,7 +11,12 @@ $menu_items = [];
 // Adding default menu items
 $menu_items[] = [ 'label' => __( 'Apps', 'dt-home' ), 'href' => $home ];
 $menu_items[] = [ 'label' => __( 'Training', 'dt-home' ), 'href' => magic_url( 'training' ) ];
-$menu_items[] = [ 'label' => __( 'Invite', 'dt-home' ), 'href' => '#', 'action' => 'invite' ];
+
+// Conditional invite option
+if ( get_plugin_option( 'invite_others', true ) ) {
+    $menu_items[] = [ 'label' => __( 'Invite', 'dt-home' ), 'href' => '#', 'action' => 'invite' ];
+}
+
 //if ( get_option( 'dt_home_require_login', true ) ) {
 $menu_items[] = [ 'label' => __( 'Log Out', 'dt-home' ), 'href' => magic_url( 'logout' ) ];
 //}
