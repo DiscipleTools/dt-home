@@ -10,7 +10,7 @@
 $this->layout( 'layouts/plugin' );
 ?>
 
-<header id="app-header" style="display: flex; align-items: center; justify-content: space-between; padding: 0.5rem 0;">
+<header id="app-header" style="display: flex; align-items: center; justify-content: space-between;">
     <h1 style="margin: 0; font-size: 1.5rem; font-weight: 700; text-align: left;">
         <?php echo esc_html__( 'Home Screen', 'dt-home' ); ?>
     </h1>
