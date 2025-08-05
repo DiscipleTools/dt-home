@@ -11,9 +11,10 @@ function app_factory( $params = [] ) {
     $faker = Faker::create();
 
     return array_merge( [
+        'key' => $faker->randomKey(),
         'name' => $faker->words( 3, true ),
-        'type' => $faker->randomElement( [ 'Webview', 'Link' ] ),
-        'creation_type' => $faker->randomElement( [ 'custom', 'code' ] ),
+        'type' => $faker->randomElement( [ 'Web View', 'Link' ] ),
+        'creation_type' => 'custom',
         'icon' => $faker->imageUrl(),
         'url' => $faker->url,
         'sort' => $faker->numberBetween( 0, 50 ),
@@ -27,6 +28,7 @@ function training_factory( $params = [] ) {
     $faker = Faker::create();
 
     return array_merge( [
+        'key' => $faker->randomKey(),
         'name' => $faker->words( 3, true ),
         'embed_video' => $faker->url,
         'anchor' => $faker->slug,
@@ -48,6 +50,18 @@ function wp_user_factory( $params = [] ) {
         'display_name' => $faker->name,
         'user_activation_key' => ''
     ], $params );
+}
+
+function register_wp_user( $user = [] ) {
+    if ( !isset( $user['user_login'], $user['user_pass'], $user['user_email'] ) ){
+        return false;
+    }
+
+    $user_id = wp_create_user( $user['user_login'], $user['user_pass'], $user['user_email'] );
+    update_option( 'dt_base_user', $user_id, false );
+    wp_set_current_user( $user_id );
+
+    return !is_null( wp_get_current_user() ) ? $user_id : false;
 }
 
 function wp_credentials_factory( $params = [] )

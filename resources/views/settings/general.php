@@ -7,6 +7,10 @@
  * @var string $page_title
  * @var string $dt_home_require_login
  * @var string $dt_home_reset_apps
+ * @var string $dt_home_use_capabilities
+ * @var string $dt_home_button_color
+ * @var string $dt_home_show_in_menu
+ * @var string $dt_home_file_upload
  * @var string $dt_home_invite_others
  */
 $this->layout( 'layouts/settings', compact( 'tab', 'link', 'page_title' ) )
@@ -18,7 +22,7 @@ $this->layout( 'layouts/settings', compact( 'tab', 'link', 'page_title' ) )
 	<table>
 		<tr>
 			<td>
-				<label for="require_user">
+				<label for="dt_home_require_login">
 					<input type="checkbox" id="dt_home_require_login"
 							name="dt_home_require_login" <?php checked( $dt_home_require_login ); ?>
 					>
@@ -29,7 +33,7 @@ $this->layout( 'layouts/settings', compact( 'tab', 'link', 'page_title' ) )
 		</tr>
 		<tr>
 			<td>
-				<label for="reset_app">
+				<label for="dt_home_reset_apps">
 					<input type="checkbox" id="dt_home_reset_apps"
 							name="dt_home_reset_apps" <?php checked( $dt_home_reset_apps ); ?>
 					>
@@ -44,6 +48,21 @@ $this->layout( 'layouts/settings', compact( 'tab', 'link', 'page_title' ) )
                            name="dt_home_invite_others" <?php checked( $dt_home_invite_others ); ?>
                     >
                     <?php esc_html_e( 'Allow users to invite others?', 'dt-home' ); ?>
+                </label>
+                <label for="dt_home_use_capabilities">
+                    <input type="checkbox" id="dt_home_use_capabilities"
+                           name="dt_home_use_capabilities" <?php checked( $dt_home_use_capabilities ); ?>
+                    >
+                    <?php esc_html_e( 'Restrict access for some users?', 'dt-home' ); ?>
+                </label>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label for="dt_home_show_in_menu">
+                    <input type="checkbox" id="dt_home_show_in_menu"
+                           name="dt_home_show_in_menu" <?php checked( $dt_home_show_in_menu ); ?>>
+                    <?php esc_html_e( 'Add "Apps" link to Disciple.Tools main menu?', 'dt-home' ); ?>
                 </label>
             </td>
         </tr>

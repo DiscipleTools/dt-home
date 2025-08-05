@@ -1,4 +1,4 @@
-import { LitElement, html, css } from 'lit'
+import { css, html, LitElement } from 'lit'
 import { property } from 'lit/decorators.js'
 import { customElement } from 'lit-element'
 
@@ -15,6 +15,12 @@ class VideoList extends LitElement {
                 aspect-ratio: 16 / 9;
                 //padding-bottom: 6.25%; /* 16:9 aspect ratio */
                 /* Add any other styles you want here */
+            }
+
+            @media (prefers-color-scheme: dark) {
+                .training-videos-text-color {
+                    color: #ffffff;
+                }
             }
         `
     }
@@ -52,7 +58,7 @@ class VideoList extends LitElement {
 
     render() {
         return html`
-            <div>
+            <div class="training-videos-text-color">
                 ${this.trainingData.map(
                     (training) => html`
                         <div id=${training.anchor}>

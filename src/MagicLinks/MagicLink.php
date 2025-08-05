@@ -24,7 +24,7 @@ abstract class MagicLink extends DT_Magic_Url_Base {
     public $meta = [];
     private $meta_key = ''; // Allows for instance specific data.
 
-    public function __construct() {
+    public function __construct( bool $test_post_id = true ) {
         /**
          * Specify metadata structure, specific to the processing of current
          * magic link type.
@@ -74,7 +74,7 @@ abstract class MagicLink extends DT_Magic_Url_Base {
         /**
          * tests magic link parts are registered and have valid elements
          */
-        if ( ! $this->check_parts_match() ) {
+        if ( ! $this->check_parts_match( $test_post_id ) ) {
             return;
         }
 

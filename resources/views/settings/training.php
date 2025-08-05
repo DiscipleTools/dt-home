@@ -18,48 +18,79 @@ $this->layout( 'layouts/settings', compact( 'tab', 'link', 'page_title' ) )
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-12">
-                <span style="float:right;">
-                    <a href="admin.php?page=dt_home&tab=training&action=create" class="button float-right">
+                <span>
+                    <a href="admin.php?page=dt_home&tab=training&action=create" class="button" style="float:right;">
                         <i class="fa fa-plus"></i> <?php esc_html_e( 'Add Training', 'dt-home' ); ?>
                     </a>
                 </span>
 
                 <br><br>
-
-                <table class="widefat striped" style="border-collapse: collapse; width: 110%;">
-                    <thead>
+                <div class="scrollable-table">
+                    <table class="widefat striped" style="border-collapse: collapse; width: 100%; ">
+                        <thead>
                         <tr>
                             <th style="border: 1px solid #ddd;"><?php esc_html_e( 'Name', 'dt-home' ); ?></th>
                             <th style="border: 1px solid #ddd;"><?php esc_html_e( 'Embed Video', 'dt-home' ); ?></th>
                             <th style="border: 1px solid #ddd;"><?php esc_html_e( 'Anchor', 'dt-home' ); ?></th>
-                            <th style="border: 1px solid #ddd; min-width: 100%;"><?php esc_html_e( 'Action', 'dt-home' ); ?></th>
+                            <th class="training_action"
+                                style="border: 1px solid #ddd; width: 100%;"><?php esc_html_e( 'Action', 'dt-home' ); ?></th>
                         </tr>
-                    </thead>
-                    <tbody>
+                        </thead>
+                        <tbody>
                         <?php foreach ( $data as $training ) : ?>
                             <tr>
                                 <td style="border: 1px solid #ddd;"><?php echo esc_html( $training['name'] ); ?></td>
-                                <td style="border: 1px solid #ddd;"><?php echo stripslashes( $training['embed_video'] ); //phpcs:ignore ?></td>
+                                <td style="border: 1px solid #ddd;"><?php echo stripslashes($training['embed_video']); //phpcs:ignore ?></td>
                                 <td style="border: 1px solid #ddd;"><?php echo esc_html( $training['anchor'] ); ?></td>
-                                <td style="border: 1px solid #ddd;">
-                                    <a href="admin.php?page=dt_home&tab=training&action=edit/<?php echo esc_attr( $training['id'] ); ?>"><?php esc_html_e( 'Edit', 'dt-home' ); ?></a>&nbsp;|&nbsp;
-                                    <a href="#" onclick="confirmDelete(<?php echo esc_attr( $training['id'] ); ?>)"><?php esc_html_e( 'Delete', 'dt-home' ); ?></a>
+                                <td style="border: 1px solid #ddd; white-space: nowrap;">
+                                    <div class="action-tooltip">
+                                        <a href="admin.php?page=dt_home&tab=training&action=up/<?php echo esc_attr( $training['id'] ); ?>">
+                                            <i class="fas fa-arrow-up action-icon"></i>
+                                        </a>
+                                        <span
+                                            class="action-tooltip-text"><?php esc_html_e( 'Move Up', 'dt-home' ); ?></span>
+                                    </div>
+                                    &nbsp;|&nbsp;
+                                    <div class="action-tooltip">
+                                        <a href="admin.php?page=dt_home&tab=training&action=down/<?php echo esc_attr( $training['id'] ); ?>">
+                                            <i class="fas fa-arrow-down action-icon"></i>
+                                        </a>
+                                        <span
+                                            class="action-tooltip-text"><?php esc_html_e( 'Move Down', 'dt-home' ); ?></span>
+                                    </div>
+                                    &nbsp;|&nbsp;
+                                    <div class="action-tooltip">
+                                        <a href="admin.php?page=dt_home&tab=training&action=edit/<?php echo esc_attr( $training['id'] ); ?>">
+                                            <i class="fas fa-edit action-icon"></i>
+                                        </a>
+                                        <span class="action-tooltip-text"><?php esc_html_e( 'Edit', 'dt-home' ); ?></span>
+                                    </div>
+                                    &nbsp;|&nbsp;
+                                    <div class="action-tooltip">
+                                        <a href="#" onclick="confirmDelete(<?php echo esc_attr( $training['id'] ); ?>)"
+                                           class="delete-apps">
+                                            <i class="fas fa-trash action-icon"></i>
+                                        </a>
+                                        <span
+                                            class="action-tooltip-text"><?php esc_html_e( 'Delete', 'dt-home' ); ?></span>
+                                    </div>
                                 </td>
+
                             </tr>
                         <?php endforeach; ?>
-                    </tbody>
-                </table>
-
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
 </div>
 <script>
     function confirmDelete(trainingId) {
-        var confirmation = confirm(<?php echo json_encode( __( 'Are you sure you want to delete this entry?', 'dt-home' ) ); ?>);
+        var confirmation = confirm(<?php echo json_encode( __( 'Are you sure you want to delete this entry?', 'dt-home' ) ); ?>)
         if (confirmation) {
             // If the user confirms, redirect to the delete URL
-            window.location.href = "admin.php?page=dt_home&tab=training&action=delete/" + trainingId;
+            window.location.href = 'admin.php?page=dt_home&tab=training&action=delete/' + trainingId
         }
         // If the user cancels, do nothing
     }

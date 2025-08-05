@@ -1,9 +1,11 @@
 <?php
+
 use function DT\Home\route_url;
+
 ?>
 <style>
     .icon-link {
-        position: absolute;
+        position: fixed;
         bottom: 16px;
         left: 16px;
         display: inline-flex; /* or block, depending on your requirements */
@@ -33,10 +35,13 @@ use function DT\Home\route_url;
         transform: scale(1.1); /* Hover scale effect */
     }
 </style>
-<a href="<?php echo esc_url( route_url() ); ?>" class="icon-link">
+
+<a href="<?php echo esc_url( route_url() ) . 'launcher/' . esc_attr( $key ); ?>" class="icon-link">
     <div class="icon-link__inner">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36" role="img" fill="currentColor" height="24" width="24" aria-hidden="true" aria-label="">
-            <path d="M10 10H2V3a1 1 0 0 1 1-1h7ZM14 2h8v8h-8zM34 10h-8V2h7a1 1 0 0 1 1 1ZM2 14h8v8H2zM14 14h8v8h-8zM26 14h8v8h-8zM10 34H3a1 1 0 0 1-1-1v-7h8ZM14 26h8v8h-8zM33 34h-7v-8h8v7a1 1 0 0 1-1 1Z"></path>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36" role="img" fill="currentColor" height="24"
+             width="24" aria-hidden="true" aria-label="">
+            <path
+                d="M10 10H2V3a1 1 0 0 1 1-1h7ZM14 2h8v8h-8zM34 10h-8V2h7a1 1 0 0 1 1 1ZM2 14h8v8H2zM14 14h8v8h-8zM26 14h8v8h-8zM10 34H3a1 1 0 0 1-1-1v-7h8ZM14 26h8v8h-8zM33 34h-7v-8h8v7a1 1 0 0 1-1 1Z"></path>
         </svg>
     </div>
 </a>

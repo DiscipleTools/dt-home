@@ -14,6 +14,7 @@ Follow the links below for detailed descriptions of the functionality offered by
 - [Home Screen Custom Apps](./documentation/apps/README.md)
 - [Home Screen Training Videos](./documentation/train/README.md)
 - [Registering New Custom Apps](./documentation/custom/README.md)
+- [Frequently Asked Questions](./documentation/README.md)
 
 ## Requirements
 

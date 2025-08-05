@@ -1,4 +1,5 @@
-if [ $# -lt 3 ]; then
+
+if [ $# -lt 1 ]; then
 	echo "usage: $0 <db-name> <db-user> <db-pass>, [db-host] --wp-version=<version> --skip-database-creation"
 	exit 1
 fi
@@ -6,7 +7,34 @@ fi
 DB_NAME=$1
 DB_USER=$2
 DB_PASS=$3
-DB_HOST=${4-localhost}
+DB_HOST=$4
+
+if [ -z $DB_HOST ]; then
+    if command -v ddev &> /dev/null
+    then
+        echo "DDEV detected. Attempting to get DB host from DDEV configuration."
+
+        DDEV_DB_HOST=127.0.0.1:$(ddev describe -j | jq -r '.raw.dbinfo.published_port')
+        DDEV_DB_USER=$(ddev describe -j | jq -r '.raw.dbinfo.username')
+        DDEV_DB_PASS=$(ddev describe -j | jq -r '.raw.dbinfo.password')
+
+        if [[ "$DDEV_DB_HOST" == "" || "$DDEV_DB_HOST" == "null" || "$DDEV_DB_USER" == "" || "$DDEV_DB_USER" == "null" || "$DDEV_DB_PASS" == "" || "$DDEV_DB_PASS" == "null" ]]; then
+            echo "DDEV configuration not available. Please ensure that DDEV is started. by running 'ddev start'."
+            exit 1
+        fi
+
+        DB_HOST=$DDEV_DB_HOST
+        DB_USER=$DDEV_DB_USER
+        DB_PASS=$DDEV_DB_PASS
+
+        echo "Using DB_HOST: $DB_HOST, DB_USER: $DB_USER, DB_PASS: $DB_PASS"
+    fi
+fi
+
+
+if [ -z $DB_HOST ]; then
+    DB_HOST='localhost'
+fi
 
 WP_VERSION=latest
 SKIP_DB_CREATE=false
