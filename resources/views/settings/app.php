@@ -66,7 +66,7 @@ $this->layout( 'layouts/settings', compact( 'tab', 'link', 'page_title' ) )
             <div class="col-md-12">
                 <div class="apps-btn">
                     <span>
-                        <a href="admin.php?page=dt_home&tab=app&action=create" class="button">
+                        <a href="admin.php?page=dt_home&tab=app&action=create" class="button" style="margin-right: 10px;">
                             <i class="fa fa-plus"></i> <?php esc_html_e( 'Add App', 'dt-home' ); ?>
                         </a>
                     </span>
@@ -81,11 +81,13 @@ $this->layout( 'layouts/settings', compact( 'tab', 'link', 'page_title' ) )
                         </a>
                     </span>
                     <span>
-                        <button class="button" id="exportButton" disabled style="float: right">
+                        <button class="button" id="exportButton" disabled style="float: right; margin-right: 10px;">
                            <i class="fas fa-file-export"></i> <?php esc_html_e( 'Export Apps', 'dt-home' ); ?>
                         </button>
                     </span>
                 </div>
+
+                <br>
                 <div class="scrollable-table">
                     <table class="widefat striped" style="border-collapse: collapse; width: 100%;">
                         <thead>
@@ -137,22 +139,6 @@ $this->layout( 'layouts/settings', compact( 'tab', 'link', 'page_title' ) )
                                 </td>
                                 <td style="border: 1px solid #ddd;"><?php echo esc_attr( $app['slug'] ); ?></td>
                                 <td style="border: 1px solid #ddd; white-space: nowrap;">
-                                    <div class="action-tooltip">
-                                        <a href="admin.php?page=dt_home&tab=app&action=up/<?php echo esc_attr( $app['slug'] ); ?>">
-                                            <i class="fas fa-arrow-up action-icon"></i>
-                                        </a>
-                                        <span
-                                            class="action-tooltip-text"><?php esc_attr_e( 'Move Up', 'dt-home' ); ?></span>
-                                    </div>
-                                    &nbsp;|&nbsp;
-                                    <div class="action-tooltip">
-                                        <a href="admin.php?page=dt_home&tab=app&action=down/<?php echo esc_attr( $app['slug'] ); ?>">
-                                            <i class="fas fa-arrow-down action-icon"></i>
-                                        </a>
-                                        <span
-                                            class="action-tooltip-text"><?php esc_attr_e( 'Move Down', 'dt-home' ); ?></span>
-                                    </div>
-                                    &nbsp;|&nbsp;
                                     <div class="action-tooltip">
                                         <?php if ( $app['is_hidden'] == 1 ) { ?>
                                             <a href="admin.php?page=dt_home&tab=app&action=unhide/<?php echo esc_attr( $app['slug'] ); ?>">

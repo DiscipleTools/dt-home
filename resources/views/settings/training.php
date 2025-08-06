@@ -24,7 +24,7 @@ $this->layout( 'layouts/settings', compact( 'tab', 'link', 'page_title' ) )
                     </a>
                 </span>
 
-                <br><br>
+                <br><br><br>
                 <div class="scrollable-table">
                     <table class="widefat striped" style="border-collapse: collapse; width: 100%; ">
                         <thead>
@@ -43,22 +43,6 @@ $this->layout( 'layouts/settings', compact( 'tab', 'link', 'page_title' ) )
                                 <td style="border: 1px solid #ddd;"><?php echo stripslashes($training['embed_video']); //phpcs:ignore ?></td>
                                 <td style="border: 1px solid #ddd;"><?php echo esc_html( $training['anchor'] ); ?></td>
                                 <td style="border: 1px solid #ddd; white-space: nowrap;">
-                                    <div class="action-tooltip">
-                                        <a href="admin.php?page=dt_home&tab=training&action=up/<?php echo esc_attr( $training['id'] ); ?>">
-                                            <i class="fas fa-arrow-up action-icon"></i>
-                                        </a>
-                                        <span
-                                            class="action-tooltip-text"><?php esc_html_e( 'Move Up', 'dt-home' ); ?></span>
-                                    </div>
-                                    &nbsp;|&nbsp;
-                                    <div class="action-tooltip">
-                                        <a href="admin.php?page=dt_home&tab=training&action=down/<?php echo esc_attr( $training['id'] ); ?>">
-                                            <i class="fas fa-arrow-down action-icon"></i>
-                                        </a>
-                                        <span
-                                            class="action-tooltip-text"><?php esc_html_e( 'Move Down', 'dt-home' ); ?></span>
-                                    </div>
-                                    &nbsp;|&nbsp;
                                     <div class="action-tooltip">
                                         <a href="admin.php?page=dt_home&tab=training&action=edit/<?php echo esc_attr( $training['id'] ); ?>">
                                             <i class="fas fa-edit action-icon"></i>

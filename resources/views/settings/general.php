@@ -49,6 +49,10 @@ $this->layout( 'layouts/settings', compact( 'tab', 'link', 'page_title' ) )
                     >
                     <?php esc_html_e( 'Allow users to invite others?', 'dt-home' ); ?>
                 </label>
+            </td>
+        </tr>
+        <tr>
+            <td>
                 <label for="dt_home_use_capabilities">
                     <input type="checkbox" id="dt_home_use_capabilities"
                            name="dt_home_use_capabilities" <?php checked( $dt_home_use_capabilities ); ?>

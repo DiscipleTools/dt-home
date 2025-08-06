@@ -335,46 +335,68 @@ class AppGrid extends LitElement {
   }
 
   initSortable() {
-    // Select the container for the grid items
-    if (this.isSortableDragging) {
-      if (this.editing) {
-        const appGrids = this.shadowRoot.querySelectorAll(".app-grid");
+    console.log('Initializing SortableJS...'); // Debug log
+    console.log('isSortableDragging:', this.isSortableDragging); // Debug log
+    console.log('editing:', this.editing); // Debug log
+    
+    // Clean up existing instances first
+    this.sortableInstances.forEach((sortableInstance) => {
+      sortableInstance.destroy();
+    });
+    this.sortableInstances = [];
 
-        appGrids.forEach((appGrid) => {
-          const sortableInstance = new Sortable(appGrid, {
-            group: "shared",
-            animation: 500,
-            draggable: ".app-grid__item",
-            fallbackOnBody: true,
-            dragClass: "sortable-drag",
-            onEnd: (evt) => this.handleReorder(evt),
-          });
-          this.sortableInstances.push(sortableInstance);
+    // Select the container for the grid items
+    if (this.isSortableDragging && this.editing) {
+      const appGrids = this.shadowRoot.querySelectorAll(".app-grid");
+      console.log('Found app grids:', appGrids.length); // Debug log
+
+      appGrids.forEach((appGrid) => {
+        const sortableInstance = new Sortable(appGrid, {
+          group: "shared",
+          animation: 500,
+          draggable: ".app-grid__item",
+          fallbackOnBody: true,
+          dragClass: "sortable-drag",
+          onEnd: (evt) => this.handleReorder(evt),
         });
-      } else {
-        this.sortableInstances.forEach((sortableInstance) => {
-          sortableInstance.destroy();
-        });
-        this.sortableInstances = [];
-      }
+        this.sortableInstances.push(sortableInstance);
+        console.log('SortableJS instance created'); // Debug log
+      });
+    } else {
+      console.log('SortableJS not initialized - conditions not met'); // Debug log
     }
   }
 
   handleReorder(event) {
+    console.log('Reorder event triggered:', event); // Debug log
     // Reorder the array based on the new order of DOM elements
     const oldIndex = event.oldIndex;
     const newIndex = event.newIndex;
-    const reorderedItems = [...this.appDataCopy];
+    
+    console.log('Old index:', oldIndex, 'New index:', newIndex); // Debug log
+    
+    if (oldIndex === newIndex) return;
+    
+    const reorderedItems = [...this.appData];
 
     const [movedItem] = reorderedItems.splice(oldIndex, 1);
     reorderedItems.splice(newIndex, 0, movedItem);
-    this.appDataCopy = reorderedItems;
-
+    
+    // Update sort values based on new positions
+    reorderedItems.forEach((item, index) => {
+      item.sort = index + 1;
+    });
+    
+    console.log('Reordered items:', reorderedItems); // Debug log
+    
+    this.appData = reorderedItems;
     this.postNewOrderToServer(reorderedItems);
   }
 
   postNewOrderToServer(updatedAppData) {
+    console.log('Posting new order to server:', updatedAppData); // Debug log
     const url = magic_url("reorder");
+    console.log('Reorder URL:', url); // Debug log
     fetch(url, {
       method: "POST",
       headers: {
@@ -383,8 +405,12 @@ class AppGrid extends LitElement {
       },
       body: JSON.stringify(updatedAppData),
     })
-      .then((response) => response.json())
+      .then((response) => {
+        console.log('Server response:', response); // Debug log
+        return response.json();
+      })
       .then((data) => {
+        console.log('Server data:', data); // Debug log
         this.requestUpdate();
       })
       .catch((error) => {
@@ -587,40 +613,7 @@ class AppGrid extends LitElement {
     }
   };
 
-    /**
-     * Reorders apps based on drag and drop.
-     * @param {number} fromIndex - The index from which the app is dragged.
-     * @param {number} toIndex - The index to which the app is dropped.
-     */
-    reorderApps(fromIndex, toIndex) {
-        const appsCopy = [...this.appData]
-        const [removedApp] = appsCopy.splice(fromIndex, 1)
-        appsCopy.splice(toIndex, 0, removedApp)
-        this.appData = appsCopy
-        this.postNewOrderToServer()
-    }
 
-    /**
-     * Posts the new order of apps to the server.
-     */
-    postNewOrderToServer() {
-        const url = magic_url('reorder')
-        fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-WP-Nonce': $home.nonce,
-            },
-            body: JSON.stringify(this.appData),
-        })
-            .then((response) => response.json())
-            .then((data) => {
-                console.log('Order update successful:', data)
-            })
-            .catch((error) => {
-                console.error('Error updating order:', error)
-            })
-    }
 
     /**
      * Loads application data from an external source.
@@ -780,52 +773,28 @@ class AppGrid extends LitElement {
   }
 
   handleDragStart(event, index) {
-    this.showRemoveIconId = null;
-    event.dataTransfer.setData("text/plain", index);
-    this.shadowRoot
-      .querySelectorAll(".app-grid__remove-icon")
-      .forEach((icon) => {
-        icon.classList.add("hidden");
-      });
+    // Remove this method as we're using SortableJS instead
+    return;
   }
 
   handleDragEnd(event) {
-    this.items.forEach((item) => {
-      item.classList.remove("app-grid__item--over");
-      item.classList.remove("app-grid__item--dragging");
-    });
-    this.shadowRoot
-      .querySelectorAll(".app-grid__remove-icon")
-      .forEach((icon) => {
-        icon.classList.remove("hidden");
-      });
+    // Remove this method as we're using SortableJS instead
+    return;
   }
 
   handleDragOver(event) {
-    event.preventDefault();
-    event.target.classList.add("app-grid__item--over");
+    // Remove this method as we're using SortableJS instead
+    return;
   }
 
   handleDragLeave(event) {
-    event.target.classList.remove("app-grid__item--over");
+    // Remove this method as we're using SortableJS instead
+    return;
   }
 
   handleDrop(event) {
-    event.preventDefault();
-    const visibleApps = this.appData.filter((app) => !app.is_hidden);
-    const fromIndex = parseInt(event.dataTransfer.getData("text/plain"), 10);
-    const toElement = event.target.closest(".app-grid__item");
-    const toIndex = Array.from(this.items).indexOf(toElement);
-    if (fromIndex >= 0 && toIndex >= 0) {
-      const originalFromIndex = this.appData.findIndex(
-        (app) => app.slug === visibleApps[fromIndex].slug,
-      );
-      const originalToIndex = this.appData.findIndex(
-        (app) => app.slug === visibleApps[toIndex].slug,
-      );
-      this.reorderApps(originalFromIndex, originalToIndex);
-    }
-    this.handleDocumentClick(event);
+    // Remove this method as we're using SortableJS instead
+    return;
   }
 
   reorderApps(fromIndex, toIndex) {
@@ -985,24 +954,6 @@ class AppGrid extends LitElement {
                                             index,
                                             app
                                         )}"
-                                    @dragstart="${(event) =>
-                                        this.handleDragStart(
-                                            event,
-                                            index,
-                                            app
-                                        )}"
-                                    @dragend="${(event) =>
-                                        this.handleDragEnd(event, index, app)}"
-                                    @dragover="${(event) =>
-                                        this.handleDragOver(event, index, app)}"
-                                    @dragleave="${(event) =>
-                                        this.handleDragLeave(
-                                            event,
-                                            index,
-                                            app
-                                        )}"
-                                    @drop="${(event) =>
-                                        this.handleDrop(event, index, app)}"
                                     draggable="${this.editing
                                         ? 'true'
                                         : 'false'}"

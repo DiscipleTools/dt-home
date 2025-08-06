@@ -90,7 +90,11 @@ class Assets
                 'in-footer' => true, // Optional. Defaults to false.
         ]);
         $javascript_globals = config( 'assets.javascript_globals' );
-        $javascript_globals['translations']['remove_app_confirmation'] = __( 'Are you sure you want to remove this app?', 'dt-home' );
+        
+        // Handle callback function for translations if it exists
+        if ( isset( $javascript_globals['translations'] ) && is_callable( $javascript_globals['translations'] ) ) {
+            $javascript_globals['translations'] = $javascript_globals['translations']();
+        }
 
         wp_localize_script( 'dt-home', config( 'assets.javascript_global_scope' ), apply_filters( \DT\Home\namespace_string( 'javascript_globals' ), $javascript_globals ) );
         wp_register_style( 'material-font-icons-local', '/wp-content/plugins/dt-home/resources/css/materialdesignicons.min.css' );

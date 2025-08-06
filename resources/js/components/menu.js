@@ -128,8 +128,8 @@ class Menu extends LitElement {
         }
     `
     @property({ type: Boolean }) isOpen = false
-    @property({ type: Array }) menuItems = []
-    @property({type: Object}) translations = {}
+    @property({ type: String }) menuItems = '[]'
+    @property({type: String}) translations = '{}'
 
     render() {
         return html`
@@ -161,21 +161,21 @@ class Menu extends LitElement {
             >
                 <sp-popover placement="right-end">
                     <sp-menu class="right-aligned-menu">
-                        ${this.menuItems.map(
+                                                ${JSON.parse(this.menuItems).map(
                             (item) =>
                                 html`
                                   <sp-menu-item
                                     class="menu-item"
                                     @click="${() => this.handleMenuClick(item)}"
-                                >
+                                  >
                                     ${item.label}
-                                </sp-menu-item>`
+                                  </sp-menu-item>`
                         )}
                     </sp-menu>
                 </sp-popover>
             </sp-overlay>
 
-            <dt-home-invite-modal id="inviteModal" .translations=${this.translations}></dt-home-invite-modal>
+            <dt-home-invite-modal id="inviteModal" .translations=${JSON.parse(this.translations)}></dt-home-invite-modal>
         `
     }
 
@@ -186,7 +186,7 @@ class Menu extends LitElement {
       if (inviteModal) {
         inviteModal.open()
       }
-      // Try dispatching a 'close' event on the overlay
+      // Close the menu overlay
       const overlay = this.shadowRoot.querySelector('sp-overlay')
       if (overlay) {
         overlay.dispatchEvent(new CustomEvent('close', { bubbles: true, composed: true }))

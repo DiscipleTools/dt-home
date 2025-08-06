@@ -79,6 +79,7 @@ class InviteModal extends LitElement {
         super()
         // Get the share URL from the current page URL
         this.shareUrl = window.location.href + '/share'
+        this.translations = {}
     }
 
     open() {
@@ -131,6 +132,7 @@ class InviteModal extends LitElement {
                         mode="modal"
                         size="m"
                         dismissable
+                        @close=${this.close}
                     >
                         <h2 slot="heading">${this.t('inviteTitle', 'Invite')}</h2>
                         <div class="invite-content">

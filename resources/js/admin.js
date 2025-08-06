@@ -100,16 +100,21 @@ class SortableTable {
     }
 
     init() {
+        console.log('SortableTable: Starting initialization...'); // Debug log
         this.addDragHandles();
         this.bindEvents();
         console.log('SortableTable: Initialization complete');
     }
 
     addDragHandles() {
+        console.log('SortableTable: Adding drag handles...'); // Debug log
         const tbody = this.table.querySelector('tbody');
         const thead = this.table.querySelector('thead');
 
-        if (!tbody || !thead) return;
+        if (!tbody || !thead) {
+            console.log('SortableTable: Missing tbody or thead'); // Debug log
+            return;
+        }
 
         // Add header column for drag handle
         const headerRow = thead.querySelector('tr');
@@ -125,7 +130,7 @@ class SortableTable {
 
         // Add drag handles to each row and make rows draggable
         const rows = tbody.querySelectorAll('tr');
-
+        console.log('SortableTable: Found', rows.length, 'rows'); // Debug log
 
         rows.forEach((row, index) => {
             // Make the entire row draggable
@@ -168,9 +173,11 @@ class SortableTable {
     }
 
     handleDragStart(e) {
+        console.log('SortableTable: Drag start event'); // Debug log
         // Check if we're dragging a table row
         if (e.target.tagName.toLowerCase() === 'tr') {
             this.draggedRow = e.target;
+            console.log('SortableTable: Dragging row:', e.target); // Debug log
 
             // Create placeholder
             this.placeholder = document.createElement('tr');
@@ -273,9 +280,11 @@ class SortableTable {
     }
 
     updateOrder() {
+        console.log('SortableTable: Updating order...'); // Debug log
         const tbody = this.table.querySelector('tbody');
         const rows = tbody.querySelectorAll('tr:not(.drag-placeholder)');
         const orderedIds = [];
+        console.log('SortableTable: Processing', rows.length, 'rows'); // Debug log
         rows.forEach((row, index) => {
             if (this.config.type === 'app') {
                 // For apps, look for slug in the action links
@@ -372,10 +381,37 @@ document.addEventListener('DOMContentLoaded', function() {
   var mediaUploader;
 
   // Check if we're on the dt_home admin page
-    const urlParams = new URLSearchParams(window.location.search);
-    const page = urlParams.get('page');
-    const tab = urlParams.get('tab');
-    const action = urlParams.get('action');
+  const urlParams = new URLSearchParams(window.location.search);
+  const page = urlParams.get('page');
+  const tab = urlParams.get('tab');
+  const action = urlParams.get('action');
+
+  // Initialize sortable table functionality for admin pages
+  if (page === 'dt_home' && (tab === 'app' || tab === 'training') && action !== 'create' && action !== 'available_app' && !action?.startsWith('edit')) {
+    // Wait a bit for the DOM to fully load
+    setTimeout(() => {
+      // Find table
+      const table = document.querySelector('.widefat');
+
+      if (table) {
+        console.log('Initializing SortableTable for:', tab); // Debug log
+        // Initialize sortable functionality
+        if (tab === 'app') {
+          new SortableTable('.widefat', {
+            type: 'app',
+            endpoint: 'admin.php?page=dt_home&tab=app&action=reorder'
+          });
+        } else if (tab === 'training') {
+          new SortableTable('.widefat', {
+            type: 'training',
+            endpoint: 'admin.php?page=dt_home&tab=training&action=reorder'
+          });
+        }
+      } else {
+        console.log('Table not found for SortableTable initialization'); // Debug log
+      }
+    }, 100);
+  }
 
   // Add click event listener to the upload image button
   document
@@ -387,30 +423,6 @@ document.addEventListener('DOMContentLoaded', function() {
       if (mediaUploader) {
         mediaUploader.open();
         return;
-      }
-
-      // Skip drag and drop functionality when creating new apps or editing
-      if (page === 'dt_home' && (tab === 'app' || tab === 'training') && action !== 'create' && action !== 'available_app' && !action?.startsWith('edit')) {
-        // Wait a bit for the DOM to fully load
-        setTimeout(() => {
-          // Find table
-          const table = document.querySelector('.widefat');
-
-          if (table) {
-            // Initialize sortable functionality
-            if (tab === 'app') {
-              new SortableTable('.widefat', {
-                type: 'app',
-                endpoint: 'admin.php?page=dt_home&tab=app&action=reorder'
-              });
-            } else if (tab === 'training') {
-              new SortableTable('.widefat', {
-                type: 'training',
-                endpoint: 'admin.php?page=dt_home&tab=training&action=reorder'
-              });
-            }
-          }
-        }, 100); // Close setTimeout
       }
 
       // Create a new media uploader instance
