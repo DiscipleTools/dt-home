@@ -77,7 +77,7 @@ class Plugin
     public function wp_init()
     {
         $this->rewrites->sync();
-        
+
         // Load plugin text domain
         load_plugin_textdomain( 'dt-home', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
     }

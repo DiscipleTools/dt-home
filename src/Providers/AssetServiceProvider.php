@@ -45,12 +45,12 @@ class AssetServiceProvider extends AbstractServiceProvider
 
         add_filter( namespace_string( 'javascript_globals' ), function ( $data ) {
             $javascript_globals = config( 'assets.javascript_globals' );
-            
+
             // Handle callback function for translations
             if ( isset( $javascript_globals['translations'] ) && is_callable( $javascript_globals['translations'] ) ) {
                 $javascript_globals['translations'] = $javascript_globals['translations']();
             }
-            
+
             return array_merge( $data, $javascript_globals, [
                 'magic_url' => magic_url(),
                 'nonce' => wp_create_nonce( 'dt_home' ),

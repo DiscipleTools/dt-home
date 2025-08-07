@@ -18,7 +18,7 @@ $config->merge([
         ],
         'javascript_global_scope' => '$home',
         'javascript_globals' => [
-            'translations' => function() {
+            'translations' => function () {
                 return [
                     'installAppLabel' => __( 'Install as App', 'dt-home' ),
                     'hiddenAppLabel' => __( 'Hidden Apps', 'dt-home' ),

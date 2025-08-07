@@ -90,7 +90,7 @@ class Assets
                 'in-footer' => true, // Optional. Defaults to false.
         ]);
         $javascript_globals = config( 'assets.javascript_globals' );
-        
+
         // Handle callback function for translations if it exists
         if ( isset( $javascript_globals['translations'] ) && is_callable( $javascript_globals['translations'] ) ) {
             $javascript_globals['translations'] = $javascript_globals['translations']();
