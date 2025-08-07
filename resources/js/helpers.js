@@ -21,6 +21,11 @@ export const isAndroid = function () {
     return userAgent.includes('Android')
 }
 
+export const isiOS = function () {
+    const userAgent = navigator.userAgent
+    return /iPad|iPhone|iPod/.test(userAgent) && !window.MSStream
+}
+
 /**
  * Executes the callback function when the document has finished loading.
  *

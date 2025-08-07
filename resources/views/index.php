@@ -6,8 +6,15 @@
  * @var string $subpage_url
  * @var WP_User $user
  * @var string $reset_apps
+ * @var string $button_color
  */
 $this->layout( 'layouts/plugin' );
+
+
+use function DT\Home\magic_url;
+use function DT\Home\plugin_url;
+
+$full_link = magic_url();
 ?>
 
 <header id="app-header" style="display: flex; align-items: center; justify-content: space-between;">
@@ -25,19 +32,20 @@ $this->layout( 'layouts/plugin' );
 <div>
     <?php
     // phpcs:ignore
-    echo $this->section( 'content' ) ?>
+    echo $this->section('content') ?>
 </div>
 
 <?php $this->start( 'footer' ); ?>
 
 <dt-home-footer id="hiddenApps"
-                translations='<?php echo wp_json_encode( [
+                translations='<?php echo wp_json_encode([
                     "hiddenAppsLabel" => __( "Hidden Apps", 'dt-home' ),
-                    "buttonLabel"     => __( "Ok", 'dt-home' )
-                ] ) ?>'
+                    "buttonLabel" => __( "Ok", 'dt-home' )
+                ]) ?>'
                 hidden-data='<?php echo esc_attr( htmlspecialchars( $data ) ); ?>'
                 app-url-unhide='<?php echo esc_url( $app_url ); ?>'
-                reset-apps='<?php echo esc_attr( $reset_apps ); ?>'>
+                reset-apps='<?php echo esc_attr( $reset_apps ); ?>'
+                button-color='<?php echo esc_attr( $button_color ); ?>'>
 </dt-home-footer>
 
 <?php $this->stop(); ?>

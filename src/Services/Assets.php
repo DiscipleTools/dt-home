@@ -4,10 +4,13 @@ namespace DT\Home\Services;
 
 use DT\Home\CodeZone\WPSupport\Assets\AssetQueue;
 use DT\Home\CodeZone\WPSupport\Assets\AssetQueueInterface;
-use function DT\Home\Kucrut\Vite\enqueue_asset;
-use function DT\Home\plugin_path;
-use function DT\Home\namespace_string;
 use function DT\Home\config;
+use function DT\Home\get_plugin_option;
+use function DT\Home\Kucrut\Vite\enqueue_asset;
+use function DT\Home\namespace_string;
+use function DT\Home\plugin_path;
+use function DT\Home\plugin_url;
+
 
 class Assets
 {
@@ -29,6 +32,7 @@ class Assets
     {
         $this->asset_queue = $asset_queue;
     }
+
     /**
      * Register method to add necessary actions for enqueueing scripts and adding cloaked styles
      *
@@ -47,6 +51,7 @@ class Assets
         } else {
             add_action( 'wp_enqueue_scripts', [ $this, 'wp_enqueue_scripts' ], 1000 );
             add_action( "wp_head", [ $this, 'cloak_style' ] );
+            add_action( 'wp_head', [ $this, 'add_open_graph_meta_tags' ] );
             add_action( 'wp_print_styles', [ $this, 'wp_print_styles' ] );
         }
     }
@@ -56,7 +61,8 @@ class Assets
      *
      * @return void
      */
-    public function wp_print_styles() {
+    public function wp_print_styles()
+    {
         $this->asset_queue->filter(
             apply_filters( namespace_string( 'allowed_scripts' ), [] ),
             apply_filters( namespace_string( 'allowed_styles' ), [] )
@@ -84,8 +90,15 @@ class Assets
                 'in-footer' => true, // Optional. Defaults to false.
         ]);
         $javascript_globals = config( 'assets.javascript_globals' );
-        $javascript_globals['translations']['remove_app_confirmation'] = __( 'Are you sure you want to remove this app?', 'dt-home' );
+
+        // Handle callback function for translations if it exists
+        if ( isset( $javascript_globals['translations'] ) && is_callable( $javascript_globals['translations'] ) ) {
+            $javascript_globals['translations'] = $javascript_globals['translations']();
+        }
+
         wp_localize_script( 'dt-home', config( 'assets.javascript_global_scope' ), apply_filters( \DT\Home\namespace_string( 'javascript_globals' ), $javascript_globals ) );
+        wp_register_style( 'material-font-icons-local', '/wp-content/plugins/dt-home/resources/css/materialdesignicons.min.css' );
+        wp_enqueue_style( 'material-font-icons-local' );
     }
 
     /**
@@ -372,6 +385,9 @@ class Assets
         wp_register_style( 'jquery-ui', 'https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.css' );
         wp_enqueue_style( 'jquery-ui' );
 
+        wp_register_style( 'font-awesome', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css' );
+        wp_enqueue_style( 'font-awesome' );
+
         dt_theme_enqueue_style( 'material-font-icons-local', 'dt-core/dependencies/mdi/css/materialdesignicons.min.css', [] );
         wp_enqueue_style( 'material-font-icons', 'https://cdn.jsdelivr.net/npm/@mdi/font@6.6.96/css/materialdesignicons.min.css' );
 
@@ -396,6 +412,27 @@ class Assets
                 visibility: hidden;
             }
         </style>
+        <?php
+    }
+
+    /**
+     * Outputs Open Graph meta tags.
+     *
+     * This method outputs the necessary Open Graph meta tags for the HTML document.
+     *
+     * @return void
+     */
+    public function add_open_graph_meta_tags(): void
+    {
+        $custom_logo = get_plugin_option( 'custom_ministry_logo' );
+        $default_logo = plugin_url( 'resources/img/logo-color.png' );
+        ?>
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="<?php echo esc_attr( get_bloginfo( 'name' ) ); ?>" />
+        <meta property="og:url" content="<?php echo esc_url( get_plugin_option( 'dt_home_plugin_url' ) ); ?>" />
+        <meta property="og:image"
+              content="<?php echo esc_url( !empty( $custom_logo ) ? $custom_logo : $default_logo ); ?>" />
+        <meta name="color-scheme" content="light dark">
         <?php
     }
 }

@@ -5,11 +5,13 @@
  */
 
 use DT\Home\MagicLinks\Launcher;
+use DT\Home\MagicLinks\AppJson;
 
 $config->merge( [
     'magic' => [
         'links' => [
-            Launcher::class
+            Launcher::class,
+            AppJson::class
         ]
     ]
 ] );

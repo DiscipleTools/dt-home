@@ -5,8 +5,13 @@ namespace DT\Home\Controllers\MagicLink;
 use DT\Home\GuzzleHttp\Psr7\ServerRequest as Request;
 use DT\Home\Psr\Http\Message\ResponseInterface;
 use DT\Home\Services\Apps;
+use DT\Home\Services\RolesPermissions;
+use DT\Home\Sources\SettingsApps;
+use DT\Home\Sources\UserApps;
 use function DT\Home\container;
 use function DT\Home\extract_request_input;
+use function DT\Home\get_plugin_option;
+use function DT\Home\magic_url;
 use function DT\Home\namespace_string;
 use function DT\Home\response;
 use function DT\Home\template;
@@ -19,25 +24,80 @@ use function DT\Home\template;
 class AppController
 {
 
+    private $apps;
+
+    private $user_apps;
+
+    private $roles_permissions;
+
+    public function __construct( Apps $apps, UserApps $user_apps, RolesPermissions $roles_permissions )
+    {
+        $this->apps = $apps;
+        $this->user_apps = $user_apps;
+        $this->roles_permissions = $roles_permissions;
+    }
+
+    /**
+     * Display the app launcher
+     *
+     * @param Request $request The request object.
+     * @param array $params The parameters.
+     */
+    public function index( Request $request, $params )
+    {
+
+        $key = $params['key'];
+        $user = get_current_user_id();
+        $apps_array = $this->apps->for( $user );
+        $data = json_encode( $apps_array );
+        $hidden_data = $data;
+        $app_url = magic_url( '', $key );
+        $magic_link = $app_url . '/share';
+        $reset_apps = get_plugin_option( 'reset_apps' );
+        $button_color = get_plugin_option( 'button_color' );
+
+        return template(
+            'index',
+            compact(
+                'user',
+                'data',
+                'app_url',
+                'magic_link',
+                'hidden_data',
+                'reset_apps',
+                'button_color'
+            )
+        );
+    }
 
     /**
      * Displays the app based on the provided slug.
      *
      * @param Request $request The request object.
-     * @param array   $params
+     * @param array $params
      *
      * @return ResponseInterface The response object.
      */
     public function show( Request $request, $params )
     {
-        // Fetch the app
-        $slug = $params['slug'];
-        $apps = container()->get( Apps::class );
-        $user_id = get_current_user_id();
-        $apps_array = $apps->for_user( $user_id );
-        $app  = $apps->find_for_user( $user_id, $slug );
 
-        if ( ! $app ) {
+        // Fetch the app
+        $key = $params['key'];
+        $slug = $params['slug'];
+        $user_id = get_current_user_id();
+        $app = $this->apps->find_for( $slug, $user_id );
+
+        // If no initial hit, attempt a direct search.
+        if ( !$app ) {
+            $filtered_array = array_values(array_filter($this->apps->for( $user_id ), function ( $element ) use ( $slug ) {
+                return ( isset( $element['slug'] ) && $element['slug'] === $slug );
+            }));
+
+            $app = !empty( $filtered_array[0] ) ? $filtered_array[0] : null;
+        }
+
+        // Also confirm user has relevant permission to access app.
+        if ( !$app || !container()->get( RolesPermissions::class )->has_permission( $app, $user_id, get_option( RolesPermissions::OPTION_KEY_CUSTOM_ROLES, [] ) ) ) {
             return response( __( 'Not Found', 'dt-home' ), 404 );
         }
 
@@ -66,13 +126,14 @@ class AppController
 
         // Check to see if the app has an iframe URL
         $url = apply_filters( 'dt_home_webview_url', ( $app['url'] ?? '' ), $app );
-        if ( ! $url ) {
+        if ( !$url ) {
             // No URL found 404
             return response( __( 'Not Found', 'dt-home' ), 404 );
         }
 
-        return template( 'web-view', compact( 'app', 'url', 'apps_array' ) );
-    }//end show()
+        return template( 'web-view', compact( 'key', 'app', 'url' ) );
+    }
+
 
 
     /**
@@ -113,57 +174,15 @@ class AppController
      */
     public function hide( Request $request )
     {
-        $apps = container()->get( Apps::class );
-        $data = extract_request_input( $request );
+        $params = extract_request_input( $request );
+        $result = $this->user_apps->hide( $params['slug'] );
 
-        $apps_array = $apps->for_user( get_current_user_id() );
-
-        // Find the app with the specified slug and update its 'is_hidden' status
-        foreach ( $apps_array as $key => $app ) {
-            if ( isset( $app['slug'] ) && $app['slug'] == $data['slug'] ) {
-                $apps_array[$key]['is_hidden'] = 1;
-                // Set 'is_hidden' to 1 (hide)
-                break;
-                // Exit the loop once the app is found and updated
-            }
+        if ( !isset( $result['is_hidden'] ) || !$result['is_hidden'] ) {
+            return response( [ 'message' => 'Failed to update visibility.' ], 500 );
         }
 
-        // Separate hidden and visible apps
-        $hidden_apps  = [];
-        $visible_apps = [];
-
-        foreach ( $apps_array as $app ) {
-            if ( $app['is_hidden'] == 1 ) {
-                $hidden_apps[] = $app;
-            } else {
-                $visible_apps[] = $app;
-            }
-        }
-
-        // Sort visible apps by the 'sort' field
-        usort(
-            $visible_apps,
-            function ( $a, $b ) {
-                return ( $a['sort'] <=> $b['sort'] );
-            }
-        );
-
-        // Reset sort values for visible apps
-        foreach ( $visible_apps as $index => $app ) {
-            $visible_apps[$index]['sort'] = ( $index + 1 );
-        }
-
-        // Add hidden apps back to the end
-        foreach ( $hidden_apps as $hidden_app ) {
-            $hidden_app['sort'] = ( count( $visible_apps ) + 1 );
-            $visible_apps[]     = $hidden_app;
-        }
-
-        // Save the updated array back to the option
-        update_user_option( get_current_user_id(), 'dt_home_apps', $visible_apps );
-
-        return response( [ 'message' => 'App visibility and order updated' ] );
-    }//end hide()
+        return response( [ 'message' => 'App visibility updated' ] );
+    }
 
 
     /**
@@ -175,57 +194,15 @@ class AppController
      */
     public function unhide( Request $request )
     {
-        $apps = container()->get( Apps::class );
-        $data = extract_request_input( $request );
+        $params = extract_request_input( $request );
+        $result = $this->user_apps->unhide( $params['slug'] );
 
-        $apps_array = $apps->for_user( get_current_user_id() );
-
-        // Find the app with the specified ID and update its 'is_hidden' status
-        foreach ( $apps_array as $key => $app ) {
-            if ( isset( $app['slug'] ) && $app['slug'] == $data['slug'] ) {
-                $apps_array[$key]['is_hidden'] = 0;
-                // Set 'is_hidden' to 1 (hide)
-                break;
-                // Exit the loop once the app is found and updated
-            }
+        if ( !isset( $result['is_hidden'] ) || $result['is_hidden'] ) {
+            return response( [ 'message' => 'Failed to update visibility.' ], 500 );
         }
-
-        // Separate hidden and visible apps
-        $hidden_apps  = [];
-        $visible_apps = [];
-
-        foreach ( $apps_array as $app ) {
-            if ( $app['is_hidden'] == 1 ) {
-                $hidden_apps[] = $app;
-            } else {
-                $visible_apps[] = $app;
-            }
-        }
-
-        // Sort visible apps by the 'sort' field
-        usort(
-            $visible_apps,
-            function ( $a, $b ) {
-                return ( $a['sort'] <=> $b['sort'] );
-            }
-        );
-
-        // Reset sort values for visible apps
-        foreach ( $visible_apps as $index => $app ) {
-            $visible_apps[$index]['sort'] = ( $index + 1 );
-        }
-
-        // Add hidden apps back to the end
-        foreach ( $hidden_apps as $hidden_app ) {
-            $hidden_app['sort'] = ( count( $visible_apps ) + 1 );
-            $visible_apps[]     = $hidden_app;
-        }
-
-        // Save the updated array back to the option
-        update_user_option( get_current_user_id(), 'dt_home_apps', $visible_apps );
 
         return response( [ 'message' => 'App visibility updated' ] );
-    }//end unhide()
+    }
 
 
     /**
@@ -249,7 +226,7 @@ class AppController
         update_user_option( get_current_user_id(), 'dt_home_apps', $data );
 
         return response( [ 'message' => 'App order updated' ] );
-    }//end reorder()
+    }
 
 
     /**
@@ -261,11 +238,91 @@ class AppController
      */
     public function reset_apps( Request $request )
     {
-        $apps       = container()->get( Apps::class );
-        $admin_apps = $apps->all();
-
-        update_user_option( get_current_user_id(), 'dt_home_apps', $admin_apps );
+        update_user_option( get_current_user_id(), 'dt_home_apps', container()->get( SettingsApps::class )->raw() );
 
         return response( [ 'message' => 'App order updated' ] );
-    }//end reset_apps()
-}//end class
+    }
+
+    /**
+     * Stores the user's apps by updating the 'dt_home_apps' option
+     *
+     * @param Request $request The request object.
+     *
+     * @return ResponseInterface The response containing a success message.
+     */
+    public function store_apps( Request $request )
+    {
+        $data = extract_request_input( $request );
+        $user = wp_get_current_user();
+        $user_roles = $user->roles;
+        $roles = dt_recursive_sanitize_array( $user_roles ?? [] );
+        $apps_array = $this->apps->from( 'user' );
+        $apps_count = count( $apps_array );
+        $app_data = [
+            'name' => $data['name'] ?? 'test',
+            'type' => $data['type'] ?? 'Web View',
+            'icon' => $data['icon'] ?? '',
+            'url' => $data['url'],
+            'slug' => $data['slug'],
+            'open_in_new_tab' => $data['open_in_new_tab'] ?? false,
+            'sort' => $apps_count,
+            'roles' => $roles,
+        ];
+        // validate the slug to ensure it is unique for the user
+        foreach ( $apps_array as $app ) {
+            if ( $app['slug'] == $app_data['slug'] ) {
+                return response( [ 'error' => 'App with the same slug already exists' ], 400 );
+            }
+        }
+        $apps_array[] = $app_data;
+        $this->user_apps->save( $apps_array );
+
+        return response( [ 'message' => 'App has been added', 'app' => $app_data ] );
+    }
+
+    /**
+     * Updates the user's apps by updating the 'dt_home_apps' option
+     *
+     * @param Request $request The request object.
+     *
+     * @return ResponseInterface The response containing a success message.
+     */
+    public function update_apps( Request $request, $params )
+    {
+        $data = extract_request_input( $request );
+        $slug = $params['slug'];
+        $apps_array = $this->apps->from( 'user' );
+        foreach ( $apps_array as $key => $app ) {
+            if ( $app['slug'] == $slug ) {
+                $apps_array[$key] = [
+                    'name' => $data['name'],
+                    'type' => $data['type'],
+                    'icon' => $data['icon'],
+                    'url' => $data['url'],
+                    'slug' => $data['slug'],
+                    'open_in_new_tab' => $data['open_in_new_tab'] ?? false,
+                    'sort' => $app['sort'],
+                    'creation_type' => $app['creation_type'],
+                    'is_hidden' => $app['is_hidden'],
+                ];
+                break; // Stop the loop once the app is found and updated
+            }
+        }
+        $this->user_apps->save( $apps_array );
+
+        return response( [ 'message' => 'App has been updated', 'app' => $data ] );
+    }
+
+    /**
+     * Fetches all the apps for the current user.
+     *
+     * @return ResponseInterface The response containing the user's apps.
+     */
+    public function all()
+    {
+        $user = get_current_user_id();
+        $apps_array = $this->apps->for( $user );
+        $data = json_encode( $apps_array );
+        return response( $data );
+    }
+}

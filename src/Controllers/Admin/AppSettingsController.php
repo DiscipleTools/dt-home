@@ -5,29 +5,44 @@ namespace DT\Home\Controllers\Admin;
 use DT\Home\GuzzleHttp\Psr7\ServerRequest as Request;
 use DT\Home\Psr\Http\Message\ResponseInterface;
 use DT\Home\Services\Apps;
+use DT\Home\Services\RolesPermissions;
 use DT\Home\Services\SVGIconService;
+use DT\Home\Sources\SettingsApps;
 use function DT\Home\container;
 use function DT\Home\extract_request_input;
-use function DT\Home\get_plugin_option;
 use function DT\Home\redirect;
 use function DT\Home\response;
 use function DT\Home\set_plugin_option;
+use function DT\Home\get_plugin_option;
 use function DT\Home\view;
 
-class AppSettingsController {
+class AppSettingsController
+{
+
+    private Apps $apps;
+    private SettingsApps $settings_apps;
+    private RolesPermissions $roles_permissions;
+
+    public function __construct( Apps $apps, SettingsApps $source, RolesPermissions $roles_permissions )
+    {
+        $this->apps = $apps;
+        $this->settings_apps = $source;
+        $this->roles_permissions = $roles_permissions;
+    }
 
     /**
-     * Show the general settings app tab.
+     * Show the apps settings app tab.
      *
      * @return ResponseInterface
      */
-    public function show() {
+    public function show()
+    {
 
-        $tab        = "app";
-        $link       = 'admin.php?page=dt_home&tab=';
+        $tab = "app";
+        $link = 'admin.php?page=dt_home&tab=';
         $page_title = "Home Settings";
 
-        $data = $this->get_all_apps_data();
+        $data = $this->settings_apps->undeleted();
 
         return view( "settings/app", compact( 'tab', 'link', 'page_title', 'data' ) );
     }
@@ -37,91 +52,16 @@ class AppSettingsController {
      * @return ResponseInterface
      */
 
-    public function show_available_apps() {
+    public function show_available_apps()
+    {
 
-        $tab        = "app";
-        $link       = 'admin.php?page=dt_home&tab=';
+        $tab = "app";
+        $link = 'admin.php?page=dt_home&tab=';
         $page_title = "Home Settings";
 
-        $data = $this->get_all_softdelete_apps();
+        $data = $this->settings_apps->deleted();
 
         return view( "settings/available-apps", compact( 'tab', 'link', 'page_title', 'data' ) );
-    }
-
-    /**
-     * Get all apps data from the options and ensure default values.
-     *
-     * @return array
-     */
-    protected function get_all_apps_data() {
-        $apps = container()->get( Apps::class );
-
-        // Get the apps array from the option
-        $apps_collection = $apps->all();
-        $apps_array      = array_values( array_filter( $apps_collection, function ( $app ) {
-            if ( ! isset( $app['is_deleted'] ) ) {
-                return true;
-            }
-
-            return false === $app['is_deleted'];
-        } ) );
-
-        usort( $apps_array, function ( $a, $b ) {
-            return (int) $a['sort'] - (int) $b['sort'];
-        } );
-
-        $apps_array = array_map( function ( $app ) {
-            return array_merge( [
-                'name'      => '',
-                'type'      => 'webview',
-                'icon'      => '',
-                'url'       => '',
-                'sort'      => 0,
-                'slug'      => '',
-                'is_hidden' => false,
-            ], $app );
-        }, $apps_array );
-
-
-        return $apps_array;
-    }
-
-    /**
-     * Get all soft deleted apps data from the options and ensure default values.
-     *
-     * @return ResponseInterface
-     */
-    protected function get_all_softdelete_apps() {
-        $apps = container()->get( Apps::class );
-        // Get the apps array from the option
-        $apps_collection = $apps->all();
-        $apps_array      = array_values( array_filter( $apps_collection, function ( $app ) {
-            if ( ! isset( $app['is_deleted'] ) ) {
-                return false;
-            }
-
-            return true === $app['is_deleted'];
-        } ) );
-        // Sort the array based on the 'sort' key
-        usort( $apps_array, function ( $a, $b ) {
-            return $a['sort'] - $b['sort'];
-        } );
-
-        $apps_array = array_map( function ( $app ) {
-            return array_merge( [
-                'name'          => '',
-                'type'          => 'Web View',
-                'creation_type' => '',
-                'icon'          => '',
-                'url'           => '',
-                'sort'          => 0,
-                'slug'          => '',
-                'is_hidden'     => false,
-            ], $app );
-        }, $apps_array );
-
-
-        return $apps_array;
     }
 
     /**
@@ -129,13 +69,15 @@ class AppSettingsController {
      *
      * @return ResponseInterface
      */
-    public function create() {
-        $tab         = "app";
-        $link        = 'admin.php?page=dt_home&tab=';
-        $page_title  = "Home Settings";
+    public function create()
+    {
+        $tab = "app";
+        $link = 'admin.php?page=dt_home&tab=';
+        $page_title = "Home Settings";
         $svg_service = new SVGIconService( get_template_directory() . '/dt-assets/images/' );
+        $svg_images = $svg_service->get_svg_icon_urls();
 
-        return view( "settings/create", compact( 'tab', 'link', 'page_title' ) );
+        return view( "settings/create", compact( 'tab', 'link', 'page_title', 'svg_images' ) );
     }
 
     /**
@@ -145,18 +87,31 @@ class AppSettingsController {
      *
      * @return ResponseInterface
      */
-    public function store( Request $request ) {
+    public function store( Request $request )
+    {
         // Retrieve form data
         $input = extract_request_input( $request );
 
-        $name            = sanitize_text_field( $input['name'] ?? '' );
-        $type            = sanitize_text_field( $input['type'] ?? '' );
-        $creation_type   = sanitize_text_field( $input['creation_type'] ?? '' );
-        $icon            = sanitize_text_field( $input['icon'] ?? '' );
-        $url             = sanitize_text_field( $input['url'] ?? '' );
-        $slug            = sanitize_text_field( $input['slug'] ?? '' );
-        $is_hidden       = filter_var( $input['is_hidden'] ?? '0', FILTER_SANITIZE_NUMBER_INT );
+        $name = sanitize_text_field( $input['name'] ?? '' );
+        $type = sanitize_text_field( $input['type'] ?? '' );
+        $creation_type = sanitize_text_field( $input['creation_type'] ?? '' );
+        $icon = sanitize_text_field( $input['icon'] ?? '' );
+        $icon_color = sanitize_text_field( $input['icon_color'] ?? '' );
+        $is_icon_color_deleted = sanitize_text_field( $input['icon_color_hidden'] ?? '' ) === 'deleted';
+        $icon_dark = sanitize_text_field( $input['icon_dark'] ?? '' );
+        $icon_dark_color = sanitize_text_field( $input['icon_dark_color'] ?? '' );
+        $is_icon_dark_color_deleted = sanitize_text_field( $input['icon_dark_color_hidden'] ?? '' ) === 'deleted';
+        $url = sanitize_text_field( $input['url'] ?? '' );
+        $fallback_url_ios = sanitize_text_field( $input['fallback_url_ios'] ?? '' );
+        $fallback_url_android = sanitize_text_field( $input['fallback_url_android'] ?? '' );
+        $fallback_url_others = sanitize_text_field( $input['fallback_url_others'] ?? '' );
+        $slug = sanitize_text_field( $input['slug'] ?? '' );
+        $sort = sanitize_text_field( $input['sort'] ?? count( $this->settings_apps->raw() ) );
+        $is_hidden = filter_var( $input['is_hidden'] ?? '0', FILTER_SANITIZE_NUMBER_INT );
+        $is_exportable = filter_var( $input['is_exportable'] ?? '0', FILTER_SANITIZE_NUMBER_INT );
         $open_in_new_tab = filter_var( $input['open_in_new_tab'] ?? '0', FILTER_SANITIZE_NUMBER_INT );
+        $roles = dt_recursive_sanitize_array( $input['roles'] ?? [] );
+        $deleted_roles = json_decode( stripslashes_from_strings_only( $input['deleted_roles'] ?? '[]' ) );
 
         $apps = container()->get( Apps::class );
         // Get the existing apps array
@@ -173,23 +128,34 @@ class AppSettingsController {
 
         // Prepare the data to be stored
         $app_data = [
-            'name'            => $name,
-            'type'            => $type,
-            'creation_type'   => $creation_type,
-            'icon'            => $icon,
-            'url'             => $url,
-            'sort'            => $new_sort,
-            'slug'            => $slug,
-            'is_hidden'       => $is_hidden == "1" ? 1 : 0,
+            'name' => $name,
+            'type' => $type,
+            'creation_type' => $creation_type,
+            'icon' => $icon,
+            'icon_color' => $is_icon_color_deleted ? null : $icon_color,
+            'icon_dark' => $icon_dark,
+            'icon_dark_color' => $is_icon_dark_color_deleted ? null : $icon_dark_color,
+            'url' => $url,
+            'fallback_url_ios' => $fallback_url_ios,
+            'fallback_url_android' => $fallback_url_android,
+            'fallback_url_others' => $fallback_url_others,
+            'sort' => $new_sort,
+            'slug' => $slug,
+            'is_hidden' => $is_hidden == "1" ? 1 : 0,
+            'is_exportable' => $is_exportable == "1" ? 1 : 0,
             'open_in_new_tab' => $open_in_new_tab,
+            'roles' => $roles
         ];
 
+        // Get the existing apps array
+        $apps_array = $this->settings_apps->raw();
+
         // Avoid duplicate slugs and append unique counter if required.
-        $dup_apps = array_filter( $apps_array, function ( $app ) use ( $app_data ) {
+        $dup_apps = array_filter($apps_array, function ( $app ) use ( $app_data ) {
 
             // Check for identical matches, as well as for previously set slugs, with appended counts.
             return ( isset( $app['slug'] ) && ( ( $app['slug'] === $app_data['slug'] ) || ( substr( $app['slug'], 0, strlen( $app_data['slug'] . '_' ) ) === ( $app_data['slug'] . '_' ) ) ) );
-        } );
+        });
         if ( count( $dup_apps ) > 0 ) {
             $app_data['slug'] .= '_' . ( count( $dup_apps ) + 1 );
         }
@@ -197,8 +163,10 @@ class AppSettingsController {
         // Append new app data to the array
         $apps_array[] = $app_data;
 
-        // Save the updated array back to the option
-        set_plugin_option( 'apps', $apps_array );
+        $this->settings_apps->save( $apps_array );
+
+        // Update global roles and permissions.
+        $this->roles_permissions->update( $slug, [ $this->roles_permissions->generate_permission_key( $slug ) ], $roles, $deleted_roles );
 
         return redirect( 'admin.php?page=dt_home&tab=app&updated=true' );
     }
@@ -269,44 +237,64 @@ class AppSettingsController {
      *
      * @return ResponseInterface
      */
-    public function update( Request $request, $params ) {
+    public function update( Request $request, $params )
+    {
 
-        $slug            = $params['slug'] ?? '';
-        $input           = extract_request_input( $request );
-        $name            = sanitize_text_field( $input['name'] ?? '' );
-        $type            = sanitize_text_field( $input['type'] ?? '' );
-        $creation_type   = sanitize_text_field( $input['creation_type'] ?? '' );
-        $icon_url        = sanitize_text_field( $input['icon'] ?? '' );
-        $url             = sanitize_text_field( $input['url'] ?? '' );
-        $sort            = sanitize_text_field( $input['sort'] ?? '' );
-        $new_slug        = sanitize_text_field( $input['slug'] ?? '' );
-        $is_hidden       = filter_var( $input['is_hidden'] ?? '0', FILTER_SANITIZE_NUMBER_INT );
+        $slug = $params['slug'] ?? '';
+        $input = extract_request_input( $request );
+        $name = sanitize_text_field( $input['name'] ?? '' );
+        $type = sanitize_text_field( $input['type'] ?? '' );
+        $creation_type = sanitize_text_field( $input['creation_type'] ?? '' );
+        $icon = sanitize_text_field( $input['icon'] ?? '' );
+        $icon_color = sanitize_text_field( $input['icon_color'] ?? '' );
+        $is_icon_color_deleted = sanitize_text_field( $input['icon_color_hidden'] ?? '' ) === 'deleted';
+        $icon_dark = sanitize_text_field( $input['icon_dark'] ?? '' );
+        $icon_dark_color = sanitize_text_field( $input['icon_dark_color'] ?? '' );
+        $is_icon_dark_color_deleted = sanitize_text_field( $input['icon_dark_color_hidden'] ?? '' ) === 'deleted';
+        $url = sanitize_text_field( $input['url'] ?? '' );
+        $fallback_url_ios = sanitize_text_field( $input['fallback_url_ios'] ?? '' );
+        $fallback_url_android = sanitize_text_field( $input['fallback_url_android'] ?? '' );
+        $fallback_url_others = sanitize_text_field( $input['fallback_url_others'] ?? '' );
+        $new_slug = sanitize_text_field( $input['slug'] ?? '' );
+        $is_hidden = filter_var( $input['is_hidden'] ?? '0', FILTER_SANITIZE_NUMBER_INT );
+        $is_exportable = filter_var( $input['is_exportable'] ?? '0', FILTER_SANITIZE_NUMBER_INT );
         $open_in_new_tab = filter_var( $input['open_in_new_tab'] ?? '0', FILTER_SANITIZE_NUMBER_INT );
+        $roles = dt_recursive_sanitize_array( $input['roles'] ?? [] );
+        $deleted_roles = json_decode( stripslashes_from_strings_only( $input['deleted_roles'] ?? '[]' ) );
 
         // Retrieve the existing array of apps
-        $apps       = container()->get( Apps::class );
-        $apps_array = $apps->all();
+        $apps_array = $this->settings_apps->raw();
 
         // Find and update the app in the array
         foreach ( $apps_array as $key => $app ) {
             if ( $app['slug'] == $slug ) {
-                $apps_array[ $key ] = [
-                    'name'            => $name,
-                    'type'            => $type,
-                    'creation_type'   => $creation_type,
-                    'icon'            => $icon_url,
-                    'url'             => $url,
-                    'slug'            => $new_slug,
-                    'sort'            => $sort,
-                    'is_hidden'       => $is_hidden == "1" ? 1 : 0,
+                $apps_array[$key] = [
+                    'name' => $name,
+                    'type' => $type,
+                    'creation_type' => $creation_type,
+                    'icon' => $icon,
+                    'icon_color' => $is_icon_color_deleted ? null : $icon_color,
+                    'icon_dark' => $icon_dark,
+                    'icon_dark_color' => $is_icon_dark_color_deleted ? null : $icon_dark_color,
+                    'url' => $url,
+                    'fallback_url_ios' => $fallback_url_ios,
+                    'fallback_url_android' => $fallback_url_android,
+                    'fallback_url_others' => $fallback_url_others,
+                    'slug' => $new_slug,
+                    'sort' => $app['sort'] ?? '',
+                    'is_hidden' => $is_hidden == "1" ? 1 : 0,
+                    'is_exportable' => $is_exportable == "1" ? 1 : 0,
                     'open_in_new_tab' => $open_in_new_tab,
+                    'roles' => $roles
                 ];
                 break; // Stop the loop once the app is found and updated
             }
         }
 
-        // Save the updated array back to the option
-        set_plugin_option( 'apps', $apps_array );
+        $this->settings_apps->save( $apps_array );
+
+        // Update global roles and permissions.
+        $this->roles_permissions->update( $slug, [ $this->roles_permissions->generate_permission_key( $slug ) ], $roles, $deleted_roles );
 
         return redirect( 'admin.php?page=dt_home&tab=app&updated=true' );
     }
@@ -319,42 +307,24 @@ class AppSettingsController {
      *
      * @return ResponseInterface
      */
-    public function edit( Request $request, $params ) {
-        $slug        = $params['slug'] ?? '';
-        $svg_service = new SVGIconService( get_template_directory() . '/dt-assets/images/' );
+    public function edit( Request $request, $params )
+    {
+        $existing_data = $this->apps->find( $params['slug'] ?? '' );
 
-        $existing_data = $this->get_data_by_slug( $slug );
-
-        $tab        = "app";
-        $link       = 'admin.php?page=dt_home&tab=';
+        $tab = "app";
+        $link = 'admin.php?page=dt_home&tab=';
         $page_title = "Home Settings";
+        $svg_service = new SVGIconService( get_template_directory() . '/dt-assets/images/' );
+        $svg_images = $svg_service->get_svg_icon_urls();
 
-        if ( ! $existing_data ) {
+        if ( !$existing_data ) {
             return response( __( 'App not found', 'dt-home' ), 404 );
         }
 
         // Load the edit form view and pass the existing data
-        return view( "settings/edit", compact( 'existing_data', 'link', 'tab', 'page_title' ) );
+        return view( "settings/edit", compact( 'existing_data', 'link', 'tab', 'page_title', 'svg_images' ) );
     }
 
-    /**
-     * Get app data by ID.
-     *
-     * @param int $slug
-     *
-     * @return ResponseInterface
-     */
-    protected function get_data_by_slug( $slug ) {
-        $apps_array = container()->get( Apps::class )->all();
-
-        foreach ( $apps_array as $app ) {
-            if ( isset( $app['slug'] ) && $app['slug'] == $slug ) {
-                return $app;
-            }
-        }
-
-        return null; // Return null if no app is found with the given slug
-    }
 
     /**
      * Delete an app by its slug.
@@ -431,7 +401,8 @@ class AppSettingsController {
      *
      * @return ResponseInterface
      */
-    public function restore_app( Request $request, $params ) {
+    public function restore_app( Request $request, array $params ): ResponseInterface
+    {
         $slug = $params['slug'] ?? '';
 
         if ( empty( $slug ) ) {
@@ -508,8 +479,22 @@ class AppSettingsController {
         }
 
         // Save the updated app order back to the option
-        set_plugin_option( 'apps', $reordered_apps );
+        $this->settings_apps->save( $reordered_apps );
 
         return redirect( 'admin.php?page=dt_home&tab=app&updated=true' );
+    }
+
+    /**
+     * This function handles import requests.
+     *
+     * @param Request $request The request instance.
+     * @param array $params The route parameters.
+     *
+     */
+    public function import( Request $request, array $params )
+    {
+        return response([
+            'success' => $this->apps->import( extract_request_input( $request ) )
+        ], 200, [ 'Content-Type' => 'application/json' ]);
     }
 }

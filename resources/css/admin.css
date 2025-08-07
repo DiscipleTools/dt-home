@@ -1,7 +1,7 @@
 body {
     background-color: #f1f1f1;
     color: #636b6f;
-    font-family: 'Nunito', sans-serif;
+    font-family: Nunito, sans-serif;
     font-weight: 200;
     height: 100vh;
     margin: 0;
@@ -36,11 +36,11 @@ body {
 }
 
 .delete-apps {
-    color: #e44f4f;
+    color: #e44f4f !important;
 }
 
 .delete-apps:hover {
-    color: #b33737;
+    color: #b33737 !important;
 }
 
 /* Custom Tooltip css */
@@ -64,8 +64,9 @@ body {
     left: 50%;
     margin-left: -100px; /* Center the tooltip */
     opacity: 0;
-    transition: opacity 0.3s, transform 0.3s;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    transition: opacity 0.3s,
+    transform 0.3s;
+    box-shadow: 0 4px 8px rgb(0 0 0 / 20%);
     transform: translateY(10px); /* Slight upward movement */
 }
 
@@ -73,7 +74,6 @@ body {
     visibility: visible;
     opacity: 1;
     transform: translateY(0); /* Smooth appearance */
-
 }
 
 .tooltip:hover {
@@ -82,18 +82,18 @@ body {
 
 .tooltip .tooltiptext::after {
     z-index: auto;
-    content: '';
+    content: "";
     position: absolute;
     top: 100%;
     left: 50%;
     margin-left: -5px;
     border-width: 5px;
     border-style: solid;
-    border-color: #333 transparent transparent transparent; /* Creates a small triangle pointing downwards */
+    border-color: #333 transparent transparent; /* Creates a small triangle pointing downwards */
 }
 
 /* Mobile responsiveness */
-@media (max-width: 600px) {
+@media (width <= 600px) {
     .tooltip .tooltiptext {
         /* Adjust width for smaller screens */
         left: 0%; /* Center the tooltip */
@@ -105,4 +105,405 @@ body {
         left: 10%;
         margin-left: -5px; /* Center the arrow */
     }
+}
+
+/* Color Picker */
+.color-picker {
+    width: 24px;
+    height: 24px;
+    border: none !important;
+    cursor: pointer;
+    margin: 0 !important;
+    background-color: transparent !important;
+}
+
+.image-preview {
+    height: 22px;
+}
+
+.color-picker-lable {
+    margin-left: -3px;
+}
+
+/*.apps-btn .button {*/
+/*    float: right;*/
+/*}*/
+
+/* Custom Copy Button Styles */
+.text-area {
+    width: 100%;
+    height: 100%;
+    border: 1px solid #ccc;
+}
+
+.custom-checkbox {
+    margin: 0 !important;
+}
+
+.copied {
+    color: green;
+    border-color: green !important;
+
+    &:focus {
+        box-shadow: 0 0 0 1px #96cd96 !important;
+    }
+}
+
+/* Custom Overlay Styles */
+.overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgb(0 0 0 / 50%);
+    z-index: 999;
+}
+
+/* Custom Popup model Styles */
+.popup-model {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 15px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    z-index: 1000;
+    width: 30%; /* Adjusted width */
+    box-shadow: 0 4px 8px rgb(0 0 0 / 10%),
+    0 6px 20px rgb(0 0 0 / 10%); /* Add shadow */
+
+    border-radius: 8px; /* Optional: Add rounded corners */
+}
+
+.popup-content {
+    position: relative;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    width: 80%;
+    margin: auto;
+    background: #fff;
+    border-radius: 8px;
+    padding: 15px;
+    font-size: 14px;
+}
+
+.popup-body {
+    flex-grow: 1;
+
+    /* margin-top: 20px; */
+    display: flex;
+    flex-direction: column;
+}
+
+.popup-body textarea {
+    flex-grow: 1;
+}
+
+.popup-footer {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+
+.close {
+    cursor: pointer;
+    font-size: 20px;
+    background-color: #e1e1e1;
+    padding: 5px;
+    border-radius: 20%;
+
+    &:hover {
+        background-color: #f1f1f1;
+    }
+}
+
+/* General popup styling */
+.popup-model {
+    width: 30%;
+}
+
+@media (max-width: 600px) {
+    .popup-model {
+        width: 80%; /* Adjust the width for mobile screens */
+    }
+}
+
+@media (min-width: 601px) and (max-width: 1024px) {
+    .popup-model {
+        width: 50%; /* Adjust the width for tablet screens */
+    }
+}
+
+@media (min-width: 1025px) {
+    .popup-model {
+        width: 30%; /* Adjust the width for desktop screens */
+    }
+}
+
+.popup-content {
+    width: 80%;
+    margin: auto;
+    background: #fff;
+    border-radius: 8px;
+    padding: 15px;
+    font-size: 14px;
+}
+
+.popup-header h2 {
+    font-size: 16px;
+    margin: 0;
+}
+
+.popup-header .close {
+    cursor: pointer;
+    font-size: 18px;
+    line-height: 1;
+}
+
+/* Tabs styling */
+.tabs {
+    display: flex;
+    border-bottom: 1px solid #ccc;
+    padding: 0;
+    margin: 0 0 10px;
+    list-style: none;
+    font-size: 14px;
+}
+
+.tabs .tab {
+    padding: 8px 12px;
+    cursor: pointer;
+    border: 1px solid transparent;
+    background: #f8f8f8;
+    color: #495057;
+    transition: all 0.3s;
+    border-radius: 4px 4px 0 0;
+    margin-right: 5px;
+    margin-bottom: auto;
+}
+
+.tabs .tab:hover {
+    background: #e0e0e0;
+}
+
+.tabs .tab.active {
+    background: #fff;
+    border-color: #ccc #ccc transparent;
+    color: #000;
+}
+
+/* Tab content container */
+.tab-content-container {
+    border: 1px solid #ccc;
+    border-radius: 0 0 4px 4px;
+    padding: 10px;
+    background: #fff;
+}
+
+.tab-content {
+    display: none;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/* QR code styling */
+.qr-code-container {
+    text-align: center;
+    margin: 10px 0;
+}
+
+.qr-code-container img {
+    width: 200px;
+    height: 200px;
+}
+
+/* Input and textarea styling */
+.styled-textbox,
+.text-area {
+    width: 100%;
+    padding: 8px;
+    font-size: 13px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-top: 5px;
+}
+
+textarea.text-area {
+    resize: none;
+}
+
+
+/* Action icon size */
+.action-icon {
+    font-size: 15px;
+}
+
+/* Tooltip container */
+.action-tooltip {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+}
+
+/* Tooltip text */
+.action-tooltip .action-tooltip-text {
+    visibility: hidden;
+    width: auto;
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    border-radius: 4px;
+    padding: 5px 10px;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%; /* Adjust based on position */
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+/* Tooltip arrow */
+.action-tooltip .action-tooltip-text::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #333 transparent transparent;
+}
+
+/* Show tooltip on hover */
+.action-tooltip:hover .action-tooltip-text {
+    visibility: visible;
+    opacity: 1;
+}
+
+.action-tooltip a {
+    color: #62a8ba;
+
+    &:hover {
+        color: #0073aa;
+    }
+}
+
+.export-container {
+    display: flex;
+    align-items: center;
+}
+
+.export-container .form-control {
+    flex: 1;
+    margin-right: 10px;
+}
+
+.export-container .button {
+    white-space: nowrap;
+}
+
+@media (min-width: 228px) and (max-width: 767px) {
+    .wp-core-ui .button, .wp-core-ui .button.button-large, .wp-core-ui .button.button-small, a.preview, input#publish, input#save-post {
+        /*padding: 1px !important;*/
+        min-height: 0px !important;
+        font-size: 10px;
+    }
+
+    .color-picker {
+        width: 35px;
+        height: 35px;
+    }
+}
+
+/* 17-02-2022 */
+@media (max-width: 600px) {
+    .icon-button-container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+}
+
+@media (min-width: 228px) and (max-width: 767px) {
+    .icon-button-container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .apps-btn .button {
+        float: none !important;
+    }
+
+    .scrollable-table {
+        position: relative;
+        overflow-x: auto;
+    }
+
+    .scroll-tip {
+        position: fixed;
+        top: 95%;
+        left: 90%;
+        background: #0073aa;
+        padding: 5px;
+        border-radius: 50%;
+        cursor: pointer;
+        transition: opacity 0.3s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 10px;
+        height: 10px;
+    }
+
+    .scrollable-table:hover .scroll-tip {
+        opacity: 1;
+    }
+
+    .tooltip-text {
+        visibility: hidden;
+        background-color: #333;
+        color: white;
+        text-align: center;
+        border-radius: 4px;
+        position: absolute;
+        top: 50%;
+        right: 150%; /* Position to the left of the icon */
+        transform: translateY(-50%);
+        white-space: nowrap;
+        font-size: 12px;
+        padding: inherit;
+    }
+
+    .tooltip-text::before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 100%; /* Position the arrow to the right of the tooltip */
+        margin-top: -5px; /* Center the arrow vertically */
+        border-width: 5px;
+        border-style: solid;
+        border-color: transparent transparent transparent #333; /* Creates a small triangle pointing to the right */
+    }
+
+    .scroll-tip:hover .tooltip-text,
+    .scroll-tip:focus .tooltip-text,
+    .scroll-tip.touch-active .tooltip-text {
+        visibility: visible;
+    }
+
+}
+
+.icon-button-container .button {
+    margin-right: 10px; /* Adjust the value as needed */
 }

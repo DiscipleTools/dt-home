@@ -4,6 +4,7 @@
  * @var $config DT\Home\CodeZone\WPSupport\Config\ConfigInterface
  */
 
+use DT\Home\Middleware\CanAccess;
 use DT\Home\Middleware\SetBypassCookie;
 use DT\Home\Middleware\UnCached;
 
@@ -24,7 +25,8 @@ $config->merge( [
         ],
         'middleware' => [
             new SetBypassCookie(),
-	        new UnCached()
+	        new UnCached(),
+            new CanAccess()
         ],
     ],
 ] );

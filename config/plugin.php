@@ -5,7 +5,7 @@
  */
 $config->merge( [
     'plugin' => [
-        'text_domain' => 'dt_home',
+        'text_domain' => 'dt-home',
         'nonce_name' => 'dt_home',
         'share_cookie' => 'dt_home_share',
         'dt_version' => 1.19,
