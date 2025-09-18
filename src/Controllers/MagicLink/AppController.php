@@ -37,7 +37,7 @@ class AppController
         $user_id = get_current_user_id();
         $apps_array = $apps->for_user( $user_id );
         $app  = $apps->find_for_user( $user_id, $slug );
-dt_write_log('====================== AppController');
+
         // Also confirm user has relevant permission to access app.
         if ( ! $app || !container()->get( RolesPermissions::class )->has_permission( $app, $user_id, get_option( RolesPermissions::OPTION_KEY_CUSTOM_ROLES, [] ) ) ) {
             return response( __( 'Not Found', 'dt-home' ), 404 );
