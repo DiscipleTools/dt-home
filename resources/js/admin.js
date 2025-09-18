@@ -400,3 +400,58 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 100); // Close setTimeout
     }
 });
+
+/**
+ * Handle bulk selecting/deselecting of Apps user role options.
+ *
+ * @function
+ * @name bulkAppsUserRoleSelections
+ * @returns {void}
+ */
+document.addEventListener('DOMContentLoaded', function () {
+  const select_all = document.getElementById('select_all_user_roles');
+
+  if (!select_all) {
+    return;
+  }
+
+  // Listen for select all app user role clicks.
+  select_all.addEventListener('click', (e) => {
+    const roles = document.querySelectorAll('input.apps-user-role');
+    for (let i = 0; i < roles.length; i++) {
+
+      // Accordingly select/deselect user roles.
+      roles[i].checked = select_all.checked;
+    }
+  });
+
+  // Listen for individual user role clicks and update parent all option accordingly.
+  for (const role of document.querySelectorAll('input.apps-user-role')) {
+    role.addEventListener('click', (e) => {
+      if (!role.checked) {
+        select_all.checked = false;
+      }
+    });
+  }
+
+  // Execute final pre-submission tasks.
+  document
+  .getElementById('submit')
+  .addEventListener('click', (e) => {
+
+    // Capture unselected roles, to ensure they are removed within the backend.
+    const deleted_roles_element = document.getElementById('deleted_roles');
+    if (deleted_roles_element) {
+
+      let deleted_roles = [];
+      for (const role of document.querySelectorAll('input.apps-user-role')) {
+        if (!role.checked) {
+          deleted_roles.push(role.value);
+        }
+      }
+
+      // Update deleted roles hidden field, ahead of final submission.
+      deleted_roles_element.value = JSON.stringify( deleted_roles );
+    }
+  });
+});

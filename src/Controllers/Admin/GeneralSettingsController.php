@@ -4,11 +4,13 @@ namespace DT\Home\Controllers\Admin;
 
 use DT\Home\GuzzleHttp\Psr7\ServerRequest as Request;
 use DT\Home\Psr\Http\Message\ResponseInterface;
+use DT\Home\Services\RolesPermissions;
 use function DT\Home\extract_request_input;
 use function DT\Home\get_plugin_option;
 use function DT\Home\redirect;
 use function DT\Home\set_plugin_option;
 use function DT\Home\view;
+use function DT\Home\container;
 
 class GeneralSettingsController {
 	/**
@@ -23,8 +25,9 @@ class GeneralSettingsController {
 		$dt_home_require_login = get_plugin_option( 'require_login' );
 		$dt_home_reset_apps    = get_plugin_option( 'reset_apps' );
         $dt_home_invite_others    = get_plugin_option( 'invite_others' );
+        $dt_home_use_capabilities = container()->get( RolesPermissions::class )->is_enabled();
 
-		return view( 'settings/general', compact( 'tab', 'link', 'page_title', 'dt_home_require_login', 'dt_home_reset_apps', 'dt_home_invite_others' ) );
+		return view( 'settings/general', compact( 'tab', 'link', 'page_title', 'dt_home_require_login', 'dt_home_reset_apps', 'dt_home_invite_others', 'dt_home_use_capabilities' ) );
 	}
 
 	/**
@@ -39,10 +42,13 @@ class GeneralSettingsController {
 		$require_user = $input['dt_home_require_login'] ?? 'off';
 		$reset_apps   = $input['dt_home_reset_apps'] ?? 'off';
         $invite_others   = $input['dt_home_invite_others'] ?? 'off';
+        $dt_home_use_capabilities = $input['dt_home_use_capabilities'] ?? 'off';
 
 		set_plugin_option( 'require_login', $require_user === 'on' );
 		set_plugin_option( 'reset_apps', $reset_apps === 'on' );
         set_plugin_option( 'invite_others', $invite_others === 'on' );
+
+        container()->get( RolesPermissions::class )->enabled( $dt_home_use_capabilities === 'on' );
 
 		$redirect_url = add_query_arg( 'message', 'updated', admin_url( 'admin.php?page=dt_home' ) );
 
