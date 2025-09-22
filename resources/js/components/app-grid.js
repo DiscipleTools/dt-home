@@ -35,8 +35,8 @@ class AppGrid extends LitElement {
             align-items: center;
             padding: 16px;
             border-radius: 12px;
-            background-color: #f0f0f0;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            background-color: var(--dt-tile-background-color, #f0f0f0);
+            box-shadow: var(--shadow-0, 0 4px 12px rgba(0, 0, 0, 0.08));
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
@@ -44,7 +44,7 @@ class AppGrid extends LitElement {
 
         .link-item:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+            box-shadow: var(--shadow-1, 0 6px 16px rgba(0, 0, 0, 0.12));
         }
 
         .link-item:before {
@@ -90,31 +90,32 @@ class AppGrid extends LitElement {
         .link-item__title {
             font-size: 16px;
             font-weight: 600;
-            color: #1a202c;
+            color: var(--text-color, #1a202c);
             margin-bottom: 4px;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            transition: color 0.3s ease;
         }
 
         .link-item__url {
-            color: #718096;
+            color: var(--gray-0, #718096);
             text-decoration: none;
             font-size: 13px;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
             display: block;
-            transition: color 0.2s ease;
+            transition: color 0.3s ease;
         }
 
         .link-item__url:hover {
-            color: #4a90e2;
+            color: var(--primary-color, #4a90e2);
         }
 
         .link-item__copy {
-            background: linear-gradient(45deg, #4a90e2, #63b3ed);
-            color: white;
+            background: linear-gradient(45deg, var(--primary-color, #4a90e2), var(--primary-color-light-1, #63b3ed));
+            color: var(--text-color-inverse, white);
             border: none;
             width: 40px;
             height: 40px;
@@ -125,8 +126,8 @@ class AppGrid extends LitElement {
             cursor: pointer;
             margin-left: 16px;
             flex-shrink: 0;
-            transition: all 0.2s ease;
-            box-shadow: 0 2px 6px rgba(74, 144, 226, 0.3);
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-0, 0 2px 6px rgba(74, 144, 226, 0.3));
         }
 
         .link-item__copy i {
@@ -135,12 +136,12 @@ class AppGrid extends LitElement {
 
         .link-item__copy:hover {
             transform: translateY(-1px) rotate(5deg);
-            box-shadow: 0 4px 8px rgba(74, 144, 226, 0.4);
+            box-shadow: var(--shadow-1, 0 4px 8px rgba(74, 144, 226, 0.4));
         }
 
         .link-item__remove {
-            background: linear-gradient(45deg, #e53e3e, #fc8181);
-            color: white;
+            background: linear-gradient(45deg, var(--alert-color, #e53e3e), #fc8181);
+            color: var(--text-color-inverse, white);
             border: none;
             width: 40px;
             height: 40px;
@@ -151,8 +152,8 @@ class AppGrid extends LitElement {
             cursor: pointer;
             margin-left: 12px;
             flex-shrink: 0;
-            transition: all 0.2s ease;
-            box-shadow: 0 2px 6px rgba(229, 62, 62, 0.3);
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-0, 0 2px 6px rgba(229, 62, 62, 0.3));
         }
 
         .link-item__remove i {
@@ -161,7 +162,7 @@ class AppGrid extends LitElement {
 
         .link-item__remove:hover {
             transform: translateY(-1px) rotate(5deg);
-            box-shadow: 0 4px 8px rgba(229, 62, 62, 0.4);
+            box-shadow: var(--shadow-1, 0 4px 8px rgba(229, 62, 62, 0.4));
         }
 
         .app-grid__item {
@@ -189,15 +190,15 @@ class AppGrid extends LitElement {
             position: absolute;
             top: -7px;
             right: -10px;
-            background-color: rgb(255, 255, 255);
-            color: #fcfbfb;
+            background-color: var(--alert-color, #f16d71);
+            color: var(--text-color-inverse, #fcfbfb);
             padding: 5px 5px 0px 5px;
             cursor: pointer;
             border-radius: 53%;
             font-size: 14px;
             z-index: 1;
-            background-color: #f16d71;
-            border: 1px solid #7e1919;
+            border: 1px solid var(--primry-dark, #7e1919);
+            transition: all 0.3s ease;
         }
 
         .app-grid__icon {
@@ -207,6 +208,11 @@ class AppGrid extends LitElement {
 
         .app-grid__remove-icon.hidden {
             display: none;
+        }
+
+        /* Dark mode styles */
+        :host-context(sp-theme[color="dark"]) h2 {
+            color: #ffffff !important;
         }
     `
     @property({ type: Array }) appData = []
@@ -230,6 +236,49 @@ class AppGrid extends LitElement {
         document.addEventListener('mousedown', this.handleMouseDown)
         document.addEventListener('mouseup', this.handleMouseUp)
         document.addEventListener('mouseleave', this.handleMouseLeave)
+        
+        // Listen for theme changes
+        document.addEventListener('theme-changed', this.handleThemeChange)
+        
+        // Apply theme styles after a short delay to ensure DOM is ready
+        setTimeout(() => {
+            this.applyThemeStyles()
+        }, 100)
+    }
+
+    /**
+     * Called after the component has been updated for the first time
+     */
+    firstUpdated() {
+        // Apply theme styles after first render
+        this.applyThemeStyles()
+    }
+
+    /**
+     * Handles theme change events
+     */
+    handleThemeChange = (event) => {
+        this.applyThemeStyles()
+    }
+
+    /**
+     * Applies theme-specific styles
+     */
+    applyThemeStyles() {
+        const themeElement = document.querySelector('sp-theme')
+        const isDark = themeElement && themeElement.color === 'dark'
+        
+        // Get all h2 elements in this component
+        const h2Elements = this.shadowRoot.querySelectorAll('h2')
+        h2Elements.forEach(h2 => {
+            if (isDark) {
+                h2.style.color = '#ffffff'
+                h2.style.setProperty('color', '#ffffff', 'important')
+            } else {
+                h2.style.color = ''
+                h2.style.removeProperty('color')
+            }
+        })
     }
 
     /**

@@ -36,13 +36,13 @@ $invite_translations_json = wp_json_encode( $invite_translations );
 <sp-theme
     color="light"
     scale="medium"
+    id="main-theme"
 >
     <div class="plugin cloak">
         <div class="plugin__main">
             <div class="container non-selectable">
-
                 <dt-home-menu menuItems='<?php echo esc_js( $menu_items_json ); ?>' translations='<?php echo esc_js( $invite_translations_json ); ?>'></dt-home-menu>
-
+                
                 <?php
                 // phpcs:ignore
                 echo $this->section('content') ?>

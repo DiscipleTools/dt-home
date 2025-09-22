@@ -1,5 +1,5 @@
 body {
-    background-color: #f1f1f1;
+    background-color: var(--body-background-color, #f1f1f1) !important;
     color: #636b6f;
     font-family: 'Nunito', sans-serif;
     font-weight: 200;
