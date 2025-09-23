@@ -9,6 +9,7 @@ class InviteModal extends LitElement {
     @property({ type: String }) shareUrl = ''
     @property({ type: Boolean }) isOpen = false
     @property({ type: Object }) translations = {}
+    @property({ type: Boolean }) isDarkMode = false
 
     static styles = css`
         :host {
@@ -27,7 +28,8 @@ class InviteModal extends LitElement {
             justify-content: center;
         }
         .modal-content {
-            background: #fff;
+            background: var(--dt-modal-background-color, #fff);
+            color: var(--dt-modal-color, #000);
             border-radius: 12px;
             box-shadow: 0 8px 32px rgba(0,0,0,0.18);
             min-width: 320px;
@@ -43,8 +45,11 @@ class InviteModal extends LitElement {
         }
         .explanation-text {
             margin-bottom: 20px;
-            color: #666;
+            color: var(--dt-text-color, #666);
             line-height: 1.5;
+        }
+        .explanation-text.dark-mode {
+            color: #ffffff !important;
         }
         .share-link-container {
             display: flex;
@@ -81,8 +86,41 @@ class InviteModal extends LitElement {
         this.shareUrl = window.location.href + '/share'
     }
 
+    connectedCallback() {
+        super.connectedCallback()
+        // Listen for theme changes
+        document.addEventListener('theme-changed', this.handleThemeChange)
+        // Apply theme styles after a short delay to ensure DOM is ready
+        setTimeout(() => {
+            this.applyThemeStyles()
+        }, 100)
+    }
+
+    disconnectedCallback() {
+        super.disconnectedCallback()
+        document.removeEventListener('theme-changed', this.handleThemeChange)
+    }
+
+    /**
+     * Handles theme change events
+     */
+    handleThemeChange = (event) => {
+        this.applyThemeStyles()
+    }
+
+    /**
+     * Applies theme-specific styles
+     */
+    applyThemeStyles() {
+        const themeElement = document.querySelector('sp-theme')
+        const isDark = themeElement && themeElement.color === 'dark'
+        this.isDarkMode = isDark
+    }
+
     open() {
         this.isOpen = true
+        // Apply theme styles when opening the modal
+        this.applyThemeStyles()
     }
 
     close() {
@@ -134,7 +172,7 @@ class InviteModal extends LitElement {
                     >
                         <h2 slot="heading">${this.t('inviteTitle', 'Invite')}</h2>
                         <div class="invite-content">
-                            <p class="explanation-text">
+                            <p class="explanation-text ${this.isDarkMode ? 'dark-mode' : ''}">
                                 ${this.t('inviteExplanation', 'Copy this link and share it with people you are coaching. They will create their own account and have their own Home Screen.')}
                             </p>
                             <div class="share-link-container">

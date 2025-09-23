@@ -23,6 +23,8 @@ class HomeFooter extends LitElement {
 
     @property({ type: Array })
     appData = []
+    
+    @property({ type: Boolean }) isDarkMode = false
 
     static get styles() {
         return css`
@@ -68,19 +70,32 @@ class HomeFooter extends LitElement {
 
       sp-dialog {
         background-color: white;
-        border: none; /* Remove any border */
-        box-shadow: none; /* Remove any shadow */
+        border: 2px solid #e0e0e0; /* Light border for light mode */
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); /* Subtle shadow */
         height: 200px; /* Let the content dictate the height */
         padding: 0; /* Remove default padding */
         overflow: hidden; /* Hide overflow */
         margin-right: 50px;
         margin-bottom: -41px;
+        transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+        border-radius: 8px; /* Rounded corners */
+      }
+      
+      sp-dialog.dark-mode {
+        background-color: #2a2a2a !important;
+        border-color: #4a4a4a !important;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4) !important;
       }
 
       .app-row {
         display: flex;
         align-items: center;
         border-bottom: 1px solid lightgray; /* Add bottom border */
+        transition: border-color 0.3s ease;
+      }
+      
+      .app-row.dark-mode {
+        border-bottom-color: #4a4a4a !important;
       }
 
       .app-row:last-child {
@@ -101,10 +116,19 @@ class HomeFooter extends LitElement {
       .app-name {
         flex: 1; /* Ensure the name takes the remaining space */
         color: black; /* Ensure text color is black */
+        transition: color 0.3s ease;
+      }
+      
+      .app-name.dark-mode {
+        color: #ffffff !important;
       }
 
       .app-name:hover {
         color: hsla(216, 100%, 50%, 1);
+      }
+      
+      .app-name.dark-mode:hover {
+        color: #4a9eff !important;
       }
 
       .reset-apps {
@@ -141,6 +165,15 @@ class HomeFooter extends LitElement {
         sp-dialog {
           background-color: white;
           height: 200px;
+          border: 2px solid #e0e0e0;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+          border-radius: 8px;
+        }
+        
+        sp-dialog.dark-mode {
+          background-color: #2a2a2a !important;
+          border-color: #4a4a4a !important;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4) !important;
         }
       }
 
@@ -210,6 +243,11 @@ class HomeFooter extends LitElement {
       .no-data {
         color: gray;
         padding: 10px; /* Add padding for space */
+        transition: color 0.3s ease;
+      }
+      
+      .no-data.dark-mode {
+        color: #cccccc !important;
       }
     `
     }
@@ -221,6 +259,34 @@ class HomeFooter extends LitElement {
     connectedCallback() {
         super.connectedCallback()
         this.loadAppData()
+        
+        // Listen for theme changes
+        document.addEventListener('theme-changed', this.handleThemeChange)
+        // Apply theme styles after a short delay to ensure DOM is ready
+        setTimeout(() => {
+            this.applyThemeStyles()
+        }, 100)
+    }
+
+    disconnectedCallback() {
+        super.disconnectedCallback()
+        document.removeEventListener('theme-changed', this.handleThemeChange)
+    }
+
+    /**
+     * Handles theme change events
+     */
+    handleThemeChange = (event) => {
+        this.applyThemeStyles()
+    }
+
+    /**
+     * Applies theme-specific styles
+     */
+    applyThemeStyles() {
+        const themeElement = document.querySelector('sp-theme')
+        const isDark = themeElement && themeElement.color === 'dark'
+        this.isDarkMode = isDark
     }
 
     loadAppData() {
@@ -309,7 +375,7 @@ class HomeFooter extends LitElement {
     renderAppItems() {
         const hiddenApps = this.hiddenApps.sort((a, b) => b.sort - a.sort)
         if (hiddenApps.length === 0) {
-            return html` <dt-app-menu-item class="no-data"
+            return html` <dt-app-menu-item class="no-data ${this.isDarkMode ? 'dark-mode' : ''}"
                 >No hidden apps available.
             </dt-app-menu-item>`
         }
@@ -319,7 +385,7 @@ class HomeFooter extends LitElement {
                 <dt-app-menu-item
                     @click="${(e) => this.handleAppClick(e, app.slug)}"
                 >
-                    <div class="app-row">
+                    <div class="app-row ${this.isDarkMode ? 'dark-mode' : ''}">
                         ${this.isIconURL(app.icon)
                             ? html`<img
                                   src="${app.icon}"
@@ -330,7 +396,7 @@ class HomeFooter extends LitElement {
                                   id="app-icon"
                                   class="app-icon material-icons ${app.icon}"
                               ></span>`}
-                        <span class="app-name">${app.name}</span>
+                        <span class="app-name ${this.isDarkMode ? 'dark-mode' : ''}">${app.name}</span>
                     </div>
                 </dt-app-menu-item>
             `
@@ -352,7 +418,7 @@ class HomeFooter extends LitElement {
                     <!--                    </button>-->
                     <sp-dialog
                         slot="click-content"
-                        class="custom-dialog-overlay"
+                        class="custom-dialog-overlay ${this.isDarkMode ? 'dark-mode' : ''}"
                         size="xs"
                     >
                         <dt-app-menu label="Choose an app">

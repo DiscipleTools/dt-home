@@ -10,11 +10,13 @@
 $this->layout( 'layouts/plugin' );
 ?>
 
-<header id="app-header" style="display: flex; align-items: center; justify-content: space-between;">
-    <h1 style="margin: 0; font-size: 1.5rem; font-weight: 700; text-align: left;">
+<header id="app-header" class="app-header">
+    <h1 class="app-title">
         <?php echo esc_html__( 'Home Screen', 'dt-home' ); ?>
     </h1>
-    <!-- The hamburger menu is rendered by the layout -->
+    <div class="header-controls">
+        <dt-home-theme-toggle></dt-home-theme-toggle>
+    </div>
 </header>
 
 <dt-home-app-grid id="appGrid" app-data='<?php echo esc_attr( htmlspecialchars( $data ) ); ?>'
