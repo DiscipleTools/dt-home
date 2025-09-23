@@ -25,7 +25,9 @@ class RolesPermissions {
      * @return bool
      */
     public function is_enabled(): bool {
-        return get_plugin_option( self::OPTION_KEY_USE_CAPABILITIES, false );
+        //return get_plugin_option( self::OPTION_KEY_USE_CAPABILITIES, false );
+
+        return true; // Always Enabled!
     }
 
     /**
@@ -131,7 +133,16 @@ class RolesPermissions {
                  */
 
                 foreach ( $permissions as $permission => $selected ) {
-                    $expected_roles[$role]['permissions'][$permission] = $dt_custom_roles[$role]['capabilities'][$permission] ?? $selected;
+
+                    /**
+                     * If no custom role setting is set; then revert to a selected default state.
+                     */
+
+                    if ( ! isset( $dt_custom_roles[$role]['capabilities'][$permission] ) ) {
+                        $expected_roles[$role]['permissions'][$permission] = true;
+                    } else {
+                        $expected_roles[$role]['permissions'][$permission] = $dt_custom_roles[$role]['capabilities'][$permission];
+                    }
 
                     /**
                      * If no corresponding custom roles settings detected,
