@@ -32,7 +32,7 @@ $this->layout( 'layouts/settings', compact( 'tab', 'link', 'page_title' ) )
                         <th style="border: 1px solid #ddd;"><?php esc_html_e( 'Icon', 'dt-home' ); ?></th>
                         <th style="border: 1px solid #ddd;"><?php esc_html_e( 'Slug', 'dt-home' ); ?></th>
                         <th style="border: 1px solid #ddd;"><?php esc_html_e( 'Action', 'dt-home' ); ?></th>
-                        <th style="border: 1px solid #ddd; text-align: center;"><?php esc_html_e( 'Limited By Role(s)', 'dt-home' ); ?></th>
+                        <th style="border: 1px solid #ddd; text-align: center;"><?php esc_html_e( 'Visibility', 'dt-home' ); ?></th>
                     </tr>
                     </thead>
                     <tbody>
@@ -85,7 +85,9 @@ $this->layout( 'layouts/settings', compact( 'tab', 'link', 'page_title' ) )
                             </td>
                             <td style="border: 1px solid #ddd; text-align: center; padding: 8px;">
                                 <?php if ( isset( $app['user_roles_type'] ) && $app['user_roles_type'] === 'support_specific_roles' ) { ?>
-                                    <i class="mdi mdi-checkbox-outline" style="font-size: 24px;"></i>
+                                    <i class="mdi mdi-eye-off-outline" style="font-size: 24px;"></i>
+                                <?php } else { ?>
+                                    <i class="mdi mdi-eye" style="font-size: 24px;"></i>
                                 <?php } ?>
                             </td>
                         </tr>
