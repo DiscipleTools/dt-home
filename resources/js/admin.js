@@ -409,7 +409,30 @@ document.addEventListener('DOMContentLoaded', function() {
  * @returns {void}
  */
 document.addEventListener('DOMContentLoaded', function () {
-  const select_all = document.getElementById('select_all_user_roles');
+  const user_roles_type = document.querySelectorAll('input[name="user_roles_type"]');
+  if (!user_roles_type || user_roles_type.length === 0) {
+    return;
+  }
+
+  for (let i = 0; i < user_roles_type.length; i++) {
+    user_roles_type[i].addEventListener('change', function () {
+
+      // Display user role checkboxes accordingly; based on type selection.
+      const roles_trs = document.querySelectorAll('tr.user-roles-type-tr');
+      for (let j = 0; j < roles_trs.length; j++) {
+        switch (this.value) {
+          case 'support_all_roles':
+            roles_trs[j].style.display = 'none';
+            break;
+          case 'support_specific_roles':
+            roles_trs[j].style.display = 'table-row';
+            break;
+        }
+      }
+    });
+  }
+
+  /*const select_all = document.getElementById('select_all_user_roles');
 
   if (!select_all) {
     return;
@@ -432,7 +455,7 @@ document.addEventListener('DOMContentLoaded', function () {
         select_all.checked = false;
       }
     });
-  }
+  }*/
 
   // Execute final pre-submission tasks.
   document

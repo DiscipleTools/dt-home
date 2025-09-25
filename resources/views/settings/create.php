@@ -127,10 +127,22 @@ get_template_part('dt-core/admin/menu/tabs/dialog-icon-selector');
                 <tr>
                     <td style="padding-left: 0;" colspan="<?php echo esc_attr( $max_row_count ); ?>">
                         <div>
-                            <label>
-                                <input type="checkbox" id="select_all_user_roles" checked />
-                                <?php esc_html_e('Select all roles?', 'dt-home'); ?>
-                            </label>
+                            <table>
+                                <tr>
+                                    <td style="padding-left: 0 !important;">
+                                        <label>
+                                            <input type="radio" id="select_all_user_roles" name="user_roles_type" value="support_all_roles" checked />
+                                            <?php esc_html_e('Select all roles', 'dt-home'); ?>
+                                        </label>
+                                    </td>
+                                    <td>
+                                        <label>
+                                            <input type="radio" id="select_specific_user_roles" name="user_roles_type" value="support_specific_roles" />
+                                            <?php esc_html_e('Select specific roles', 'dt-home'); ?>
+                                        </label>
+                                    </td>
+                                </tr>
+                            </table>
                             <hr>
                         </div>
                     </td>
@@ -144,7 +156,7 @@ get_template_part('dt-core/admin/menu/tabs/dialog-icon-selector');
                     // Determine if a new row should be started.
                     if ( $counter === 0 ) {
                         ?>
-                        <tr>
+                        <tr class="user-roles-type-tr" style="display: none;">
                         <?php
                     }
                     ?>
@@ -181,7 +193,7 @@ get_template_part('dt-core/admin/menu/tabs/dialog-icon-selector');
                         <span style="float:right;">
                             <a href="admin.php?page=dt_home&tab=app"
                                class="button float-right"><?php esc_html_e('Cancel', 'dt-home') ?></a>
-                            <button type="submit" id="ml_email_main_col_update_but"
+                            <button type="submit" name="submit" id="submit"
                                     class="button float-right"><?php esc_html_e('Submit', 'dt-home') ?></button>
                         </span>
         </td>

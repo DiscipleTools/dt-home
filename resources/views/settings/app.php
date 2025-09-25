@@ -32,6 +32,7 @@ $this->layout( 'layouts/settings', compact( 'tab', 'link', 'page_title' ) )
                         <th style="border: 1px solid #ddd;"><?php esc_html_e( 'Icon', 'dt-home' ); ?></th>
                         <th style="border: 1px solid #ddd;"><?php esc_html_e( 'Slug', 'dt-home' ); ?></th>
                         <th style="border: 1px solid #ddd;"><?php esc_html_e( 'Action', 'dt-home' ); ?></th>
+                        <th style="border: 1px solid #ddd; text-align: center;"><?php esc_html_e( 'Limited By Role(s)', 'dt-home' ); ?></th>
                     </tr>
                     </thead>
                     <tbody>
@@ -80,6 +81,11 @@ $this->layout( 'layouts/settings', compact( 'tab', 'link', 'page_title' ) )
                                     <a href="#" onclick="softdelete('<?php echo esc_attr( $app['slug'] ); ?>')" class="delete-apps">
                                         <?php esc_html_e( 'Delete', 'dt-home' ); ?>
                                     </a>
+                                <?php } ?>
+                            </td>
+                            <td style="border: 1px solid #ddd; text-align: center; padding: 8px;">
+                                <?php if ( isset( $app['user_roles_type'] ) && $app['user_roles_type'] === 'support_specific_roles' ) { ?>
+                                    <i class="mdi mdi-checkbox-outline" style="font-size: 24px;"></i>
                                 <?php } ?>
                             </td>
                         </tr>

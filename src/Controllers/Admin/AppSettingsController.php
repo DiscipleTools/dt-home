@@ -170,6 +170,7 @@ class AppSettingsController {
         $slug            = sanitize_text_field( $input['slug'] ?? '' );
         $is_hidden       = filter_var( $input['is_hidden'] ?? '0', FILTER_SANITIZE_NUMBER_INT );
         $open_in_new_tab = filter_var( $input['open_in_new_tab'] ?? '0', FILTER_SANITIZE_NUMBER_INT );
+        $user_roles_type            = sanitize_text_field( $input['user_roles_type'] ?? 'support_all_roles' );
         $roles = dt_recursive_sanitize_array( $input['roles'] ?? [] );
         $deleted_roles = json_decode( stripslashes_from_strings_only( $input['deleted_roles'] ?? '[]' ) );
 
@@ -197,6 +198,7 @@ class AppSettingsController {
             'slug'            => $slug,
             'is_hidden'       => $is_hidden == "1" ? 1 : 0,
             'open_in_new_tab' => $open_in_new_tab,
+            'user_roles_type' => $user_roles_type,
             'roles' => $roles
         ];
 
@@ -301,6 +303,7 @@ class AppSettingsController {
         $new_slug        = sanitize_text_field( $input['slug'] ?? '' );
         $is_hidden       = filter_var( $input['is_hidden'] ?? '0', FILTER_SANITIZE_NUMBER_INT );
         $open_in_new_tab = filter_var( $input['open_in_new_tab'] ?? '0', FILTER_SANITIZE_NUMBER_INT );
+        $user_roles_type            = sanitize_text_field( $input['user_roles_type'] ?? 'support_all_roles' );
         $roles = dt_recursive_sanitize_array( $input['roles'] ?? [] );
         $deleted_roles = json_decode( stripslashes_from_strings_only( $input['deleted_roles'] ?? '[]' ) );
 
@@ -321,6 +324,7 @@ class AppSettingsController {
                     'sort'            => $sort,
                     'is_hidden'       => $is_hidden == "1" ? 1 : 0,
                     'open_in_new_tab' => $open_in_new_tab,
+                    'user_roles_type' => $user_roles_type,
                     'roles' => $roles
                 ];
                 break; // Stop the loop once the app is found and updated

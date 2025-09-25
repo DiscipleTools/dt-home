@@ -152,16 +152,29 @@ get_template_part('dt-core/admin/menu/tabs/dialog-icon-selector');
             <?php
             $counter = 0;
             $max_row_count = 3;
+            $support_specific_roles = isset( $existing_data['user_roles_type'] ) && $existing_data['user_roles_type'] === 'support_specific_roles';
             ?>
             <table style="min-width: 100%;">
                 <tbody>
                 <tr>
                     <td style="padding-left: 0;" colspan="<?php echo esc_attr( $max_row_count ); ?>">
                         <div>
-                            <label>
-                                <input type="checkbox" id="select_all_user_roles"/>
-                                <?php esc_html_e( 'Select all roles?', 'dt-home' ); ?>
-                            </label>
+                            <table>
+                                <tr>
+                                    <td style="padding-left: 0 !important;">
+                                        <label>
+                                            <input type="radio" id="select_all_user_roles" name="user_roles_type" value="support_all_roles" <?php echo ( $support_specific_roles === false ? 'checked' : '' ) ?> />
+                                            <?php esc_html_e('Select all roles', 'dt-home'); ?>
+                                        </label>
+                                    </td>
+                                    <td>
+                                        <label>
+                                            <input type="radio" id="select_specific_user_roles" name="user_roles_type" value="support_specific_roles" <?php echo ( $support_specific_roles === true ? 'checked' : '' ) ?> />
+                                            <?php esc_html_e('Select specific roles', 'dt-home'); ?>
+                                        </label>
+                                    </td>
+                                </tr>
+                            </table>
                             <hr>
                         </div>
                     </td>
@@ -190,7 +203,7 @@ get_template_part('dt-core/admin/menu/tabs/dialog-icon-selector');
                     // Determine if a new row should be started.
                     if ( $counter === 0 ) {
                         ?>
-                        <tr>
+                        <tr class="user-roles-type-tr" <?php echo ( $support_specific_roles === false ? 'style="display: none;"' : '' ) ?> >
                         <?php
                     }
                     ?>

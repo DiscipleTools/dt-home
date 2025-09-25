@@ -65,7 +65,8 @@ class RolesPermissions {
             if ( isset( $app['slug'] ) ) {
                 $capabilities[ $this->generate_permission_key( $app['slug'] ) ] = [
                     'source' => self::CAPABILITIES_SOURCE,
-                    'description' => ''
+                    'description' => '',
+                    'user_roles_type' => $app['user_roles_type'] ?? 'support_all_roles'
                 ];
             }
         }
@@ -104,8 +105,8 @@ class RolesPermissions {
         $default_capabilities = $this->default_capabilities();
         foreach ( $default_roles as $role ) {
             $default_roles_and_permissions[ $role ] = [];
-            foreach ( array_keys( $default_capabilities ) as $capability ) {
-                $default_roles_and_permissions[ $role ][ $capability ] = true;
+            foreach ( $default_capabilities as $key => $capability ) {
+                $default_roles_and_permissions[ $role ][ $key ] = $capability;
             }
         }
 
@@ -129,16 +130,24 @@ class RolesPermissions {
 
                 /**
                  * Ensure selected flag is set accordingly, based on saved
-                 * custom role settings; which take priority.
+                 * custom role settings; which take priority and overall
+                 * payload settings.
                  */
 
-                foreach ( $permissions as $permission => $selected ) {
+                foreach ( $permissions as $permission => $payload ) {
 
                     /**
-                     * If no custom role setting is set; then revert to a selected default state.
+                     * If no user_roles_type is set; or it's set, with the value support_all_roles;
+                     * then access will be granted.
+                     *
+                     * If no custom setting is detected; then access is automatically granted.
+                     *
+                     * Else; access is granted accordingly; by specified custom setting.
                      */
 
-                    if ( ! isset( $dt_custom_roles[$role]['capabilities'][$permission] ) ) {
+                    if ( ! isset( $payload['user_roles_type'] ) || $payload['user_roles_type'] === 'support_all_roles' ) {
+                        $expected_roles[$role]['permissions'][$permission] = true;
+                    } else if ( ! isset( $dt_custom_roles[$role]['capabilities'][$permission] ) ) {
                         $expected_roles[$role]['permissions'][$permission] = true;
                     } else {
                         $expected_roles[$role]['permissions'][$permission] = $dt_custom_roles[$role]['capabilities'][$permission];
@@ -244,8 +253,12 @@ class RolesPermissions {
      */
     public function has_permission( array $app, int $user_id = 0, array $dt_custom_roles = [] ): bool {
 
-        // Default to true if roles & permissions enforcement is currently disabled.
-        if ( !$this->is_enabled() ) {
+        /**
+         * Default to true if roles & permissions enforcement is currently disabled; or
+         * user_roles_type is not set; or it is set to support_all_roles.
+         */
+
+        if ( !$this->is_enabled() || !isset( $app['user_roles_type'] ) || $app['user_roles_type'] === 'support_all_roles' ) {
             return true;
         }
 
