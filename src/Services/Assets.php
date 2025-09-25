@@ -110,18 +110,18 @@ class Assets
             ]
         );
 
-        wp_enqueue_script( 'common-js', admin_url() . 'js/common.min.js', array( 'jquery', 'hoverIntent', 'utils', 'wp-a11y' ), false, 1 );
-        wp_enqueue_script( 'underscore-js', includes_url( 'js/underscore.min.js' ), true, '1.13.4' );
-        wp_enqueue_script( 'backbone-js', includes_url( 'js/backbone.min.js' ), true, '1.5.0' );
+        wp_enqueue_script( 'common-js', admin_url() . 'js/common.min.js', [ 'jquery', 'hoverIntent', 'utils', 'wp-a11y' ], '1.0', 1 );
+        wp_enqueue_script( 'underscore-js', includes_url( 'js/underscore.min.js' ), [], '1.13.4', true );
+        wp_enqueue_script( 'backbone-js', includes_url( 'js/backbone.min.js' ), [], '1.5.0', true );
 
-        wp_enqueue_script( 'wp-util-js', includes_url( 'js/wp-util.min.js' ), true );
+        wp_enqueue_script( 'wp-util-js', includes_url( 'js/wp-util.min.js' ), [], '1.0', true );
         wp_localize_script('wp-util-js', '_wpUtilSettings', [
             'ajax' => [
                 'url' => admin_url( 'admin-ajax.php' )
             ]
         ]);
-        wp_enqueue_script( 'wp-backbone-js', includes_url( 'js/wp-backbone.min.js' ), array( 'backbone', 'wp-util' ), false, 1 );
-        wp_enqueue_script( 'media-models-js', includes_url( 'js/media-models.min.js' ), array( 'wp-backbone', 'wp-util' ), false, 1 );
+        wp_enqueue_script( 'wp-backbone-js', includes_url( 'js/wp-backbone.min.js' ), [ 'backbone', 'wp-util' ], '1.0', 1 );
+        wp_enqueue_script( 'media-models-js', includes_url( 'js/media-models.min.js' ), [ 'wp-backbone', 'wp-util' ], '1.0', 1 );
         wp_localize_script('media-models-js', '_wpMediaModelsL10n', [
             'settings' => [
                 'ajaxurl' => admin_url( 'admin-ajax.php' ),
@@ -131,10 +131,10 @@ class Assets
             ],
         ]);
         // Load plupload dependencies
-        wp_enqueue_script( 'json2', includes_url( 'js/json2.min.js' ), array(), '2015-05-03', 1 );
-        wp_enqueue_script( 'moxiejs', includes_url( 'js/plupload/moxie.min.js' ), array(), '1.3.5.1', 1 );
-        wp_enqueue_script( 'plupload', includes_url( 'js/plupload/plupload.min.js' ), array( 'moxiejs' ), '2.1.9', 1 );
-        wp_enqueue_script( 'wp-plupload-js', includes_url( 'js/plupload/wp-plupload.min.js' ), array( 'plupload', 'jquery', 'json2', 'media-models' ), false, 1 );
+        wp_enqueue_script( 'json2', includes_url( 'js/json2.min.js' ), [], '2015-05-03', 1 );
+        wp_enqueue_script( 'moxiejs', includes_url( 'js/plupload/moxie.min.js' ), [], '1.3.5.1', 1 );
+        wp_enqueue_script( 'plupload', includes_url( 'js/plupload/plupload.min.js' ), [ 'moxiejs' ], '2.1.9', 1 );
+        wp_enqueue_script( 'wp-plupload-js', includes_url( 'js/plupload/wp-plupload.min.js' ), [ 'plupload', 'jquery', 'json2', 'media-models' ], '1.0', 1 );
 
         wp_localize_script('wp-plupload-js', 'pluploadL10n', [
             'queue_limit_exceeded' => 'You have attempted to queue too many files.',
@@ -188,16 +188,16 @@ class Assets
         ]);
 
         // Load MediaElement core dependencies first
-        wp_enqueue_script( 'mediaelement-core', includes_url( 'js/mediaelement/mediaelement-and-player.min.js' ), array(), '4.2.17', 1 );
-        wp_enqueue_script( 'mediaelement-migrate', includes_url( 'js/mediaelement/mediaelement-migrate.min.js' ), array(), false, 1 );
-        wp_enqueue_script( 'mediaelement', false, array( 'jquery', 'mediaelement-core', 'mediaelement-migrate' ), '4.2.17', 1 );
-        wp_enqueue_script( 'wp-mediaelement-js', includes_url( 'js/mediaelement/wp-mediaelement.min.js' ), array( 'mediaelement' ), false, 1 );
-        wp_enqueue_script( 'wp-api-request-js', includes_url( 'js/api-request.min.js' ), true );
-        wp_enqueue_script( 'wp-dom-ready-js', includes_url( 'js/dist/dom-ready.min.js' ), true );
-        wp_enqueue_script( 'wp-a11y-js', includes_url( 'js/dist/a11y.min.js' ), true );
-        wp_enqueue_script( 'clipboard-js', includes_url( 'js/clipboard.min.js' ), true, '2.0.11' );
+        wp_enqueue_script( 'mediaelement-core', includes_url( 'js/mediaelement/mediaelement-and-player.min.js' ), [], '4.2.17', 1 );
+        wp_enqueue_script( 'mediaelement-migrate', includes_url( 'js/mediaelement/mediaelement-migrate.min.js' ), [], '1.0', 1 );
+        wp_enqueue_script( 'mediaelement', false, [ 'jquery', 'mediaelement-core', 'mediaelement-migrate' ], '4.2.17', 1 );
+        wp_enqueue_script( 'wp-mediaelement-js', includes_url( 'js/mediaelement/wp-mediaelement.min.js' ), [ 'mediaelement' ], '1.0', 1 );
+        wp_enqueue_script( 'wp-api-request-js', includes_url( 'js/api-request.min.js' ), [], '1.0', true );
+        wp_enqueue_script( 'wp-dom-ready-js', includes_url( 'js/dist/dom-ready.min.js' ), [], '1.0', true );
+        wp_enqueue_script( 'wp-a11y-js', includes_url( 'js/dist/a11y.min.js' ), [], '1.0', true );
+        wp_enqueue_script( 'clipboard-js', includes_url( 'js/clipboard.min.js' ), [], '2.0.11', true );
 
-        wp_enqueue_script( 'media-views-js', includes_url( 'js/media-views.min.js' ), array( 'utils', 'media-models', 'wp-plupload', 'jquery-ui-sortable', 'wp-mediaelement', 'wp-api-request', 'wp-a11y', 'clipboard' ), false, 1 );
+        wp_enqueue_script( 'media-views-js', includes_url( 'js/media-views.min.js' ), [ 'utils', 'media-models', 'wp-plupload', 'jquery-ui-sortable', 'wp-mediaelement', 'wp-api-request', 'wp-a11y', 'clipboard' ], '1.0', 1 );
         wp_localize_script('media-views-js', '_wpMediaViewsL10n', [
             'mediaFrameDefaultTitle' => 'Media',
             'url' => 'URL',
@@ -309,14 +309,14 @@ class Assets
         ]);
 
 
-        wp_enqueue_script( 'media-editor-js', includes_url( 'js/media-editor.min.js' ), array( 'shortcode', 'media-views' ), false, 1 );
-        wp_enqueue_script( 'media-audiovideo-js', includes_url( 'js/media-audiovideo.min.js' ), array( 'media-editor' ), false, 1 );
-        wp_enqueue_script( 'mce-view-js', includes_url( 'js/mce-view.min.js' ), array( 'shortcode', 'jquery', 'media-views', 'media-audiovideo' ), false, 1 );
-        wp_enqueue_script( 'imgareaselect-js', includes_url( 'js/imgareaselect/jquery.imgareaselect.min.js' ), true );
-        wp_enqueue_script( 'image-edit-js', admin_url() . 'js/image-edit.min.js', true );
-        wp_enqueue_script( 'heartbeat-js', includes_url( 'js/heartbeat.min.js' ), true );
-        wp_enqueue_script( 'wp-api-js', includes_url( 'js/wp-api.min.js' ), true );
-        wp_enqueue_script( 'wp-auth-check-js', includes_url( 'js/wp-auth-check.min.js' ), true );
+        wp_enqueue_script( 'media-editor-js', includes_url( 'js/media-editor.min.js' ), [ 'shortcode', 'media-views' ], '1.0', 1 );
+        wp_enqueue_script( 'media-audiovideo-js', includes_url( 'js/media-audiovideo.min.js' ), [ 'media-editor' ], '1.0', 1 );
+        wp_enqueue_script( 'mce-view-js', includes_url( 'js/mce-view.min.js' ), [ 'shortcode', 'jquery', 'media-views', 'media-audiovideo' ], '1.0', 1 );
+        wp_enqueue_script( 'imgareaselect-js', includes_url( 'js/imgareaselect/jquery.imgareaselect.min.js' ), [], '1.0', true );
+        wp_enqueue_script( 'image-edit-js', admin_url() . 'js/image-edit.min.js', [], '1.0', true );
+        wp_enqueue_script( 'heartbeat-js', includes_url( 'js/heartbeat.min.js' ), [], '1.0', true );
+        wp_enqueue_script( 'wp-api-js', includes_url( 'js/wp-api.min.js' ), [], '1.0', true );
+        wp_enqueue_script( 'wp-auth-check-js', includes_url( 'js/wp-auth-check.min.js' ), [], '1.0', true );
 
         wp_enqueue_style( 'wp-color-picker' );
         wp_enqueue_script('dt_utilities_scripts_script', disciple_tools()->admin_js_url . 'dt-utilities-scripts.js', [
@@ -382,10 +382,9 @@ class Assets
 
         dt_theme_enqueue_style( 'material-font-icons-local', 'dt-core/dependencies/mdi/css/materialdesignicons.min.css', [] );
         wp_enqueue_style( 'material-font-icons', 'https://cdn.jsdelivr.net/npm/@mdi/font@6.6.96/css/materialdesignicons.min.css' );
-        
         // Load MediaElement styles
-        wp_enqueue_style( 'mediaelement', includes_url( 'js/mediaelement/mediaelementplayer-legacy.min.css' ), array(), '4.2.17' );
-        wp_enqueue_style( 'wp-mediaelement', includes_url( 'js/mediaelement/wp-mediaelement.min.css' ), array( 'mediaelement' ) );
+        wp_enqueue_style( 'mediaelement', includes_url( 'js/mediaelement/mediaelementplayer-legacy.min.css' ), [], '4.2.17' );
+        wp_enqueue_style( 'wp-mediaelement', includes_url( 'js/mediaelement/wp-mediaelement.min.css' ), [ 'mediaelement' ], '1.0' );
 
         wp_print_media_templates();
     }
