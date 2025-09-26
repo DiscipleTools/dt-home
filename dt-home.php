@@ -5,7 +5,7 @@
  * Description: An app home screen for disciple.tools. Part of the DT Toolbox.
  * Text Domain: dt-home
  * Domain Path: /languages
- * Version:  1.1.1
+ * Version:  1.2.0
  * Author URI: https://github.com/DiscipleTools
  * GitHub Plugin URI: https://github.com/DiscipleTools/dt-home
  * Requires at least: 4.7.0
