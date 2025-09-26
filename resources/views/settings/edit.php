@@ -164,13 +164,13 @@ get_template_part('dt-core/admin/menu/tabs/dialog-icon-selector');
                                     <td style="padding-left: 0 !important;">
                                         <label>
                                             <input type="radio" id="select_all_user_roles" name="user_roles_type" value="support_all_roles" <?php echo ( $support_specific_roles === false ? 'checked' : '' ) ?> />
-                                            <?php esc_html_e('Select all roles', 'dt-home'); ?>
+                                            <?php esc_html_e('All roles have access', 'dt-home'); ?>
                                         </label>
                                     </td>
                                     <td>
                                         <label>
                                             <input type="radio" id="select_specific_user_roles" name="user_roles_type" value="support_specific_roles" <?php echo ( $support_specific_roles === true ? 'checked' : '' ) ?> />
-                                            <?php esc_html_e('Select specific roles', 'dt-home'); ?>
+                                            <?php esc_html_e('Limit access by role', 'dt-home'); ?>
                                         </label>
                                     </td>
                                 </tr>
