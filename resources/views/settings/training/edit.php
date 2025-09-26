@@ -73,16 +73,20 @@ $this->layout( 'layouts/settings', compact( 'tab', 'link', 'page_title' ) )
     </td>
 </tr>
     </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="4">
+                <span style="float:right;">
+                    <input type="hidden" name="edit_id" value="<?php echo esc_attr( $existing_data['id'] ); ?>">
+                    <a href="admin.php?page=dt_home&tab=training"
+                       class="button float-right"><?php esc_html_e( 'Cancel', 'dt-home' ) ?></a>
+                    <button type="submit" name="submit" id="submit"
+                            class="button float-right"><?php esc_html_e( 'Update', 'dt-home' ) ?></button>
+                </span>
+            </td>
+        </tr>
+    </tfoot>
 </table>
-
-    <br>
-    <span style="float:right;">
-        <input type="hidden" name="edit_id" value="<?php echo esc_attr( $existing_data['id'] ); ?>">
-        <a href="admin.php?page=dt_home&tab=training"
-           class="button float-right"><?php esc_html_e( 'Cancel', 'dt-home' ) ?></a>
-        <button type="submit" name="submit" id="submit"
-                class="button float-right"><?php esc_html_e( 'Update', 'dt-home' ) ?></button>
-    </span>
 </form>
 
 <?php $this->start( 'right' ) ?>

@@ -5,6 +5,8 @@ namespace DT\Home\Controllers\Admin;
 use DT\Home\GuzzleHttp\Psr7\ServerRequest as Request;
 use DT\Home\Psr\Http\Message\ResponseInterface;
 use DT\Home\Services\Apps;
+use DT\Home\Services\RolesPermissions;
+use DT\Home\Sources\SettingsApps;
 use DT\Home\Services\SVGIconService;
 use function DT\Home\container;
 use function DT\Home\extract_request_input;
@@ -15,6 +17,17 @@ use function DT\Home\set_plugin_option;
 use function DT\Home\view;
 
 class AppSettingsController {
+
+    private Apps $apps;
+    private SettingsApps $settings_apps;
+    private RolesPermissions $roles_permissions;
+
+    public function __construct( Apps $apps, SettingsApps $source, RolesPermissions $roles_permissions )
+    {
+        $this->apps = $apps;
+        $this->settings_apps = $source;
+        $this->roles_permissions = $roles_permissions;
+    }
 
     /**
      * Show the general settings app tab.
@@ -157,6 +170,9 @@ class AppSettingsController {
         $slug            = sanitize_text_field( $input['slug'] ?? '' );
         $is_hidden       = filter_var( $input['is_hidden'] ?? '0', FILTER_SANITIZE_NUMBER_INT );
         $open_in_new_tab = filter_var( $input['open_in_new_tab'] ?? '0', FILTER_SANITIZE_NUMBER_INT );
+        $user_roles_type            = sanitize_text_field( $input['user_roles_type'] ?? 'support_all_roles' );
+        $roles = dt_recursive_sanitize_array( $input['roles'] ?? [] );
+        $deleted_roles = json_decode( stripslashes_from_strings_only( $input['deleted_roles'] ?? '[]' ) );
 
         $apps = container()->get( Apps::class );
         // Get the existing apps array
@@ -182,6 +198,8 @@ class AppSettingsController {
             'slug'            => $slug,
             'is_hidden'       => $is_hidden == "1" ? 1 : 0,
             'open_in_new_tab' => $open_in_new_tab,
+            'user_roles_type' => $user_roles_type,
+            'roles' => $roles
         ];
 
         // Avoid duplicate slugs and append unique counter if required.
@@ -198,7 +216,10 @@ class AppSettingsController {
         $apps_array[] = $app_data;
 
         // Save the updated array back to the option
-        set_plugin_option( 'apps', $apps_array );
+        $this->settings_apps->save( $apps_array );
+
+        // Update global roles and permissions.
+        $this->roles_permissions->update( $slug, [ $this->roles_permissions->generate_permission_key( $slug ) ], $roles, $deleted_roles );
 
         return redirect( 'admin.php?page=dt_home&tab=app&updated=true' );
     }
@@ -282,6 +303,9 @@ class AppSettingsController {
         $new_slug        = sanitize_text_field( $input['slug'] ?? '' );
         $is_hidden       = filter_var( $input['is_hidden'] ?? '0', FILTER_SANITIZE_NUMBER_INT );
         $open_in_new_tab = filter_var( $input['open_in_new_tab'] ?? '0', FILTER_SANITIZE_NUMBER_INT );
+        $user_roles_type            = sanitize_text_field( $input['user_roles_type'] ?? 'support_all_roles' );
+        $roles = dt_recursive_sanitize_array( $input['roles'] ?? [] );
+        $deleted_roles = json_decode( stripslashes_from_strings_only( $input['deleted_roles'] ?? '[]' ) );
 
         // Retrieve the existing array of apps
         $apps       = container()->get( Apps::class );
@@ -300,13 +324,18 @@ class AppSettingsController {
                     'sort'            => $sort,
                     'is_hidden'       => $is_hidden == "1" ? 1 : 0,
                     'open_in_new_tab' => $open_in_new_tab,
+                    'user_roles_type' => $user_roles_type,
+                    'roles' => $roles
                 ];
                 break; // Stop the loop once the app is found and updated
             }
         }
 
         // Save the updated array back to the option
-        set_plugin_option( 'apps', $apps_array );
+        $this->settings_apps->save( $apps_array );
+
+        // Update global roles and permissions.
+        $this->roles_permissions->update( $slug, [ $this->roles_permissions->generate_permission_key( $slug ) ], $roles, $deleted_roles );
 
         return redirect( 'admin.php?page=dt_home&tab=app&updated=true' );
     }

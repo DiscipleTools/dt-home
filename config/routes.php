@@ -6,6 +6,7 @@
 
 use DT\Home\Middleware\SetBypassCookie;
 use DT\Home\Middleware\UnCached;
+use DT\Home\Middleware\CanAccess;
 
 $config->merge( [
     'routes' => [
@@ -24,7 +25,8 @@ $config->merge( [
         ],
         'middleware' => [
             new SetBypassCookie(),
-	        new UnCached()
+	        new UnCached(),
+            new CanAccess()
         ],
     ],
 ] );

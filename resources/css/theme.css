@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,700;1,400&display=swap');
 
 html {
-    background: #ffffff;
+    background: var(--body-background-color, #ffffff) !important;
     color-scheme: light;
 
     --primary-color: #2c5364;
@@ -14,6 +14,7 @@ html {
 
     --text-color: #0a0a0a;
     --text-color-inverse: #fefefe;
+    --body-background-color: #e2e2e2;
     --surface-0: #e2e2e2;
     --surface-1: hsla(0, 0%, 90%, 1);
     --surface-2: #c2bfbf;
@@ -154,4 +155,135 @@ sp-theme {
     --mod-buttongroup-spacing-horizontal: 10px;
     --mod-button-border-radius: 7px;
     --spectrum-button-height: var(--spectrum-component-height-100);
+    
+    /* Smooth transitions for theme switching */
+    transition: all 0.3s ease;
+}
+
+/* Global smooth transitions for theme changes */
+* {
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Force background color changes with highest specificity */
+html, body, body.dom-loaded {
+    background-color: var(--body-background-color, #e2e2e2) !important;
+}
+
+/* Debug: Force light mode background */
+html:not([data-theme="dark"]), 
+body:not([data-theme="dark"]) {
+    background-color: #e2e2e2 !important;
+}
+
+/* Dark mode overrides for custom variables */
+sp-theme[color="dark"] {
+    --primary-color: #4a9eff;
+    --primry-dark: #3a7acc;
+    --primary-color-light-1: #1a3a5c;
+    --primary-color-light-0: #0f1f2e;
+    --gray-0: #b3b3b3;
+    --gray-1: #808080;
+    --black: #f5f5f5;
+
+    --text-color: #f5f5f5;
+    --text-color-inverse: #0a0a0a;
+    --body-background-color: #1a1a1a;
+    --surface-0: #2a2a2a;
+    --surface-1: #1a1a1a;
+    --surface-2: #333333;
+    --border-color: #404040;
+
+    --shadow-0: 0px 0px 10px 3px rgba(0, 0, 0, 0.3),
+        0px 40px 40px -40px rgba(0, 0, 0, 0.5);
+    --shadow-1: 0 4px 4px rgb(0 0 0 / 50%);
+
+    --dt-form-border-color: #404040;
+    --dt-form-background-color: var(--surface-1);
+    --dt-form-disabled-background-color: #2a2a2a;
+    --dt-form-text-color: var(--text-color);
+    --dt-form-text-color-inverse: var(--text-color-inverse);
+    --dt-form-text-border-color: var(--border-color);
+
+    --dt-text-background-color: #2a2a2a;
+    --dt-text-border-color: var(--dt-form-border-color);
+    --dt-text-disabled-background-color: var(--dt-form-disabled-background-color);
+
+    --dt-text-placeholder-color: hsla(0, 0%, 70%, 1);
+
+    --dt-textarea-border-color: var(--dt-form-border-color);
+    --dt-textarea-background-color: var(--dt-form-background-color);
+    --dt-textarea-disabled-background-color: var(--dt-form-disabled-background-color);
+    --dt-textarea-text-color: var(--dt-form-text-color);
+    --dt-textarea-text-color-inverse: var(--dt-form-text-color-inverse);
+
+    --dt-tile-background-color: #1a1a1a;
+    --dt-tile-border-color: var(--surface-1);
+
+    --dt-alert-background-color: var(--surface-1);
+    --dt-alert-border-color: var(--surface-0);
+    --dt-alert-text-color: var(--text-color);
+
+    --dt-button-background-color: var(--surface-1);
+    --dt-button-border-color: var(--surface-0);
+    --dt-button-text-color: var(--text-color);
+
+    --dt-modal-background-color: #1a1a1a;
+    --dt-modal-color: #f5f5f5;
+    --dt-modal-button-color: #f5f5f5;
+    --dt-modal-button-background: var(--primary-color);
+}
+
+/* Force dark mode background with highest specificity */
+sp-theme[color="dark"] html, 
+sp-theme[color="dark"] body, 
+sp-theme[color="dark"] body.dom-loaded {
+    background-color: var(--body-background-color, #1a1a1a) !important;
+}
+
+/* Debug: Force dark mode background directly */
+sp-theme[color="dark"] {
+    background-color: #1a1a1a !important;
+}
+
+sp-theme[color="dark"] html,
+sp-theme[color="dark"] body {
+    background-color: #1a1a1a !important;
+}
+
+/* Dark mode styles for text elements */
+sp-theme[color="dark"] h1,
+sp-theme[color="dark"] h2,
+sp-theme[color="dark"] h3,
+sp-theme[color="dark"] h4,
+sp-theme[color="dark"] h5,
+sp-theme[color="dark"] h6 {
+    color: #ffffff !important;
+}
+
+/* Dark mode styles for app icons */
+sp-theme[color="dark"] .app-grid__icon {
+    color: #ffffff !important;
+    filter: brightness(0) invert(1) !important;
+}
+
+/* Dark mode styles for hamburger menu icon */
+sp-theme[color="dark"] sp-icon-triple-gripper {
+    color: #ffffff !important;
+}
+
+sp-theme[color="dark"] .menu-icon {
+    color: #ffffff !important;
+}
+
+/* Auth header styling */
+.auth-header {
+    display: flex;
+    justify-content: flex-end;
+    padding: 10px 0;
+    margin-bottom: 20px;
+}
+
+.auth-header dt-home-theme-toggle {
+    margin-left: auto;
 }

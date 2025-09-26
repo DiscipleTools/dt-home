@@ -13,26 +13,67 @@ use function DT\Home\route_url;
 
     .icon-link__inner {
         --spectrum-icon-size: 44px; /* Size of the icon */
-        color: #ffffff; /* Color of the icon itself */
-        background-color: #326A82; /* Background color of the circular shape */
+        color: var(--return-button-icon-color, #ffffff); /* Color of the icon itself */
+        background-color: var(--return-button-bg-color, #326A82); /* Background color of the circular shape */
         border-radius: 50%; /* Circular shape */
         padding: 10px; /* Space between the icon and the background */
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25); /* Shadow effect */
+        box-shadow: var(--return-button-shadow, 0 4px 10px rgba(0, 0, 0, 0.25)); /* Shadow effect */
         display: flex; /* Use flex to center the icon */
         justify-content: center; /* Center icon horizontally */
         align-items: center; /* Center icon vertically */
         width: var(--spectrum-icon-size); /* Same as --spectrum-icon-size */
         height: var(--spectrum-icon-size); /* Same as --spectrum-icon-size */
         box-sizing: border-box; /* Include padding and border in the width and height */
+        transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s; /* Smooth transitions */
         /* Do not include bottom and left properties here */
     }
 
     .icon-link__inner:hover {
-        transition: background-color 0.3s, transform 0.3s; /* Hover transition effect */
-        background-color: #2A5F75; /* Hover background color */
+        background-color: var(--return-button-hover-bg-color, #2A5F75); /* Hover background color */
         transform: scale(1.1); /* Hover scale effect */
+        box-shadow: var(--return-button-hover-shadow, 0 6px 15px rgba(0, 0, 0, 0.3)); /* Enhanced shadow on hover */
+    }
+
+    /* Dark mode styles */
+    :host-context(sp-theme[color="dark"]) .icon-link__inner {
+        --return-button-icon-color: #ffffff;
+        --return-button-bg-color: #4a9eff;
+        --return-button-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+        --return-button-hover-bg-color: #3a8eef;
+        --return-button-hover-shadow: 0 6px 15px rgba(0, 0, 0, 0.5);
     }
 </style>
+
+<script>
+    // Theme detection and application for return button
+    function applyReturnButtonTheme() {
+        const themeElement = document.querySelector('sp-theme');
+        const isDark = themeElement && themeElement.color === 'dark';
+        const iconLink = document.querySelector('.icon-link__inner');
+        
+        if (iconLink) {
+            if (isDark) {
+                iconLink.style.setProperty('--return-button-icon-color', '#ffffff');
+                iconLink.style.setProperty('--return-button-bg-color', '#4a9eff');
+                iconLink.style.setProperty('--return-button-shadow', '0 4px 10px rgba(0, 0, 0, 0.4)');
+                iconLink.style.setProperty('--return-button-hover-bg-color', '#3a8eef');
+                iconLink.style.setProperty('--return-button-hover-shadow', '0 6px 15px rgba(0, 0, 0, 0.5)');
+            } else {
+                iconLink.style.setProperty('--return-button-icon-color', '#ffffff');
+                iconLink.style.setProperty('--return-button-bg-color', '#326A82');
+                iconLink.style.setProperty('--return-button-shadow', '0 4px 10px rgba(0, 0, 0, 0.25)');
+                iconLink.style.setProperty('--return-button-hover-bg-color', '#2A5F75');
+                iconLink.style.setProperty('--return-button-hover-shadow', '0 6px 15px rgba(0, 0, 0, 0.3)');
+            }
+        }
+    }
+
+    // Apply theme on load
+    document.addEventListener('DOMContentLoaded', applyReturnButtonTheme);
+    
+    // Listen for theme changes
+    document.addEventListener('theme-changed', applyReturnButtonTheme);
+</script>
 <a href="<?php echo esc_url( route_url() ); ?>" class="icon-link">
     <div class="icon-link__inner">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36" role="img" fill="currentColor" height="24" width="24" aria-hidden="true" aria-label="">
