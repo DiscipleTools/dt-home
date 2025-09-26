@@ -6,6 +6,10 @@
  * @var string $page_title
  * @var array $existing_data
  */
+
+use DT\Home\Services\RolesPermissions;
+use function DT\Home\container;
+
 $this->layout('layouts/settings', compact('tab', 'link', 'page_title'));
 ?>
 
@@ -138,16 +142,111 @@ get_template_part('dt-core/admin/menu/tabs/dialog-icon-selector');
                    value="1" <?php checked($existing_data['is_hidden'], 1); ?>>
         </td>
     </tr>
-</tbody>
-</table>
+    <tr>
+        <td style="vertical-align: top;"><?php esc_html_e('Roles', 'dt-home') ?>
+            <span class="tooltip">[?]
+                <span class="tooltiptext"><?php esc_html_e('Select which user roles can access app.', 'dt-home') ?></span>
+            </span>
+        </td>
+        <td colspan="4">
+            <?php
+            $counter = 0;
+            $max_row_count = 3;
+            $support_specific_roles = isset( $existing_data['user_roles_type'] ) && $existing_data['user_roles_type'] === 'support_specific_roles';
+            ?>
+            <table style="min-width: 100%;">
+                <tbody>
+                <tr>
+                    <td style="padding-left: 0;" colspan="<?php echo esc_attr( $max_row_count ); ?>">
+                        <div>
+                            <table>
+                                <tr>
+                                    <td style="padding-left: 0 !important;">
+                                        <label>
+                                            <input type="radio" id="select_all_user_roles" name="user_roles_type" value="support_all_roles" <?php echo ( $support_specific_roles === false ? 'checked' : '' ) ?> />
+                                            <?php esc_html_e('All roles have access', 'dt-home'); ?>
+                                        </label>
+                                    </td>
+                                    <td>
+                                        <label>
+                                            <input type="radio" id="select_specific_user_roles" name="user_roles_type" value="support_specific_roles" <?php echo ( $support_specific_roles === true ? 'checked' : '' ) ?> />
+                                            <?php esc_html_e('Limit access by role', 'dt-home'); ?>
+                                        </label>
+                                    </td>
+                                </tr>
+                            </table>
+                            <hr>
+                        </div>
+                    </td>
+                </tr>
+                <?php
+                $roles_permissions_srv = container()->get( RolesPermissions::class );
+                $dt_custom_roles = $roles_permissions_srv->get_dt_roles_and_permissions();
+                ksort( $dt_custom_roles );
+                foreach ( $dt_custom_roles as $key => $role ) {
 
-    <br>
-    <span style="float:right;">
-        <a href="admin.php?page=dt_home&tab=app"
-           class="button float-right"><?php esc_html_e('Cancel', 'dt-home') ?></a>
-        <button type="submit" name="submit" id="submit"
-                class="button float-right"><?php esc_html_e('Update', 'dt-home') ?></button>
-    </span>
+                    /**
+                     * Determine if role should be checked; ensuring globally set custom
+                     * roles and permissions take priority.
+                     */
+
+                    $is_checked = false;
+                    $permission = $roles_permissions_srv->generate_permission_key( $existing_data['slug'] ?? '' );
+
+                    if ( isset( $role['capabilities'][ $permission ] ) ) {
+                        $is_checked = $role['capabilities'][ $permission ];
+
+                    } else {
+                        $is_checked = in_array( $key, $existing_data['roles'] ?? [] );
+                    }
+
+                    // Determine if a new row should be started.
+                    if ( $counter === 0 ) {
+                        ?>
+                        <tr class="user-roles-type-tr" <?php echo ( $support_specific_roles === false ? 'style="display: none;"' : '' ) ?> >
+                        <?php
+                    }
+                    ?>
+
+                    <td style="padding-left: 0;">
+                        <div>
+                            <label>
+                                <input type="checkbox" name="roles[]" class="apps-user-role" value="<?php echo esc_attr( $key ); ?>" <?php echo ( $is_checked ? 'checked' : '' ); ?> />
+                                <?php echo esc_html( $role['label'] ?? $key ); ?>
+                            </label>
+                        </div>
+                    </td>
+
+                    <?php
+
+                    // Determine if row should be closed.
+                    if ( ++$counter >= $max_row_count ) {
+                        $counter = 0;
+                        ?>
+                        </tr>
+                        <?php
+                    }
+                }
+                ?>
+                </tbody>
+            </table>
+            <input type="hidden" name="deleted_roles" id="deleted_roles" value="[]">
+        </td>
+    </tr>
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="5">
+                    <span style="float:right;">
+                        <a href="admin.php?page=dt_home&tab=app"
+                           class="button float-right"><?php esc_html_e('Cancel', 'dt-home') ?></a>
+                        <button type="submit" name="submit" id="submit"
+                                class="button float-right"><?php esc_html_e('Update', 'dt-home') ?></button>
+                    </span>
+            </td>
+        </tr>
+    </tfoot>
+</table>
 </form>
 
 <?php //phpcs:ignoreEnd ?>

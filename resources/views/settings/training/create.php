@@ -60,16 +60,22 @@ $this->layout( 'layouts/settings', compact( 'tab', 'link', 'page_title' ) )
         </td>
     </tr>
 </tbody>
+        <tfoot>
+        <tr>
+            <td colspan="3">
+                <span style="float:right;">
+                    <a href="admin.php?page=dt_home&tab=training"
+                       class="button float-right"><?php esc_html_e( 'Cancel', 'dt-home' ) ?></a>
+                    <button type="submit" id="ml_email_main_col_update_but"
+                            class="button float-right"><?php esc_html_e( 'Submit', 'dt-home' ) ?></button>
+                </span>
+            </td>
+        </tr>
+        </tfoot>
     </table>
 
     <br>
     <span id="ml_email_main_col_update_msg" style="font-weight: bold; color: red;"></span>
-    <span style="float:right;">
-        <a href="admin.php?page=dt_home&tab=training"
-           class="button float-right"><?php esc_html_e( 'Cancel', 'dt-home' ) ?></a>
-        <button type="submit" id="ml_email_main_col_update_but"
-                class="button float-right"><?php esc_html_e( 'Submit', 'dt-home' ) ?></button>
-    </span>
 </form>
 
 <?php $this->start( 'right' ) ?>

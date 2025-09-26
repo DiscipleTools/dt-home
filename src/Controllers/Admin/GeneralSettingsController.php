@@ -4,11 +4,13 @@ namespace DT\Home\Controllers\Admin;
 
 use DT\Home\GuzzleHttp\Psr7\ServerRequest as Request;
 use DT\Home\Psr\Http\Message\ResponseInterface;
+use DT\Home\Services\RolesPermissions;
 use function DT\Home\extract_request_input;
 use function DT\Home\get_plugin_option;
 use function DT\Home\redirect;
 use function DT\Home\set_plugin_option;
 use function DT\Home\view;
+use function DT\Home\container;
 
 class GeneralSettingsController {
 	/**

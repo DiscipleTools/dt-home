@@ -2,10 +2,44 @@
 
 namespace DT\Home\Services;
 
+use DT\Home\Sources\UserApps;
 use function DT\Home\get_magic_url;
 use function DT\Home\set_plugin_option;
+use function DT\Home\container;
 
 class Apps {
+
+    private MagicApps $magic_apps;
+
+    public function __construct( MagicApps $magic_apps )
+    {
+        $this->magic_apps = $magic_apps;
+    }
+
+    /**
+     * Get all apps from the specified app source classname.
+     *
+     * @param string $app_source The class name of the app source.
+     * @param array $params Optional parameters for filtering the apps.
+     */
+    public function from( $app_source, array $params = [] ) {
+        $aggregator = new Aggregator( [
+            $app_source
+        ]);
+        return $aggregator->all( $params );
+    }
+
+    /**
+     * Alias for from method.
+     *
+     * @param string $app_source
+     * @param array $params
+     * @return array
+     */
+    public function source( $app_source, array $params = [] ) {
+        return $this->from( $app_source, $params );
+    }
+
     /**
      * Save apps.
      *
@@ -74,6 +108,33 @@ class Apps {
 		return $this->format( $apps );
 	}
 
+    /**
+     * Retrieve the apps array for a specific user.
+     *
+     * If the user has a specific apps array set, it will be returned.
+     *
+     * @param int $user_id The ID of the user.
+     * @param array $params Optional parameters for filtering the apps.
+     */
+    public function for( int $user_id = 0, array $params = [] ) {
+        if ( $user_id === 0 ) {
+            $user_id = get_current_user_id();
+        }
+        $params['user_id'] = $user_id;
+        $apps = $this->from( UserApps::class, $params );
+
+        // Filter out apps; which the user does not currently have permission to access and reindex.
+        $roles_permissions_srv = container()->get( RolesPermissions::class );
+        $dt_custom_roles = get_option( $roles_permissions_srv::OPTION_KEY_CUSTOM_ROLES, [] );
+        $apps = array_values( array_filter( $apps, function ( $app ) use ( $user_id, $roles_permissions_srv, $dt_custom_roles ) {
+            return $roles_permissions_srv->has_permission( $app, $user_id, $dt_custom_roles );
+        } ) );
+
+        // Proceed with hydration of magic link urls.
+        $this->magic_apps->hydrate_magic_urls( $apps, $user_id );
+        return $apps;
+    }
+
 	/**
 	 * Retrieve the apps array for a specific user.
 	 * If the user has a specific apps array set, it will be returned.
@@ -84,9 +145,9 @@ class Apps {
 	 * @return array The apps array for the user.
 	 */
 	public function for_user( $user_id ) {
-
         $user_apps = get_user_option( 'dt_home_apps', $user_id );
-		if ( ! $user_apps ) {
+
+        if ( ! $user_apps ) {
 			$user_apps = [];
 		}
 		$apps = $this->all();
@@ -124,6 +185,14 @@ class Apps {
         $apps = array_filter( $apps, function ( $app ) {
             return ( $app['is_deleted'] ?? false ) === false;
         });
+
+        // Filter out apps; which the user does not currently have permission to access and reindex.
+        $roles_permissions_srv = container()->get( RolesPermissions::class );
+        $dt_custom_roles = get_option( $roles_permissions_srv::OPTION_KEY_CUSTOM_ROLES, [] );
+        $apps = array_values( array_filter( $apps, function ( $app ) use ( $user_id, $roles_permissions_srv, $dt_custom_roles ) {
+            return $roles_permissions_srv->has_permission( $app, $user_id, $dt_custom_roles );
+        } ) );
+
 		// Sort the array based on the 'sort' key
 		usort($apps, function ( $a, $b ) {
 			return ( (int) $a['sort'] ?? 0 ) - ( (int) $b['sort'] ?? 0 );

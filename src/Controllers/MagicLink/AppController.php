@@ -5,6 +5,7 @@ namespace DT\Home\Controllers\MagicLink;
 use DT\Home\GuzzleHttp\Psr7\ServerRequest as Request;
 use DT\Home\Psr\Http\Message\ResponseInterface;
 use DT\Home\Services\Apps;
+use DT\Home\Services\RolesPermissions;
 use function DT\Home\container;
 use function DT\Home\extract_request_input;
 use function DT\Home\namespace_string;
@@ -37,7 +38,8 @@ class AppController
         $apps_array = $apps->for_user( $user_id );
         $app  = $apps->find_for_user( $user_id, $slug );
 
-        if ( ! $app ) {
+        // Also confirm user has relevant permission to access app.
+        if ( ! $app || !container()->get( RolesPermissions::class )->has_permission( $app, $user_id, get_option( RolesPermissions::OPTION_KEY_CUSTOM_ROLES, [] ) ) ) {
             return response( __( 'Not Found', 'dt-home' ), 404 );
         }
 

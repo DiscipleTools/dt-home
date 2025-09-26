@@ -18,7 +18,7 @@ $this->layout( 'layouts/settings', compact( 'tab', 'link', 'page_title' ) )
 	<table>
 		<tr>
 			<td>
-				<label for="require_user">
+				<label for="dt_home_require_login">
 					<input type="checkbox" id="dt_home_require_login"
 							name="dt_home_require_login" <?php checked( $dt_home_require_login ); ?>
 					>
@@ -29,7 +29,7 @@ $this->layout( 'layouts/settings', compact( 'tab', 'link', 'page_title' ) )
 		</tr>
 		<tr>
 			<td>
-				<label for="reset_app">
+				<label for="dt_home_reset_apps">
 					<input type="checkbox" id="dt_home_reset_apps"
 							name="dt_home_reset_apps" <?php checked( $dt_home_reset_apps ); ?>
 					>

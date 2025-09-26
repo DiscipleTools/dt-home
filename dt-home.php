@@ -23,6 +23,7 @@ use DT\Home\Plugin;
 use DT\Home\Providers\ConfigServiceProvider;
 use DT\Home\Providers\PluginServiceProvider;
 use DT\Home\Providers\RewritesServiceProvider;
+use DT\Home\Services\RolesPermissions;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
@@ -54,6 +55,7 @@ foreach ( $boot_providers as $provider ) {
 $dt_home = $container->get( Plugin::class );
 $dt_home->init();
 
+$container->get( RolesPermissions::class )->init();
 
 // Add the rest of the service providers
 $config = $container->get( ConfigInterface::class );
