@@ -1,6 +1,7 @@
 import { css, html, LitElement } from 'lit'
 import { customElement, property } from 'lit/decorators.js'
 import '@spectrum-web-components/button/sp-button.js'
+import ViewportManager from '../utils/viewport.js'
 
 @customElement('dt-home-theme-toggle')
 class ThemeToggle extends LitElement {
@@ -68,6 +69,11 @@ class ThemeToggle extends LitElement {
         if (this.systemPreferenceMediaQuery) {
             this.systemPreferenceMediaQuery.removeEventListener('change', this.handleSystemPreferenceChange)
         }
+        
+        // Clean up Safari event listeners
+        if (this.safariCleanup) {
+            this.safariCleanup()
+        }
     }
 
     initializeTheme() {
@@ -123,9 +129,26 @@ class ThemeToggle extends LitElement {
         if (this.currentTheme === 'dark') {
             body.style.backgroundColor = '#1a1a1a'
             html.style.backgroundColor = '#1a1a1a'
+            // Ensure blank template body gets dark background
+            if (body.id === 'blank-template-body') {
+                body.style.backgroundColor = '#1a1a1a'
+                // Safari-specific fixes
+                this.applySafariFixes(body, '#1a1a1a')
+            }
         } else {
             body.style.backgroundColor = '#e2e2e2'
             html.style.backgroundColor = '#e2e2e2'
+            // Ensure blank template body gets light background
+            if (body.id === 'blank-template-body') {
+                body.style.backgroundColor = '#e2e2e2'
+                // Safari-specific fixes
+                this.applySafariFixes(body, '#e2e2e2')
+            }
+        }
+        
+        // Force viewport height update after theme change
+        if (window.viewportManager) {
+            window.viewportManager.forceUpdate()
         }
         
         // Save preference
@@ -137,6 +160,78 @@ class ThemeToggle extends LitElement {
             bubbles: true,
             composed: true
         }))
+    }
+
+    /**
+     * Apply Safari-specific fixes for background rendering
+     */
+    applySafariFixes(element, color) {
+        // Detect Safari
+        const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent)
+        
+        if (isSafari) {
+            // Force Safari to repaint by temporarily changing and restoring styles
+            const originalBackground = element.style.background
+            const originalBackgroundColor = element.style.backgroundColor
+            
+            // Set both background and backgroundColor for Safari
+            element.style.background = color
+            element.style.backgroundColor = color
+            
+            // Force a reflow
+            element.offsetHeight
+            
+            // Safari-specific: Force hardware acceleration
+            element.style.transform = 'translateZ(0)'
+            element.style.willChange = 'background-color'
+            
+            // Safari viewport height fixes
+            this.applySafariViewportFixes(element)
+            
+            // Restore original values after a brief moment
+            setTimeout(() => {
+                element.style.background = originalBackground
+                element.style.backgroundColor = originalBackgroundColor
+                element.style.transform = ''
+                element.style.willChange = ''
+            }, 50)
+        }
+    }
+
+    /**
+     * Apply Safari viewport height fixes
+     */
+    applySafariViewportFixes(element) {
+        const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent)
+        
+        if (isSafari) {
+            // Set dynamic height based on actual viewport
+            const setViewportHeight = () => {
+                const vh = window.innerHeight * 0.01
+                document.documentElement.style.setProperty('--vh', `${vh}px`)
+                
+                // Apply to body and html
+                element.style.height = `${window.innerHeight}px`
+                element.style.minHeight = `${window.innerHeight}px`
+                document.documentElement.style.height = `${window.innerHeight}px`
+                document.documentElement.style.minHeight = `${window.innerHeight}px`
+            }
+            
+            // Set initial height
+            setViewportHeight()
+            
+            // Update on resize (Safari address bar changes)
+            window.addEventListener('resize', setViewportHeight)
+            window.addEventListener('orientationchange', setViewportHeight)
+            
+            // Store cleanup function
+            if (!this.safariCleanup) {
+                this.safariCleanup = () => {
+                    window.removeEventListener('resize', setViewportHeight)
+                    window.removeEventListener('orientationchange', setViewportHeight)
+                }
+            }
+        }
     }
 
     async toggleTheme() {

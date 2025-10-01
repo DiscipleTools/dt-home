@@ -165,6 +165,39 @@ sp-theme {
     transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
+/* Ensure sp-theme element fills viewport dynamically */
+sp-theme {
+    height: 100vh !important;
+    min-height: 100vh !important;
+    /* Use dynamic viewport height for better mobile support */
+    height: calc(var(--vh, 1vh) * 100) !important;
+    min-height: calc(var(--vh, 1vh) * 100) !important;
+    /* Safari-specific fallback */
+    height: -webkit-fill-available !important;
+    min-height: -webkit-fill-available !important;
+    /* Ensure background covers the entire element */
+    background-color: var(--body-background-color, #e2e2e2) !important;
+    background: var(--body-background-color, #e2e2e2) !important;
+    /* Force background to be visible */
+    background-image: none !important;
+    background-attachment: scroll !important;
+    background-position: 0 0 !important;
+    background-repeat: no-repeat !important;
+    background-size: auto !important;
+}
+
+/* Dark mode specific background */
+sp-theme[color="dark"] {
+    background-color: #1a1a1a !important;
+    background: #1a1a1a !important;
+}
+
+/* Light mode specific background */
+sp-theme[color="light"] {
+    background-color: #e2e2e2 !important;
+    background: #e2e2e2 !important;
+}
+
 /* Force background color changes with highest specificity */
 html, body, body.dom-loaded {
     background-color: var(--body-background-color, #e2e2e2) !important;
@@ -249,6 +282,76 @@ sp-theme[color="dark"] {
 sp-theme[color="dark"] html,
 sp-theme[color="dark"] body {
     background-color: #1a1a1a !important;
+}
+
+/* Specific rules for blank template body */
+sp-theme[color="dark"] body#blank-template-body {
+    background-color: #1a1a1a !important;
+}
+
+sp-theme[color="light"] body#blank-template-body {
+    background-color: #e2e2e2 !important;
+}
+
+/* Safari-specific fixes for background rendering */
+@supports (-webkit-appearance: none) {
+    /* Safari-specific background fixes */
+    sp-theme[color="dark"] body#blank-template-body {
+        background-color: #1a1a1a !important;
+        background: #1a1a1a !important;
+        -webkit-background-size: 100% 100% !important;
+        background-size: 100% 100% !important;
+    }
+    
+    sp-theme[color="light"] body#blank-template-body {
+        background-color: #e2e2e2 !important;
+        background: #e2e2e2 !important;
+        -webkit-background-size: 100% 100% !important;
+        background-size: 100% 100% !important;
+    }
+    
+    /* Force Safari to repaint background */
+    sp-theme[color="dark"] body#blank-template-body,
+    sp-theme[color="light"] body#blank-template-body {
+        -webkit-transform: translateZ(0) !important;
+        transform: translateZ(0) !important;
+        will-change: background-color !important;
+    }
+    
+    /* Safari viewport height fixes */
+    html, body#blank-template-body {
+        height: 100vh !important;
+        min-height: 100vh !important;
+        /* Safari-specific viewport units */
+        height: -webkit-fill-available !important;
+        min-height: -webkit-fill-available !important;
+        /* Dynamic viewport height support */
+        height: calc(var(--vh, 1vh) * 100) !important;
+        min-height: calc(var(--vh, 1vh) * 100) !important;
+    }
+    
+    /* Force full height on Safari */
+    sp-theme[color="dark"] html,
+    sp-theme[color="dark"] body#blank-template-body {
+        height: 100vh !important;
+        min-height: 100vh !important;
+        height: -webkit-fill-available !important;
+        min-height: -webkit-fill-available !important;
+        /* Dynamic viewport height support */
+        height: calc(var(--vh, 1vh) * 100) !important;
+        min-height: calc(var(--vh, 1vh) * 100) !important;
+    }
+    
+    sp-theme[color="light"] html,
+    sp-theme[color="light"] body#blank-template-body {
+        height: 100vh !important;
+        min-height: 100vh !important;
+        height: -webkit-fill-available !important;
+        min-height: -webkit-fill-available !important;
+        /* Dynamic viewport height support */
+        height: calc(var(--vh, 1vh) * 100) !important;
+        min-height: calc(var(--vh, 1vh) * 100) !important;
+    }
 }
 
 /* Dark mode styles for text elements */

@@ -54,6 +54,7 @@ import { loaded } from './helpers.js'
 import handleDomLoaded from './dom-hooks/handle-dom-loaded.js'
 import decloak from './dom-hooks/decloak.js'
 import submitFormOnEnter from './dom-hooks/submit-form-on-enter.js'
+import './utils/viewport.js'
 
 /**
  * Bootstrap the application

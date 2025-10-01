@@ -34,7 +34,6 @@ $invite_translations_json = wp_json_encode( $invite_translations );
 ?>
 
 <sp-theme
-    color="light"
     scale="medium"
     id="main-theme"
 >

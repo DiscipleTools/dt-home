@@ -29,10 +29,21 @@ body {
     margin: 0;
 }
 
-@media (max-width: 600px) {
+/* Ensure layout containers fill viewport on all screen sizes */
+sp-theme,
+.plugin {
+    min-height: 100vh;
+    /* Use dynamic viewport height for better mobile support */
+    min-height: calc(var(--vh, 1vh) * 100);
+}
+
+/* Help Safari compute full height */
+@supports (-webkit-touch-callout: none) {
     sp-theme,
     .plugin {
-        min-height: 100vh;
+        min-height: -webkit-fill-available;
+        /* Fallback to dynamic viewport height */
+        min-height: calc(var(--vh, 1vh) * 100);
     }
 }
 
