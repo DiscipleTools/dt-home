@@ -381,7 +381,7 @@ class Assets
         wp_enqueue_style( 'jquery-ui' );
 
         dt_theme_enqueue_style( 'material-font-icons-local', 'dt-core/dependencies/mdi/css/materialdesignicons.min.css', [] );
-        wp_enqueue_style( 'material-font-icons', 'https://cdn.jsdelivr.net/npm/@mdi/font@6.6.96/css/materialdesignicons.min.css' );
+        wp_enqueue_style( 'material-font-icons', 'https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css' );
         // Load MediaElement styles
         wp_enqueue_style( 'mediaelement', includes_url( 'js/mediaelement/mediaelementplayer-legacy.min.css' ), [], '4.2.17' );
         wp_enqueue_style( 'wp-mediaelement', includes_url( 'js/mediaelement/wp-mediaelement.min.css' ), [ 'mediaelement' ], '1.0' );

@@ -84,8 +84,10 @@ $this->layout( 'layouts/settings', compact( 'tab', 'link', 'page_title' ) )
                                 <?php } ?>
                             </td>
                             <td style="border: 1px solid #ddd; text-align: center; padding: 8px;">
-                                <?php if ( isset( $app['user_roles_type'] ) && $app['user_roles_type'] === 'support_specific_roles' ) { ?>
-                                    <i class="mdi mdi-eye-off-outline" style="font-size: 24px;" title="<?php esc_html_e( 'Limited visibility by user role', 'dt-home' ); ?>"></i>
+                                <?php if ( isset( $app['is_hidden'] ) && $app['is_hidden'] == 1 ) { ?>
+                                    <i class="mdi mdi-eye-off-outline" style="font-size: 24px;" title="<?php esc_html_e( 'Hidden app', 'dt-home' ); ?>"></i>
+                                <?php } else if ( isset( $app['user_roles_type'] ) && $app['user_roles_type'] === 'support_specific_roles' ) { ?>
+                                    <i class="mdi mdi-eye-lock-outline" style="font-size: 24px;" title="<?php esc_html_e( 'Limited visibility by user role', 'dt-home' ); ?>"></i>
                                 <?php } else { ?>
                                     <i class="mdi mdi-eye" style="font-size: 24px;" title="<?php esc_html_e( 'Visible to all user roles', 'dt-home' ); ?>"></i>
                                 <?php } ?>
