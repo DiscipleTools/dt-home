@@ -26,7 +26,7 @@ use DT\Home\Providers\RewritesServiceProvider;
 use DT\Home\Services\RolesPermissions;
 
 if ( ! defined( 'ABSPATH' ) ) {
-	exit; // Exit if accessed directly
+    exit; // Exit if accessed directly
 }
 
 // Load dependencies
@@ -46,6 +46,11 @@ $boot_providers = [
     RewritesServiceProvider::class,
     PluginServiceProvider::class
 ];
+
+//don't run if disciple tools isn't active
+if ( !class_exists( 'Disciple_Tools' ) ){
+    return;
+}
 
 foreach ( $boot_providers as $provider ) {
     $container->addServiceProvider( $container->get( $provider ) );
