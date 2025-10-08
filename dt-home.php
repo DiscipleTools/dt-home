@@ -29,7 +29,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit; // Exit if accessed directly
 }
 
-add_action( 'disciple_tools_load_plugins', function(){
+add_action( 'disciple_tools_load_plugins', function () {
 
     // Load dependencies
     require_once plugin_dir_path( __FILE__ ) . 'vendor-scoped/scoper-autoload.php';
@@ -65,4 +65,3 @@ add_action( 'disciple_tools_load_plugins', function(){
         $container->addServiceProvider( $container->get( $provider ) );
     }
 });
-
