@@ -29,41 +29,40 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit; // Exit if accessed directly
 }
 
-// Load dependencies
-require_once plugin_dir_path( __FILE__ ) . 'vendor-scoped/scoper-autoload.php';
-require_once plugin_dir_path( __FILE__ ) . 'vendor-scoped/autoload.php';
-require_once plugin_dir_path( __FILE__ ) . 'vendor/autoload.php';
+add_action( 'disciple_tools_load_plugins', function(){
+
+    // Load dependencies
+    require_once plugin_dir_path( __FILE__ ) . 'vendor-scoped/scoper-autoload.php';
+    require_once plugin_dir_path( __FILE__ ) . 'vendor-scoped/autoload.php';
+    require_once plugin_dir_path( __FILE__ ) . 'vendor/autoload.php';
 
 
 
-// Create the IOC container
-$container = ContainerFactory::singleton();
+    // Create the IOC container
+    $container = ContainerFactory::singleton();
 
-require_once plugin_dir_path( __FILE__ ) . 'src/helpers.php';
+    require_once plugin_dir_path( __FILE__ ) . 'src/helpers.php';
 
-$boot_providers = [
-    ConfigServiceProvider::class,
-    RewritesServiceProvider::class,
-    PluginServiceProvider::class
-];
+    $boot_providers = [
+        ConfigServiceProvider::class,
+        RewritesServiceProvider::class,
+        PluginServiceProvider::class
+    ];
 
-//don't run if disciple tools isn't active
-if ( !class_exists( 'Disciple_Tools' ) ){
-    return;
-}
+    foreach ( $boot_providers as $provider ) {
+        $container->addServiceProvider( $container->get( $provider ) );
+    }
 
-foreach ( $boot_providers as $provider ) {
-    $container->addServiceProvider( $container->get( $provider ) );
-}
+    // Init the plugin
+    $dt_home = $container->get( Plugin::class );
+    $dt_home->init();
 
-// Init the plugin
-$dt_home = $container->get( Plugin::class );
-$dt_home->init();
+    $container->get( RolesPermissions::class )->init();
 
-$container->get( RolesPermissions::class )->init();
+    // Add the rest of the service providers
+    $config = $container->get( ConfigInterface::class );
+    foreach ( $config->get( 'services.providers' ) as $provider ) {
+        $container->addServiceProvider( $container->get( $provider ) );
+    }
+});
 
-// Add the rest of the service providers
-$config = $container->get( ConfigInterface::class );
-foreach ( $config->get( 'services.providers' ) as $provider ) {
-    $container->addServiceProvider( $container->get( $provider ) );
-}
