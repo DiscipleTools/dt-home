@@ -29,18 +29,26 @@ body {
     margin: 0;
 }
 
-@media (max-width: 600px) {
-    sp-theme,
-    .plugin {
-        min-height: 100vh;
-    }
+/* Ensure layout containers fill viewport on all screen sizes */
+sp-theme,
+.plugin {
+    min-height: 100vh;
+    min-height: 100dvh; /* Dynamic viewport height for mobile browsers */
+}
+
+/* Ensure sp-theme uses flexbox for proper layout */
+sp-theme {
+    display: flex;
+    flex-direction: column;
 }
 
 .plugin {
+    flex: 1; /* Fill available space in sp-theme */
     gap: 50px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    min-height: 100%; /* Inherit parent min-height */
 }
 
 .plugin__main {

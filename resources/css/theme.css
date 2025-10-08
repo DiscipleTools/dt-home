@@ -155,25 +155,19 @@ sp-theme {
     --mod-buttongroup-spacing-horizontal: 10px;
     --mod-button-border-radius: 7px;
     --spectrum-button-height: var(--spectrum-component-height-100);
-    
-    /* Smooth transitions for theme switching */
-    transition: all 0.3s ease;
+
+    /* Default light mode background */
+    background-color: #e2e2e2;
+}
+
+/* Light mode explicit background */
+sp-theme[color="light"] {
+    background-color: #e2e2e2;
 }
 
 /* Global smooth transitions for theme changes */
 * {
     transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
-}
-
-/* Force background color changes with highest specificity */
-html, body, body.dom-loaded {
-    background-color: var(--body-background-color, #e2e2e2) !important;
-}
-
-/* Debug: Force light mode background */
-html:not([data-theme="dark"]), 
-body:not([data-theme="dark"]) {
-    background-color: #e2e2e2 !important;
 }
 
 /* Dark mode overrides for custom variables */
@@ -232,23 +226,15 @@ sp-theme[color="dark"] {
     --dt-modal-color: #f5f5f5;
     --dt-modal-button-color: #f5f5f5;
     --dt-modal-button-background: var(--primary-color);
+
+    /* Dark mode background */
+    background-color: #1a1a1a;
 }
 
-/* Force dark mode background with highest specificity */
-sp-theme[color="dark"] html, 
-sp-theme[color="dark"] body, 
-sp-theme[color="dark"] body.dom-loaded {
-    background-color: var(--body-background-color, #1a1a1a) !important;
-}
-
-/* Debug: Force dark mode background directly */
-sp-theme[color="dark"] {
-    background-color: #1a1a1a !important;
-}
-
-sp-theme[color="dark"] html,
-sp-theme[color="dark"] body {
-    background-color: #1a1a1a !important;
+/* Ensure html and body match the theme background */
+sp-theme[color="dark"] ~ body,
+html:has(sp-theme[color="dark"]) body {
+    background-color: #1a1a1a;
 }
 
 /* Dark mode styles for text elements */
