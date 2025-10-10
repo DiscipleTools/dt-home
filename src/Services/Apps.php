@@ -294,7 +294,7 @@ class Apps {
 
         //If the existing app is a coded app, we need to keep the url and magic link meta
         $overrides = [
-            'url' => $existing['url'] ?? ''
+            //'url' => $existing['url'] ?? ''
         ];
         if ( isset( $app['magic_link_meta'] ) ) {
             $overrides['magic_link_meta'] = $app['magic_link_meta'];
