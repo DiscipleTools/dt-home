@@ -1,0 +1,445 @@
+# Copyright (C) 2022
+msgid ""
+msgstr ""
+"Project-Id-Version: DT Home 0.1\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/dt-home\n"
+"POT-Creation-Date: 2024-09-23 10:57-0500\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"Language: ky\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Poedit 3.4.4\n"
+"X-Domain: dt-home\n"
+"X-Poedit-Mapping: php=gettext:PHP\n"
+"X-Poedit-Basepath: ..\n"
+"X-Poedit-WPHeader: dt-home.php\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: "
+"__;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;_nx_noop:3c,1,2;__ngettext_noop:1,"
+"2\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPathExcluded-0: *.min.js\n"
+"X-Poedit-SearchPathExcluded-1: node_modules\n"
+"X-Poedit-SearchPathExcluded-2: vendor\n"
+"X-Poedit-SearchPathExcluded-3: tmp-528879b2b4/source/vendor\n"
+"X-Poedit-SearchPathExcluded-4: tmp-528879b2b4/destination/vendor\n"
+"X-Poedit-SearchPathExcluded-5: resources/js\n"
+"X-Poedit-SearchPathExcluded-6: dist\n"
+"X-Poedit-SearchPathExcluded-7: vendor-scoped\n"
+"X-Poedit-SearchPathExcluded-8: includes\n"
+"X-Poedit-SearchPathExcluded-9: bible-plugin.php\n"
+
+#: config/assets.php:22
+msgid "Are you sure you want to remove this app?"
+msgstr ""
+
+#: resources/views/auth/login.php:37
+msgid "Username or Email Address"
+msgstr ""
+
+#: resources/views/auth/login.php:43 resources/views/auth/register.php:43
+msgid "Password"
+msgstr ""
+
+#: resources/views/auth/login.php:52
+msgid "Login"
+msgstr ""
+
+#: resources/views/auth/login.php:60 resources/views/auth/login.php:61
+msgid "Create Account"
+msgstr ""
+
+#: resources/views/auth/login.php:73
+msgid "Forgot Password?"
+msgstr ""
+
+#: resources/views/auth/register.php:35
+msgid "Username"
+msgstr ""
+
+#: resources/views/auth/register.php:39
+msgid "Email"
+msgstr ""
+
+#: resources/views/auth/register.php:48
+msgid "Confirm Password"
+msgstr ""
+
+#: resources/views/auth/register.php:57
+msgid "Register"
+msgstr ""
+
+#: resources/views/auth/register.php:67
+msgid "Back to Login"
+msgstr ""
+
+#: resources/views/hidden-apps.php:28
+msgid "Name:"
+msgstr ""
+
+#: resources/views/hidden-apps.php:32
+msgid "Visit subpage"
+msgstr ""
+
+#: resources/views/index.php:18
+msgid "Copy this link and share it with people you are coaching"
+msgstr ""
+
+#: resources/views/index.php:42
+msgid "Hidden Apps"
+msgstr ""
+
+#: resources/views/index.php:43
+msgid "Ok"
+msgstr ""
+
+#: resources/views/layouts/plugin.php:11
+#: resources/views/settings/create.php:24
+#: resources/views/settings/edit.php:23 src/Services/Settings.php:51
+msgid "Apps"
+msgstr ""
+
+#: resources/views/layouts/plugin.php:12 resources/views/training.php:8
+msgid "Training"
+msgstr ""
+
+#: resources/views/layouts/plugin.php:14
+msgid "Log Out"
+msgstr ""
+
+#: resources/views/layouts/settings.php:12 src/Services/Settings.php:38
+#: src/Services/Settings.php:39
+msgid "Home Screen"
+msgstr ""
+
+#: resources/views/layouts/settings.php:15
+msgid "Part of the DT Toolbox"
+msgstr ""
+
+#: resources/views/settings/app.php:17
+msgid "Available Apps"
+msgstr ""
+
+#: resources/views/settings/app.php:23
+msgid "Add App"
+msgstr ""
+
+#: resources/views/settings/app.php:30
+#: resources/views/settings/available-apps.php:26
+#: resources/views/settings/create.php:31
+#: resources/views/settings/edit.php:31
+#: resources/views/settings/training.php:32
+#: resources/views/settings/training/create.php:18
+#: resources/views/settings/training/edit.php:27
+msgid "Name"
+msgstr ""
+
+#: resources/views/settings/app.php:31
+#: resources/views/settings/available-apps.php:27
+#: resources/views/settings/create.php:41
+#: resources/views/settings/edit.php:43
+msgid "Type"
+msgstr ""
+
+#: resources/views/settings/app.php:32 resources/views/settings/app.php:59
+#: resources/views/settings/available-apps.php:28
+#: resources/views/settings/available-apps.php:46
+#: resources/views/settings/edit.php:83
+msgid "Icon"
+msgstr ""
+
+#: resources/views/settings/app.php:33
+#: resources/views/settings/available-apps.php:29
+#: resources/views/settings/create.php:90
+#: resources/views/settings/edit.php:118
+msgid "Slug"
+msgstr ""
+
+#: resources/views/settings/app.php:34
+#: resources/views/settings/available-apps.php:30
+#: resources/views/settings/training.php:35
+msgid "Action"
+msgstr ""
+
+#: resources/views/settings/app.php:67
+#: resources/views/settings/training.php:45
+msgid "Up"
+msgstr ""
+
+#: resources/views/settings/app.php:69
+msgid "Unhide"
+msgstr ""
+
+#: resources/views/settings/app.php:71
+msgid "Hide"
+msgstr ""
+
+#: resources/views/settings/app.php:73
+#: resources/views/settings/training.php:46
+msgid "Edit"
+msgstr ""
+
+#: resources/views/settings/app.php:74
+#: resources/views/settings/training.php:48
+msgid "Down"
+msgstr ""
+
+#: resources/views/settings/app.php:78 resources/views/settings/app.php:83
+#: resources/views/settings/training.php:47
+msgid "Delete"
+msgstr ""
+
+#: resources/views/settings/app.php:97 resources/views/settings/app.php:105
+msgid "Are you sure you want to delete this app?"
+msgstr ""
+
+#: resources/views/settings/available-apps.php:17
+msgid "Go Back"
+msgstr ""
+
+#: resources/views/settings/available-apps.php:36
+msgid "No apps found"
+msgstr ""
+
+#: resources/views/settings/available-apps.php:58
+msgid "Restore"
+msgstr ""
+
+#: resources/views/settings/available-apps.php:73
+msgid "Are you sure you want to restore this app?"
+msgstr ""
+
+#: resources/views/settings/create.php:33
+#: resources/views/settings/edit.php:33
+msgid "Enter the name of the app."
+msgstr ""
+
+#: resources/views/settings/create.php:37
+#: resources/views/settings/create.php:71
+#: resources/views/settings/create.php:96
+#: resources/views/settings/edit.php:38 resources/views/settings/edit.php:92
+#: resources/views/settings/training/create.php:24
+#: resources/views/settings/training/edit.php:34
+#: resources/views/settings/training/edit.php:60
+msgid "The name cannot be empty or just whitespace."
+msgstr ""
+
+#: resources/views/settings/create.php:43
+#: resources/views/settings/edit.php:45
+msgid "Select the type of the app."
+msgstr ""
+
+#: resources/views/settings/create.php:48
+#: resources/views/settings/edit.php:51
+msgid "Please select"
+msgstr ""
+
+#: resources/views/settings/create.php:49
+#: resources/views/settings/edit.php:54
+msgid "Web View"
+msgstr ""
+
+#: resources/views/settings/create.php:50
+#: resources/views/settings/edit.php:57
+msgid "Link"
+msgstr ""
+
+#: resources/views/settings/create.php:56
+#: resources/views/settings/edit.php:64
+msgid "Open link in new tab"
+msgstr ""
+
+#: resources/views/settings/create.php:58
+#: resources/views/settings/edit.php:66
+msgid "Check this box to open the link in a new tab."
+msgstr ""
+
+#: resources/views/settings/create.php:66
+#: resources/views/settings/edit.php:75
+msgid "Icon (File Upload)"
+msgstr ""
+
+#: resources/views/settings/create.php:68
+#: resources/views/settings/edit.php:77
+msgid "Upload an icon for the app."
+msgstr ""
+
+#: resources/views/settings/create.php:75
+#: resources/views/settings/edit.php:98
+msgid "Change Icon"
+msgstr ""
+
+#: resources/views/settings/create.php:80
+#: resources/views/settings/edit.php:105
+msgid "URL"
+msgstr ""
+
+#: resources/views/settings/create.php:82
+#: resources/views/settings/edit.php:107
+msgid "Enter the URL for the app."
+msgstr ""
+
+#: resources/views/settings/create.php:92
+#: resources/views/settings/edit.php:120
+msgid "Enter a slug for the app."
+msgstr ""
+
+#: resources/views/settings/create.php:100
+#: resources/views/settings/edit.php:130
+msgid "Is Hidden"
+msgstr ""
+
+#: resources/views/settings/create.php:102
+#: resources/views/settings/edit.php:132
+msgid "Check this box to hide the app."
+msgstr ""
+
+#: resources/views/settings/create.php:116
+#: resources/views/settings/edit.php:146
+#: resources/views/settings/training/create.php:69
+#: resources/views/settings/training/edit.php:82
+msgid "Cancel"
+msgstr ""
+
+#: resources/views/settings/create.php:118
+#: resources/views/settings/training/create.php:71
+msgid "Submit"
+msgstr ""
+
+#: resources/views/settings/create.php:123
+msgid "Search for icons..."
+msgstr ""
+
+#: resources/views/settings/create.php:129
+msgid "Close"
+msgstr ""
+
+#: resources/views/settings/edit.php:148
+#: resources/views/settings/general.php:55
+#: resources/views/settings/training/edit.php:84
+msgid "Update"
+msgstr ""
+
+#: resources/views/settings/general.php:24
+msgid "Require users to login to access the home screen magic link?"
+msgstr ""
+
+#: resources/views/settings/general.php:35
+msgid "Allow users to reset their apps?"
+msgstr ""
+
+#: resources/views/settings/training.php:23
+msgid "Add Training"
+msgstr ""
+
+#: resources/views/settings/training.php:33
+#: resources/views/settings/training/create.php:29
+#: resources/views/settings/training/edit.php:39
+msgid "Embed Video"
+msgstr ""
+
+#: resources/views/settings/training.php:34
+#: resources/views/settings/training/create.php:41
+#: resources/views/settings/training/edit.php:53
+msgid "Anchor"
+msgstr ""
+
+#: resources/views/settings/training.php:61
+msgid "Are you sure you want to delete this entry?"
+msgstr ""
+
+#: resources/views/settings/training/create.php:10
+#: resources/views/settings/training/edit.php:18 src/Services/Settings.php:55
+msgid "Training Videos"
+msgstr ""
+
+#: resources/views/settings/training/create.php:20
+#: resources/views/settings/training/edit.php:29
+msgid "Enter the name of the training video."
+msgstr ""
+
+#: resources/views/settings/training/create.php:31
+#: resources/views/settings/training/edit.php:41
+msgid "Paste the embed code for the video."
+msgstr ""
+
+#: resources/views/settings/training/create.php:36
+msgid "The embed Video cannot be empty or just whitespace."
+msgstr ""
+
+#: resources/views/settings/training/create.php:43
+#: resources/views/settings/training/edit.php:55
+msgid "Specify the anchor text for the video."
+msgstr ""
+
+#: resources/views/settings/training/create.php:48
+msgid "The anchor text cannot be empty or just whitespace."
+msgstr ""
+
+#: resources/views/settings/training/create.php:53
+#: resources/views/settings/training/edit.php:65
+msgid "Sort"
+msgstr ""
+
+#: resources/views/settings/training/create.php:55
+#: resources/views/settings/training/edit.php:67
+msgid "Set the sort order for the video."
+msgstr ""
+
+#: resources/views/settings/training/edit.php:46
+msgid "The video embed cannot be empty or just whitespace."
+msgstr ""
+
+#: src/Controllers/Admin/AppSettingsController.php:446
+msgid "App not found"
+msgstr ""
+
+#: src/Controllers/LoginController.php:75
+#: src/Controllers/RegisterController.php:85
+msgid "An unexpected error has occurred."
+msgstr ""
+
+#: src/Controllers/MagicLink/AppController.php:40
+#: src/Controllers/MagicLink/AppController.php:70
+msgid "Not Found"
+msgstr ""
+
+#: src/Controllers/RegisterController.php:66
+msgid "Please fill out all fields."
+msgstr ""
+
+#: src/Controllers/RegisterController.php:70
+msgid "Passwords do not match."
+msgstr ""
+
+#: src/Services/Assets.php:342
+msgid "Upload Icon"
+msgstr ""
+
+#: src/Services/Assets.php:343
+msgid "Upload"
+msgstr ""
+
+#: src/Services/Settings.php:47
+msgid "General"
+msgstr ""
+
+#. Plugin Name of the plugin/theme
+msgid "DT Home"
+msgstr ""
+
+#. Plugin URI of the plugin/theme
+msgid "https://github.com/thecodezone/dt-home"
+msgstr ""
+
+#. Description of the plugin/theme
+msgid "An app home screen for disciple.tools. Part of the DT Toolbox."
+msgstr ""
+
+#. Author URI of the plugin/theme
+msgid "https://github.com/thecodezone"
+msgstr ""
